@@ -1,0 +1,56 @@
+import React, { useState } from "react";
+import { MdInfoOutline } from "react-icons/md";
+import { MdOutlineVisibility } from "react-icons/md";
+import { RiLockPasswordLine } from "react-icons/ri";
+
+import styled from "styled-components";
+import SettingCard from "./SettingCard";
+
+const Container = styled.div`
+  margin-top: 150px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+`;
+
+const CardContainer = styled.div`
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const Setting = () => {
+  const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
+  return (
+    <>
+      <Container>
+        <CardContainer>
+          <SettingCard
+            iconSrc={<MdInfoOutline size={30} />}
+            title={"اطلاعات شخصی"}
+            color={userInfo?.data?.sex}
+            path={"/changeInfo"}
+          />
+          <SettingCard
+            iconSrc={<RiLockPasswordLine size={30} />}
+            title={"تغییر رمز"}
+            color={userInfo?.data?.sex}
+            path={"/changePassword"}
+          />
+          <SettingCard
+            iconSrc={<MdOutlineVisibility size={30} />}
+            title={"اطلاعات کارنامه‌ای"}
+            color={userInfo?.data?.sex}
+            path={"/changeReportInfo"}
+          />
+        </CardContainer>
+      </Container>
+    </>
+  );
+};
+export default Setting;
