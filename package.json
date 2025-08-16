@@ -31,6 +31,7 @@
     "react-scroll": "^1.9.0",
     "styled-components": "^5.3.8",
     "stylis": "^4.3.0",
+    "react-toastify": "^9.1.1",
     "stylis-plugin-rtl": "^2.1.1",
     "yup": "^1.0.2"
   },
