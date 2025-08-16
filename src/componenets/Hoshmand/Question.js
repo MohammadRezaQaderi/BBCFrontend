@@ -193,7 +193,7 @@ const Question = ({ userInfo, nextStep }) => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand/select_request",
           {
             table: "users",
             method_type: "get_hoshmand_questions",
@@ -264,7 +264,7 @@ const Question = ({ userInfo, nextStep }) => {
       });
 
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_questions",

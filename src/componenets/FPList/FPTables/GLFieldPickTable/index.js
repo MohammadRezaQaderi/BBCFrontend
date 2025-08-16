@@ -244,7 +244,7 @@ const GLFieldPickTable = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -281,7 +281,7 @@ const GLFieldPickTable = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spgl_list",
@@ -318,7 +318,7 @@ const GLFieldPickTable = () => {
   const select_spgl_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spgl_list",
@@ -350,7 +350,7 @@ const GLFieldPickTable = () => {
     try {
       setSearchLoading(true)
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_search_fields",
@@ -422,7 +422,7 @@ const GLFieldPickTable = () => {
   const fp_exam_types = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_exam_types",
@@ -462,7 +462,7 @@ const GLFieldPickTable = () => {
   const fp_majors = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_majors",
@@ -501,7 +501,7 @@ const GLFieldPickTable = () => {
   const fp_universities = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_universities",
@@ -539,7 +539,7 @@ const GLFieldPickTable = () => {
   const fp_cities = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_cities",
@@ -576,7 +576,7 @@ const GLFieldPickTable = () => {
   const fp_provinces = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_provinces",

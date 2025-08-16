@@ -218,7 +218,7 @@ const FRFieldPickTable = ({ }) => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -256,7 +256,7 @@ const FRFieldPickTable = ({ }) => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfr_list",
@@ -293,7 +293,7 @@ const FRFieldPickTable = ({ }) => {
   const select_spfr_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfr_list",
@@ -325,7 +325,7 @@ const FRFieldPickTable = ({ }) => {
     try {
       setSearchLoading(true)
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fr_search_fields",
@@ -384,7 +384,7 @@ const FRFieldPickTable = ({ }) => {
   const fr_majors = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fr_majors",
@@ -432,7 +432,7 @@ const FRFieldPickTable = ({ }) => {
   const fr_universities = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fr_universities",
@@ -479,7 +479,7 @@ const FRFieldPickTable = ({ }) => {
   const fr_provinces = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fr_provinces",

@@ -87,7 +87,7 @@ const StuEdit = ({ userRole, userInfo }) => {
     formData.append("last_pic", image);
 
     const response = await axios.post(
-      "https://entekhab.yejooredigeh.com/ERS/update_user_info_file",
+      "https://student.baazmoon.com/ERS/update_user_info_file",
       formData,
       {
         headers: {
@@ -101,7 +101,7 @@ const StuEdit = ({ userRole, userInfo }) => {
 
   const updateUserWithoutFile = async (values) => {
     const response = await axios.post(
-      "https://entekhab.yejooredigeh.com/ERS/update_request",
+      "https://student.baazmoon.com/ERS/update_request",
       {
         table: "users",
         method_type: "update_user",

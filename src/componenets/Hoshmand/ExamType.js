@@ -87,7 +87,7 @@ const ExamType = ({ userInfo, nextStep }) => {
         setLoading(true);
 
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand/select_request",
           {
             table: "users",
             method_type: "get_hoshmand_examtype",
@@ -182,7 +182,7 @@ const ExamType = ({ userInfo, nextStep }) => {
         .map((item) => item.examType)
         .join(",");
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_examtype",

@@ -15,7 +15,7 @@ import {
   Box,
   Typography,
   Divider,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import { LogoIcon } from "../Navbar/NavbarElements";
 import logo from "../../assets/images/logo.png";
@@ -64,7 +64,7 @@ const Signin = () => {
 
   // Handlers
   const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   const togglePasswordVisibility = () => {
@@ -75,7 +75,7 @@ const Signin = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/signin",
+        "https://student.baazmoon.com/bbc_api/signin",
         {
           table: "users",
           method_type: "signin",
@@ -102,11 +102,11 @@ const Signin = () => {
         timestamp: 1000 * 60 * 60 * 12,
         data: response.data.response,
       };
-      
+
       setLocalStorageLogin("user-info", data, () => {});
       setLocalStorageLogin("user-role", data.data.role, () => {});
       setLocalStorageLogin("token", response.data.tracking_code, () => {});
-      
+
       navigate("/dashboard");
       window.location.reload();
     } else {
@@ -149,14 +149,14 @@ const Signin = () => {
     <AuthContainer>
       <AuthForm onSubmit={formik.handleSubmit}>
         {loading && (
-          <LinearProgress 
-            sx={{ 
-              position: 'absolute',
+          <LinearProgress
+            sx={{
+              position: "absolute",
               top: 0,
               left: 0,
               right: 0,
-              borderRadius: '8px 8px 0 0'
-            }} 
+              borderRadius: "8px 8px 0 0",
+            }}
           />
         )}
 
@@ -167,12 +167,12 @@ const Signin = () => {
         <Typography variant="h5" align="center" gutterBottom>
           ورود به حساب کاربری
         </Typography>
-        
+
         <Typography variant="body2" color="textSecondary" align="center" mb={3}>
           برای ورود اطلاعات خود را وارد کنید
         </Typography>
 
-        <Divider sx={{ my: 2, borderColor: '#36ae7c', borderWidth: 2 }} />
+        <Divider sx={{ my: 2, borderColor: "#36ae7c", borderWidth: 2 }} />
 
         <TextField
           fullWidth
@@ -213,29 +213,6 @@ const Signin = () => {
           }}
         />
 
-        <Box display="flex" justifyContent="space-between" mt={2} mb={3}>
-          <Link 
-            to="/send_otp/otp" 
-            style={{ 
-              textDecoration: 'none', 
-              color: '#36ae7c',
-              fontSize: '0.875rem'
-            }}
-          >
-            ورود با رمز یکبار مصرف
-          </Link>
-          <Link 
-            to="/send_otp/verify" 
-            style={{ 
-              textDecoration: 'none', 
-              color: '#36ae7c',
-              fontSize: '0.875rem'
-            }}
-          >
-            احراز هویت
-          </Link>
-        </Box>
-
         <Button
           fullWidth
           variant="contained"
@@ -245,41 +222,27 @@ const Signin = () => {
           sx={{
             mt: 2,
             mb: 2,
-            backgroundColor: '#36ae7c',
-            '&:hover': {
-              backgroundColor: '#2d9968',
+            backgroundColor: "#36ae7c",
+            "&:hover": {
+              backgroundColor: "#2d9968",
             },
-            height: '48px'
+            height: "48px",
           }}
         >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'ورود'}
+          {loading ? <CircularProgress size={24} color="inherit" /> : "ورود"}
         </Button>
-
-        <Typography variant="body2" align="center" mt={2}>
-          حساب کاربری ندارید؟{' '}
-          <Link 
-            to="/signup" 
-            style={{ 
-              textDecoration: 'none', 
-              color: '#36ae7c',
-              fontWeight: 'bold'
-            }}
-          >
-            عضویت
-          </Link>
-        </Typography>
       </AuthForm>
 
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbar.message}
         </Alert>

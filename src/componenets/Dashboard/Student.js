@@ -96,7 +96,7 @@ const VideoCard = styled(Paper)(({ theme }) => ({
     transform: "scale(1.02)",
   },
 }));
-const Dashboard = () => {
+const Student = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
@@ -677,4 +677,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Student;

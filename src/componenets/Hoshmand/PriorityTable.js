@@ -83,7 +83,7 @@ const PriorityTable = ({ userInfo, nextStep }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand/select_request",
           {
             table: "users",
             method_type: "get_hoshmand_tables",
@@ -162,7 +162,7 @@ const PriorityTable = ({ userInfo, nextStep }) => {
     try {
       setSaving(true);
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_tables",

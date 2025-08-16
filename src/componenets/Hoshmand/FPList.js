@@ -275,7 +275,7 @@ const FPList = ({ userInfo, nextStep }) => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand/select_request",
         {
           table: "users",
           method_type: "get_hoshmand_fields",
@@ -398,7 +398,7 @@ const FPList = ({ userInfo, nextStep }) => {
     try {
       setHoshmandLoading(true);
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand/select_request",
         {
           table: "users",
           method_type: "get_hoshmand_list",
@@ -448,7 +448,7 @@ const FPList = ({ userInfo, nextStep }) => {
     try {
       setSaving(true);
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_fields",

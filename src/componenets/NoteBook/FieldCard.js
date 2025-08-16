@@ -48,7 +48,7 @@ const FieldCard = ({ iconSrc, title, onClick, color }) => {
   return (
     <FieldCardContainer background={color} onClick={onClick}>
       <FieldsIcon
-        src={`https://entekhab.yejooredigeh.com/ERS/nootbook_image/${iconSrc}`}
+        src={`https://student.baazmoon.com/ERS/nootbook_image/${iconSrc}`}
         alt={title}
       />
       <FieldsP>{title}</FieldsP>

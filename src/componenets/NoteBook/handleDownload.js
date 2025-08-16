@@ -7,7 +7,7 @@ export const handleDownload = async (
 ) => {
   try {
     const response = await fetch(
-      `https://entekhab.yejooredigeh.com/ERS/pdf_nootbook/${file}`
+      `https://student.baazmoon.com/ERS/pdf_nootbook/${file}`
     );
 
     if (response.ok) {

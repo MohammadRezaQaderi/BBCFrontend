@@ -209,7 +209,7 @@ const FRBTrashList = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -249,7 +249,7 @@ const FRBTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfrb_list",
@@ -289,7 +289,7 @@ const FRBTrashList = () => {
   const select_spfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfrb_list",
@@ -329,7 +329,7 @@ const FRBTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_trfrb_list",
@@ -368,7 +368,7 @@ const FRBTrashList = () => {
   const select_trfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_trfrb_list",

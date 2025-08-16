@@ -263,7 +263,7 @@ const FRBSpecialList = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -301,7 +301,7 @@ const FRBSpecialList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfrb_list",
@@ -342,7 +342,7 @@ const FRBSpecialList = () => {
   const select_spfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfrb_list",
@@ -383,7 +383,7 @@ const FRBSpecialList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_trfrb_list",
@@ -422,7 +422,7 @@ const FRBSpecialList = () => {
   const select_trfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_trfrb_list",
@@ -551,7 +551,7 @@ const FRBSpecialList = () => {
     const image =
       userInfo?.data?.pic === null
         ? imgData
-        : `https://entekhab.yejooredigeh.com/ERS/get_ins_pic/${userInfo?.data?.pic}`;
+        : `https://student.baazmoon.com/ERS/get_ins_pic/${userInfo?.data?.pic}`;
     let data_pdf = data.map((elt, index) => [
       elt.dorm === 0 ? "ندارد" : "دارد",
       parseInt(elt.sex) === 3

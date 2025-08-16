@@ -1,0 +1,31 @@
+.MuiInputBase-input {
+  /* max-height: 70px !important; */
+  text-align: right !important;
+}
+td {
+  text-align: center !important;
+}
+.Mui-TableHeadCell-Content {
+  text-align: center !important;
+  justify-content: center !important;
+
+  /* padding-right: 30px !important; */
+}
+.MuiTableCell-root {
+  padding-top: 10px !important ;
+  padding-bottom: 10px !important ;
+  padding-right: 0px !important ;
+  padding-left: 0px !important ;
+}
+.css-1vlry5a-MuiTableContainer-root {
+  max-width: 1200px !important;
+  overflow: auto !important;
+}
+
+.Mui-TableHeadCell-Content-Wrapper {
+  overflow: visible !important;
+}
+
+.css-1hhu9xl {
+  overflow: auto;
+}

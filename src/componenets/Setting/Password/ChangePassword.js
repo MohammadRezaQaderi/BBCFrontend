@@ -71,7 +71,7 @@ const ChangePassword = ({ userInfo }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/update_password",
+        "https://student.baazmoon.com/ERS/update_password",
         {
           table: "users",
           method_type: "update_password",

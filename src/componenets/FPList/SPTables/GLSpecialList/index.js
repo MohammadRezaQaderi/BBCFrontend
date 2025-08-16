@@ -315,7 +315,7 @@ const GLSpecialList = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -353,7 +353,7 @@ const GLSpecialList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spgl_list",
@@ -392,7 +392,7 @@ const GLSpecialList = () => {
   const select_spgl_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spgl_list",
@@ -430,7 +430,7 @@ const GLSpecialList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_trgl_list",
@@ -467,7 +467,7 @@ const GLSpecialList = () => {
   const select_trgl_list = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_trgl_list",
@@ -597,7 +597,7 @@ const GLSpecialList = () => {
     const image =
       userInfo?.data?.pic === null
         ? imgData
-        : `https://entekhab.yejooredigeh.com/ERS/get_ins_pic/${userInfo?.data?.pic}`;
+        : `https://student.baazmoon.com/ERS/get_ins_pic/${userInfo?.data?.pic}`;
 
     let data_pdf = data.map((elt, index) => [
       elt.admissionKind === 1

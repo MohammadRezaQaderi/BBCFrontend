@@ -7,12 +7,13 @@ import SettingPage from "./pages/setting";
 import InfoShowPage from "./pages/InfoShow";
 import NoteBookPage from "./pages/nootbook";
 import PickFieldKindPage from "./pages/pickField";
-
-
-// The Global Pick Pages
-import GLFPPage from "./pages/GLFPPage";
-import GLSPPage from "./pages/GLSPPage";
-import GLTRPage from "./pages/GLTRPage ";
+import ConsultantPage from "./pages/consultantshow";
+import StudentPage from "./pages/studentshow";
+import FieldPickPage from "./pages/fieldpick";
+import AcademicGuidancePage from "./pages/academicguidance";
+import PasswordChangePage from "./pages/passwordChange";
+import InfoChangePage from "./pages/infoChange";
+import FieldsCategoryPage from "./pages/fieldsCategory";
 
 // The Free Pick Pages
 import FRFPPage from "./pages/FRFPPage";
@@ -23,7 +24,6 @@ import FRTRPage from "./pages/FRTRPage";
 import FRBFPPage from "./pages/FRBFPPage";
 import FRBSPPage from "./pages/FRBSPPage";
 import FRBTRPage from "./pages/FRBTRPage";
-
 
 import MajorsPage from "./pages/majorPage";
 import FieldsPage from "./pages/fieldPage";
@@ -38,9 +38,86 @@ function App() {
     <>
       <Router>
         <Routes>
-          {userRole === "stu" ? (
+          {userRole === "ins" ? (
             <>
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/consultant_show" element={<ConsultantPage />} />
+              <Route path="/student_show" element={<StudentPage />} />
+              <Route path="/fieldpick_show" element={<FieldPickPage />} />
+              <Route
+                path="/academic_guidance"
+                element={<AcademicGuidancePage />}
+              />
+              <Route path="/setting" element={<SettingPage />} />
+              <Route path="/changePassword" element={<PasswordChangePage />} />
+              <Route path="/changeInfo" element={<InfoChangePage />} />
+              <Route path="/information" element={<InfoPage />} />
+              <Route path="/majors" element={<MajorsPage />} />
+              <Route path="/fields/:id" element={<FieldsPage />} />
+              <Route path="/info_show/:id" element={<InfoShowPage />} />
+              <Route path="/fieldsCategory" element={<FieldsCategoryPage />} />
+              <Route path="/notebookInfo" element={<NoteBookPage />} />
+              {/* <Route
+                path="/pffrb/:stu_id/:field/:part"
+                element={<FRBFPPage />}
+              />
+              <Route
+                path="/spfrb/:stu_id/:field/:part"
+                element={<FRBSPPage />}
+              />
+              <Route
+                path="/trfrb/:stu_id/:field/:part"
+                element={<FRBTRPage />}
+              />
+              <Route path="/pffr/:stu_id/:field" element={<FRFPPage />} />
+              <Route path="/spfr/:stu_id/:field" element={<FRSPPage />} />
+              <Route path="/trfr/:stu_id/:field" element={<FRTRPage />} /> */}
+              <Route path="/*" element={<DashboardPage />} />
+            </>
+          ) : userRole === "con" ? (
+            <>
+              {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+              <Route path="/student_show" element={<StudentPage />} />
+              <Route path="/fieldpick_show" element={<FieldPickPage />} />
+              <Route
+                path="/academic_guidance"
+                element={<AcademicGuidancePage />}
+              />
+              <Route path="/setting" element={<SettingPage />} />
+              <Route path="/changePassword" element={<PasswordChangePage />} />
+              <Route path="/changeInfo" element={<InfoChangePage />} />
+              <Route path="/information" element={<InfoPage />} />
+              <Route path="/majors" element={<MajorsPage />} />
+              <Route path="/fields/:id" element={<FieldsPage />} />
+              <Route path="/info_show/:id" element={<InfoShowPage />} />
+              <Route path="/fieldsCategory" element={<FieldsCategoryPage />} />
+              <Route path="/notebookInfo" element={<NoteBookPage />} />
+              <Route path="/pfgl/:stu_id" element={<GLFPPage />} />
+              <Route path="/spgl/:stu_id" element={<GLSPPage />} />
+              <Route path="/trgl/:stu_id" element={<GLTRPage />} />
+              <Route path="/pfglf/:stu_id" element={<GLFFPPage />} />
+              <Route path="/spglf/:stu_id" element={<GLFSPPage />} />
+              <Route path="/trglf/:stu_id" element={<GLFTRPage />} />
+              <Route
+                path="/pffrb/:stu_id/:field/:part"
+                element={<FRBFPPage />}
+              />
+              <Route
+                path="/spfrb/:stu_id/:field/:part"
+                element={<FRBSPPage />}
+              />
+              <Route
+                path="/trfrb/:stu_id/:field/:part"
+                element={<FRBTRPage />}
+              />
+              <Route path="/pffr/:stu_id/:field" element={<FRFPPage />} />
+              <Route path="/spfr/:stu_id/:field" element={<FRSPPage />} />
+              <Route path="/trfr/:stu_id/:field" element={<FRTRPage />} />
+              <Route path="/*" element={<DashboardPage />} />
+            </>
+          ) : userRole === "stu" ? (
+            <>
+              {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
               <Route path="/pick_field" element={<PickFieldKindPage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/changePassword" element={<PasswordPage />} />
@@ -50,9 +127,6 @@ function App() {
               <Route path="/fields/:id" element={<FieldsPage />} />
               <Route path="/info_show/:id" element={<InfoShowPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
-              <Route path="/pfgl" element={<GLFPPage />} />
-              <Route path="/spgl" element={<GLSPPage />} />
-              <Route path="/trgl" element={<GLTRPage />} />
               <Route path="/pffrb/:field/:part" element={<FRBFPPage />} />
               <Route path="/spfrb/:field/:part" element={<FRBSPPage />} />
               <Route path="/trfrb/:field/:part" element={<FRBTRPage />} />

@@ -57,7 +57,7 @@ const PickFieldKind = () => {
   const getStudentInfo = async () => {
     try {
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/ERS/select_request",
+        "https://student.baazmoon.com/ERS/select_request",
         {
           table: "users",
           method_type: "select_student_info",

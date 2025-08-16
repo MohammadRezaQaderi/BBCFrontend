@@ -102,7 +102,7 @@ const EditInfoUser = ({ userData, final, setReload, reload }) => {
 
         const method = final === 0 ? "update_student_info" : "finalize_student_info";
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/ERS/update_request",
+          "https://student.baazmoon.com/ERS/update_request",
           {
             table: "users",
             method_type: method,

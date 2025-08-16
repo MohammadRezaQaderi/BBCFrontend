@@ -4,13 +4,150 @@ import { IoSettings } from "react-icons/io5";
 import { GrSelect } from "react-icons/gr";
 import { MdSpaceDashboard } from "react-icons/md";
 import { GiArcheryTarget } from "react-icons/gi";
-import { MdOutlinePayments } from "react-icons/md";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { MdOutlineTextFields } from "react-icons/md";
 import { PiCertificateLight } from "react-icons/pi";
-import { MdInfoOutline } from "react-icons/md";
-
+import { FaUserGraduate } from "react-icons/fa";
+import { FaChalkboardTeacher } from "react-icons/fa";
 export const NavData = {
+  ins: [
+    {
+      name: "داشبورد",
+      path: "/dashboard",
+      isLast: false,
+      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "مشاوران",
+      path: "/consultant_show",
+      isLast: false,
+      icon: <FaChalkboardTeacher style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دانش‌آموزان",
+      path: "/student_show",
+      isLast: false,
+      icon: <FaUserGraduate style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "انتخاب رشته",
+      path: "/fieldpick_show",
+      isLast: false,
+      icon: <GrSelect style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "استعداد‌سنجی",
+      path: "/academic_guidance",
+      isLast: false,
+      icon: <GiArcheryTarget style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "تنظیمات",
+      path: "/setting",
+      isLast: false,
+      icon: <IoSettings style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دفترچه کنکور و معرفی رشته",
+      path: "/information",
+      isLast: false,
+      icon: <FaBook style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "خروج",
+      path: "/signin",
+      isLast: true,
+      icon: <IoMdExit style={{ width: "30px", height: "30px" }} />,
+    },
+  ],
+  con: [
+    {
+      name: "داشبورد",
+      path: "/dashboard",
+      isLast: false,
+      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دانش‌آموزان",
+      path: "/student_show",
+      isLast: false,
+      icon: <FaUserGraduate style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "انتخاب رشته",
+      path: "/fieldpick_show",
+      isLast: false,
+      icon: <GrSelect style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "استعداد‌سنجی",
+      path: "/academic_guidance",
+      isLast: false,
+      icon: <GiArcheryTarget style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "تنظیمات",
+      path: "/setting",
+      isLast: false,
+      icon: <IoSettings style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دفترچه کنکور و معرفی رشته",
+      path: "/information",
+      isLast: false,
+      icon: <FaBook style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "خروج",
+      path: "/signin",
+      isLast: true,
+      icon: <IoMdExit style={{ width: "30px", height: "30px" }} />,
+    },
+  ],
+  con: [
+    {
+      name: "داشبورد",
+      path: "/dashboard",
+      isLast: false,
+      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دانش‌آموزان",
+      path: "/student_show",
+      isLast: false,
+      icon: <FaUserGraduate style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "انتخاب رشته",
+      path: "/fieldpick_show",
+      isLast: false,
+      icon: <GrSelect style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "استعداد‌سنجی",
+      path: "/academic_guidance",
+      isLast: false,
+      icon: <GiArcheryTarget style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "تنظیمات",
+      path: "/setting",
+      isLast: false,
+      icon: <IoSettings style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "دفترچه کنکور و معرفی رشته",
+      path: "/information",
+      isLast: false,
+      icon: <FaBook style={{ width: "30px", height: "30px" }} />,
+    },
+    {
+      name: "خروج",
+      path: "/signin",
+      isLast: true,
+      icon: <IoMdExit style={{ width: "30px", height: "30px" }} />,
+    },
+  ],
   stu: [
     {
       name: "داشبورد",
@@ -54,18 +191,6 @@ export const NavData = {
       isLast: false,
       icon: <FaBook style={{ width: "30px", height: "30px" }} />,
     },
-    {
-      name: "خرید محصول",
-      path: "/payments",
-      isLast: false,
-      icon: <MdOutlinePayments style={{ width: "30px", height: "30px" }} />,
-    },
-    // {
-    //   name: "ارتباط باما",
-    //   path: "/contact_us",
-    //   isLast: false,
-    //   icon: <MdInfoOutline style={{ width: "30px", height: "30px" }} />,
-    // },
     {
       name: "تنظیمات",
       path: "/setting",

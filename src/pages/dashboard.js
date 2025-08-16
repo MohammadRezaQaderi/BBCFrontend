@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Sidebar from "../componenets/Sidebar";
 import Navbar from "../componenets/Navbar";
 import styled from "styled-components";
-import Dashboard from "../componenets/Dashboard/Dashboard";
 import { ProfileSideBar } from "../componenets/ProfileSideBar/ProfileSideBar";
+import Dashboard from "../componenets/Dashboard";
 
 const DashboardPage = () => {
   const [isOpen, setIsOpen] = useState(false);

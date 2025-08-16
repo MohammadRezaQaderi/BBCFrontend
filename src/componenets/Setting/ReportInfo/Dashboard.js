@@ -28,7 +28,7 @@ const Dashboard = () => {
     try {
       const response = await axios({
         method: "POST",
-        url: "https://entekhab.yejooredigeh.com/ERS/select_request",
+        url: "https://student.baazmoon.com/ERS/select_request",
         headers: {
           "content-type": "application/json",
           "Access-Control-Allow-Origin": "*",

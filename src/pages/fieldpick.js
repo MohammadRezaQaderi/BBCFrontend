@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import ScrollToTop from "../componenets/ScrollToTop";
-// import { ProfileSideBar } from "../componenets/ProfileSideBar/ProfileSideBar";
+import { ProfileSideBar } from "../componenets/ProfileSideBar/ProfileSideBar";
 import styled from "styled-components";
+import FieldPickList from "../componenets/Lists/FieldPickList";
 import Sidebar from "../componenets/Sidebar";
 import Navbar from "../componenets/Navbar";
-import GLFieldPickTable from "../componenets/FPList/FPTables/GLFieldPickTable";
-
-const GLFPPage = () => {
+const FieldPickPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => {
     setIsOpen(!isOpen);
@@ -14,20 +13,19 @@ const GLFPPage = () => {
   return (
     <>
       <Sidebar isOpen={isOpen} toggle={toggle} setIsOpen={setIsOpen} />
-      <Navbar toggle={toggle} />
+      <Navbar toggle={toggle} update={false} />
       <ScrollToTop />
-      <GLFPContainer>
-        {/* <ProfileSideBar /> */}
-        <GLFieldPickTable />
-      </GLFPContainer>
+      <FieldPickContainer>
+        <ProfileSideBar />
+        <FieldPickList />
+      </FieldPickContainer>
     </>
   );
 };
 
-export default GLFPPage;
-const GLFPContainer = styled.div`
-  height: 100vh;
-  width: 100%;
+export default FieldPickPage;
+const FieldPickContainer = styled.div`
+  // height: 100vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

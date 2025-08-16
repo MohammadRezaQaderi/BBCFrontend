@@ -72,7 +72,7 @@ const Majors = ({ userInfo, nextStep }) => {
         setAllItems([]);
 
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand/select_request",
           {
             table: "users",
             method_type: "get_hoshmand_major",
@@ -245,7 +245,7 @@ const Majors = ({ userInfo, nextStep }) => {
         .flatMap((box) => box.flatMap((layer) => layer))
         .join(",");
       const response = await axios.post(
-        "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_major",

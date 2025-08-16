@@ -92,7 +92,7 @@ const Hoshmand = () => {
     const fetchInfo = async () => {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand/select_request",
           {
             table: "users",
             method_type: "get_hoshmand_info",
@@ -138,7 +138,7 @@ const Hoshmand = () => {
     const saveChanges = async () => {
       try {
         const response = await axios.post(
-          "https://entekhab.yejooredigeh.com/hoshmand/update_request",
+          "https://student.baazmoon.com/hoshmand/update_request",
           {
             table: "users",
             method_type: "update_hoshmand_info",
