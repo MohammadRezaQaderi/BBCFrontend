@@ -26,28 +26,33 @@ const CardContainer = styled.div`
 
 const Setting = () => {
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
+  const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
   return (
     <>
       <Container>
         <CardContainer>
-          <SettingCard
-            iconSrc={<MdInfoOutline size={30} />}
-            title={"اطلاعات شخصی"}
-            color={userInfo?.data?.sex}
-            path={"/changeInfo"}
-          />
+          {!["stu"].includes(userRole) && (
+            <SettingCard
+              iconSrc={<MdInfoOutline size={30} />}
+              title={"تغییر اطلاعات"}
+              color={userInfo?.data?.sex}
+              path={"/changeInfo"}
+            />
+          )}
           <SettingCard
             iconSrc={<RiLockPasswordLine size={30} />}
             title={"تغییر رمز"}
             color={userInfo?.data?.sex}
             path={"/changePassword"}
           />
-          <SettingCard
-            iconSrc={<MdOutlineVisibility size={30} />}
-            title={"اطلاعات کارنامه‌ای"}
-            color={userInfo?.data?.sex}
-            path={"/changeReportInfo"}
-          />
+          {["ins"].includes(userRole) && (
+            <SettingCard
+              iconSrc={<MdOutlineVisibility size={30} />}
+              title={"تغییر احتمال قبولی"}
+              color={userInfo?.data?.sex}
+              path={"/changeVisibilty"}
+            />
+          )}
         </CardContainer>
       </Container>
     </>

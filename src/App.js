@@ -31,6 +31,8 @@ import PasswordPage from "./pages/passwordPage";
 import InfoPage from "./pages/infoPage";
 import InfoReportPage from "./pages/infoReportPage";
 import HoshmandPage from "./pages/Hoshmand";
+import ChangeVisibiltyPage from "./helper/changeVisibilty";
+import InformationPage from "./pages/information";
 
 function App() {
   const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
@@ -51,7 +53,11 @@ function App() {
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/changePassword" element={<PasswordChangePage />} />
               <Route path="/changeInfo" element={<InfoChangePage />} />
-              <Route path="/information" element={<InfoPage />} />
+              <Route
+                path="/changeVisibilty"
+                element={<ChangeVisibiltyPage />}
+              />
+              <Route path="/information" element={<InformationPage />} />
               <Route path="/majors" element={<MajorsPage />} />
               <Route path="/fields/:id" element={<FieldsPage />} />
               <Route path="/info_show/:id" element={<InfoShowPage />} />
@@ -86,18 +92,15 @@ function App() {
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/changePassword" element={<PasswordChangePage />} />
               <Route path="/changeInfo" element={<InfoChangePage />} />
-              <Route path="/information" element={<InfoPage />} />
+              <Route path="/information" element={<InformationPage />} />
               <Route path="/majors" element={<MajorsPage />} />
               <Route path="/fields/:id" element={<FieldsPage />} />
               <Route path="/info_show/:id" element={<InfoShowPage />} />
               <Route path="/fieldsCategory" element={<FieldsCategoryPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
-              <Route path="/pfgl/:stu_id" element={<GLFPPage />} />
+              {/* <Route path="/pfgl/:stu_id" element={<GLFPPage />} />
               <Route path="/spgl/:stu_id" element={<GLSPPage />} />
-              <Route path="/trgl/:stu_id" element={<GLTRPage />} />
-              <Route path="/pfglf/:stu_id" element={<GLFFPPage />} />
-              <Route path="/spglf/:stu_id" element={<GLFSPPage />} />
-              <Route path="/trglf/:stu_id" element={<GLFTRPage />} />
+              <Route path="/trgl/:stu_id" element={<GLTRPage />} /> */}
               <Route
                 path="/pffrb/:stu_id/:field/:part"
                 element={<FRBFPPage />}

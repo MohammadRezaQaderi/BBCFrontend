@@ -263,8 +263,8 @@ const FieldPickList = () => {
           },
         },
         {
-          accessorKey: "GL",
-          header: "سراسری",
+          accessorKey: "hoshmand",
+          header: "هوشمند",
           size: 100,
           muiTableHeadCellProps: {
             align: "center",
@@ -272,7 +272,7 @@ const FieldPickList = () => {
           muiTableBodyCellProps: {
             align: "center",
           },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "سراسری" },
+          muiTableHeadCellFilterTextFieldProps: { placeholder: "هوشمند" },
           Cell: ({ cell }) => {
             const row = cell.getValue();
             const user_id = cell.row.original.user_id;
@@ -288,41 +288,6 @@ const FieldPickList = () => {
                       style={{ cursor: "pointer" }}
                       title="انتخاب رشته"
                       onClick={() => goToPickField(user_id, finalized)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "GLF",
-          header: "فرهنگیان",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "فرهنگیان" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => navigate("/pfglf/" + user_id)}
                     />
                   </div>
                 ) : (
@@ -396,167 +361,7 @@ const FieldPickList = () => {
             );
           },
         },
-      ],
-      oCon: [
-        {
-          accessorKey: "name",
-          header: "نام",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            return (
-              <span
-                onClick={() => handleOpenUser(user_id)}
-                style={{ cursor: "pointer" }}
-              >
-                {row}
-              </span>
-            );
-          },
-        },
-        {
-          accessorKey: "GL",
-          header: "سراسری",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "سراسری" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => goToPickField(user_id, finalized)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "GLF",
-          header: "فرهنگیان",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "فرهنگیان" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => navigate("/pfglf/" + user_id)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "FR",
-          header: "آزاد",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "آزاد" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const field = cell.row.original.field;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <FiSearch
-                    size={20}
-                    style={{ cursor: "pointer" }}
-                    title="انتخاب رشته"
-                    onClick={() => handleOpenModal(user_id, field, finalized)}
-                  />
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "con_name",
-          header: "مشاور",
-          size: 50,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "مشاور" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const con_finalized = cell.row.original.con_finalized;
-            return (
-              <>
-                {[2, 3].includes(kind) ? (
-                  <>-</>
-                ) : con_finalized === 1 ? (
-                  <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
-                  </div>
-                ) : (
-                  <div>
-                    {row}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
-                  </div>
-                )}
-              </>
-            );
-          },
-        },
-      ],
+      ]
     };
   }, [kind, userRole]);
 
