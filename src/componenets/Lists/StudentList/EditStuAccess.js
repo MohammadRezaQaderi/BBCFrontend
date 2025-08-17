@@ -87,10 +87,8 @@ const EditStuAccess = ({
       <div style={{ padding: "20px" }}>
         <DialogTitle sx={{ textAlign: "center" }}>
           {"افزودن خدمت"}{" "}
-          {kind === "GL"
-            ? "انتخاب رشته سراسری"
-            : kind === "GLF"
-            ? "انتخاب رشته فرهنگیان"
+          {kind === "hoshmand"
+            ? "انتخاب رشته هوشمند"
             : kind === "FR"
             ? "انتخاب رشته آزاد"
             : "استعداد سنجی "}
@@ -106,7 +104,7 @@ const EditStuAccess = ({
         <p style={{ marginBottom: "30px" }}>
           از دادن این خدمت به دانش‌آموز اطمینان دارید؟
         </p>
-        {(kind === "GL" || kind === "FR" || kind === "GLF") && (
+        {(kind === "hoshmand" || kind === "FR" ) && (
           <FormControlLabel
             control={
               <Checkbox

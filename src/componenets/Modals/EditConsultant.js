@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Autocomplete,
   Button,
   Dialog,
   DialogTitle,
   Divider,
   Grid,
+  Snackbar,
   TextField,
   Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -22,13 +22,18 @@ const EditConsultantForm = ({
   type,
   data,
   setReload,
-  headConsultants,
   userInfo,
-  userRole,
 }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
       setOpen(false);
@@ -84,10 +89,6 @@ const EditConsultantForm = ({
 
   const update_consultant = async () => {
     try {
-      if (formik.values.hCon_id === "") {
-        toast.warning("لطفا مشاور انتخاب نمایید.");
-        return;
-      }
       const response = await axios.post(
         "https://student.baazmoon.com/bbc_api/update_request",
         {
@@ -97,21 +98,32 @@ const EditConsultantForm = ({
             first_name: formik.values.first_name,
             last_name: formik.values.last_name,
             sex: formik.values.sex,
-            hCon_id: formik.values.hCon_id,
             consultant_id: formik.values.consultant_id,
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
       );
       if (response.data.tracking_code !== null) {
-        toast.success(response?.data?.response.message);
+        setSnackbar({
+          open: true,
+          message: response?.data?.response.message,
+          severity: "success",
+        });
         setReload((perv) => !perv);
         setOpen(false);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در ارتباط با سامانه");
+      setSnackbar({
+        open: true,
+        message: "خطا در ارتباط با سامانه",
+        severity: "error",
+      });
     }
   };
 
@@ -121,7 +133,6 @@ const EditConsultantForm = ({
       last_name: data ? data.last_name : "",
       phone: data ? data.phone : "",
       consultant_id: data ? data.user_id : "",
-      hCon_id: data ? data.hCon_id : "",
       sex: data ? data.sex : "",
     },
     validationSchema: Yup.object({}),
@@ -140,7 +151,6 @@ const EditConsultantForm = ({
         last_name: data.last_name,
         phone: data.phone,
         consultant_id: data.user_id,
-        hCon_id: data.hCon_id,
         sex: data.sex,
       });
     }
@@ -224,41 +234,6 @@ const EditConsultantForm = ({
                 )}
               />
             </Grid>
-            {["ins"].includes(userRole) && (
-              <Grid item md={6} xs={12}>
-                <Autocomplete
-                  fullWidth
-                  id="controllable-states-demo"
-                  options={headConsultants ? headConsultants : []}
-                  onChange={(event, newValue) => {
-                    if (newValue?.user_id) {
-                      formik.setFieldValue("hCon_id", newValue.user_id);
-                    } else {
-                      formik.setFieldValue("hCon_id", "");
-                    }
-                  }}
-                  getOptionLabel={(option) =>
-                    option.first_name + " " + option.last_name || ""
-                  }
-                  value={
-                    headConsultants.find((h) => h.user_id === data.hCon_id) || {
-                      first_name: "",
-                      last_name: "",
-                      user_id: null,
-                    }
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      fullWidth
-                      value={formik.values.con_name}
-                      {...params}
-                      label={"مشاور"}
-                      required
-                    />
-                  )}
-                />
-              </Grid>
-            )}
             <Grid item xs={12}>
               <Divider />
             </Grid>
@@ -305,6 +280,20 @@ const EditConsultantForm = ({
           </Grid>
         </form>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

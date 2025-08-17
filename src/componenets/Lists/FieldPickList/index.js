@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Alert, Box, Divider, Grid, Paper, Snackbar, TextField, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { createTheme, ThemeProvider, Autocomplete } from "@mui/material";
 import MaterialReactTable from "material-react-table";
@@ -6,9 +6,7 @@ import { MRT_Localization_FA } from "material-react-table/locales/fa";
 import "./style.css";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
 import { IoIosCloseCircle } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import FreeModal from "../../Modals/FreeModal/FreeModal";
@@ -20,9 +18,8 @@ import ErrorState from "../../FPList/NoUser";
 
 const student_state = [
   { name: "همه", id: 0 },
-  { name: "سراسری", id: 1 },
+  { name: "هوشمند", id: 1 },
   { name: "آزاد", id: 2 },
-  { name: "فرهنگیان", id: 3 },
 ];
 
 const FPContainer = styled.div`
@@ -60,18 +57,34 @@ const FieldPickList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState();
   const [userField, setUserField] = useState();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const goToPickField = (user_id, finalized) => {
     if (finalized === 2) {
       navigate("/pfgl/" + user_id);
     } else {
-      toast.warning("اطلاعات دانش‌آموز هنوز ثبت نهایی نشده است.");
+      setSnackbar({
+        open: true,
+        message: "اطلاعات دانش‌آموز هنوز ثبت نهایی نشده است.",
+        severity: "warning",
+      });
     }
   };
 
   const handleOpenModal = (id, field, finalized) => {
     if (finalized === 0) {
-      toast.warning("اطلاعات دانش‌آموز هنوز ثبت نهایی نشده است.");
+      setSnackbar({
+        open: true,
+        message: "اطلاعات دانش‌آموز هنوز ثبت نهایی نشده است.",
+        severity: "warning",
+      });
     } else {
       setUserField(field);
       setUserId(id);
@@ -225,40 +238,6 @@ const FieldPickList = () => {
           },
         },
         {
-          accessorKey: "hCon_name",
-          header: "سرمشاور",
-          size: 50,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: {
-            placeholder: "سرمشاور",
-          },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const hCon_finalized = cell.row.original.hCon_finalized;
-            return (
-              <>
-                {[2, 3].includes(kind) ? (
-                  <>-</>
-                ) : hCon_finalized === 1 ? (
-                  <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
-                  </div>
-                ) : (
-                  <div>
-                    {row}{" "}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
-                  </div>
-                )}
-              </>
-            );
-          },
-        },
-        {
           accessorKey: "con_name",
           header: "مشاور",
           size: 50,
@@ -277,200 +256,6 @@ const FieldPickList = () => {
                 {[2, 3].includes(kind) ? (
                   <>-</>
                 ) : con_finalized === 1 ? (
-                  <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
-                  </div>
-                ) : (
-                  <div>
-                    {row}{" "}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
-                  </div>
-                )}
-              </>
-            );
-          },
-        },
-      ],
-      hCon: [
-        {
-          accessorKey: "name",
-          header: "نام",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            return (
-              <span
-                onClick={() => handleOpenUser(user_id)}
-                style={{ cursor: "pointer" }}
-              >
-                {row}
-              </span>
-            );
-          },
-        },
-        {
-          accessorKey: "GL",
-          header: "سراسری",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "سراسری" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => goToPickField(user_id, finalized)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "GLF",
-          header: "فرهنگیان",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "فرهنگیان" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => navigate("/pfglf/" + user_id)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "FR",
-          header: "آزاد",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "آزاد" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            const field = cell.row.original.field;
-            const finalized = cell.row.original.finalized;
-            return (
-              <>
-                {row === 1 ? (
-                  <FiSearch
-                    size={20}
-                    style={{ cursor: "pointer" }}
-                    title="انتخاب رشته"
-                    onClick={() => handleOpenModal(user_id, field, finalized)}
-                  />
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "con_name",
-          header: "مشاور",
-          size: 50,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "مشاور" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const con_finalized = cell.row.original.con_finalized;
-            return (
-              <>
-                {[2, 3].includes(kind) ? (
-                  <>-</>
-                ) : con_finalized === 1 ? (
-                  <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
-                  </div>
-                ) : (
-                  <div>
-                    {row}{" "}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
-                  </div>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "hCon_name",
-          header: "تایید سرمشاور",
-          size: 50,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: {
-            placeholder: "تایید سرمشاور",
-          },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const hCon_finalized = cell.row.original.hCon_finalized;
-            return (
-              <>
-                {[2, 3].includes(kind) ? (
-                  <>-</>
-                ) : hCon_finalized === 1 ? (
                   <div>
                     {row} <FaCheckCircle size={18} style={{ color: "green" }} />
                   </div>
@@ -828,10 +613,18 @@ const FieldPickList = () => {
       if (response.data.tracking_code !== null) {
         setUserDetails(response?.data?.response?.stu);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -851,10 +644,18 @@ const FieldPickList = () => {
       if (response.data.tracking_code !== null) {
         setData(response?.data?.response?.stu);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -997,6 +798,20 @@ const FieldPickList = () => {
             />
           )}
         </Paper>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </FPContainer>
     </>
   );

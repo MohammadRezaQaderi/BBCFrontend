@@ -17,17 +17,11 @@ import EditStuAccess from "./EditStuAccess";
 import ErrorState from "../../FPList/NoUser";
 
 const CheckCanHaveAccessEdit = (kind, userDetails, userInfo) => {
-  if (!["ins", "oCon"].includes(userInfo.data?.role)) {
+  if (!["ins"].includes(userInfo.data?.role)) {
     return false;
   }
-  if (kind == "GL") {
-    if (userDetails?.GL == 1) {
-      return false;
-    }
-    return true;
-  }
-  if (kind == "GLF") {
-    if (userDetails?.GLF == 1) {
+  if (kind == "hoshmand") {
+    if (userDetails?.hoshmand == 1) {
       return false;
     }
     return true;
@@ -188,7 +182,7 @@ const EditInfoAccess = ({
         open={open}
         onClose={handleClose}
         disableEscapeKeyDown
-        maxWidth="md"
+        maxWidth="lg"
         fullWidth
       >
         <DialogTitle>
@@ -205,7 +199,7 @@ const EditInfoAccess = ({
               اطلاعات کاربر
             </Typography>
             <Box>
-              {finalized != 2 && ["GL", "FR"].includes(kind) && (
+              {finalized != 2 && ["hoshmand", "FR"].includes(kind) && (
                 <Button
                   variant="contained"
                   color="primary"

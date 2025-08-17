@@ -974,7 +974,7 @@ const StudentList = () => {
       </Grid>
       {data?.length > 0 ? (
         <div style={{ marginTop: "50px" }}>
-          {["ins", "oCon"].includes(userRole) ? (
+          {["ins"].includes(userRole) ? (
             <ThemeProvider theme={createTheme({ direction: "rtl" })}>
               <MaterialReactTable
                 autoResetPageIndex={false}

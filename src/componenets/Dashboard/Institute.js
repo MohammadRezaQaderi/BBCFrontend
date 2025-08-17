@@ -145,8 +145,8 @@ const Institute = ({ userInfo }) => {
             <Grid item xs={12} sm={6} md={3}>
               <OverView
                 type="student"
-                count={data ? data.GLU + data.GLA : "-"}
-                title="کل خرید سراسری"
+                count={data ? data.HU + data.HA : "-"}
+                title="کل خرید هوشمند"
                 sex={userInfo?.data?.sex}
                 icon="🌐"
               />
@@ -154,28 +154,10 @@ const Institute = ({ userInfo }) => {
             <Grid item xs={12} sm={6} md={3}>
               <OverView
                 type="student"
-                count={data ? data.GLA : "-"}
-                title="باقی مانده سراسری"
+                count={data ? data.HA : "-"}
+                title="باقی مانده هوشمند"
                 sex={userInfo?.data?.sex}
                 icon="📊"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <OverView
-                type="student"
-                count={data ? data.GLFU + data.GLFA : "-"}
-                title="کل خرید فرهنگیان"
-                sex={userInfo?.data?.sex}
-                icon="👨‍🏫"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <OverView
-                type="student"
-                count={data ? data.GLFA : "-"}
-                title="باقی مانده فرهنگیان"
-                sex={userInfo?.data?.sex}
-                icon="📈"
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -250,7 +232,7 @@ const Institute = ({ userInfo }) => {
 
               <Grid container spacing={2}>
                 {/* User Roles Count */}
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                   <Box sx={{
                     p: 3,
                     backgroundColor: 'rgba(66, 165, 245, 0.1)',
@@ -265,7 +247,7 @@ const Institute = ({ userInfo }) => {
                   }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.info.dark }}>
-                        {data?.hCon_count + data?.con_count + data?.stu_count || 0}
+                        {data?.con_count + data?.stu_count || 0}
                       </Typography>
                       <PeopleIcon sx={{
                         fontSize: 40,
@@ -277,10 +259,6 @@ const Institute = ({ userInfo }) => {
                       کاربران سیستم
                     </Typography>
                     <Box sx={{ mt: 2, borderTop: `1px dashed ${theme.palette.divider}`, pt: 1 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
-                        <Typography variant="body2">سرمشاوران:</Typography>
-                        <Typography variant="body2" fontWeight={600}>{data?.hCon_count || 0}</Typography>
-                      </Box>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
                         <Typography variant="body2">مشاوران:</Typography>
                         <Typography variant="body2" fontWeight={600}>{data?.con_count || 0}</Typography>
@@ -294,7 +272,7 @@ const Institute = ({ userInfo }) => {
                 </Grid>
 
                 {/* Finalized Field Selections */}
-                <Grid item xs={12} sm={6} md={3}>
+                {/* <Grid item xs={12} sm={6} md={3}>
                   <Box sx={{
                     p: 3,
                     backgroundColor: 'rgba(102, 187, 106, 0.1)',
@@ -322,25 +300,21 @@ const Institute = ({ userInfo }) => {
                     </Typography>
                     <Box sx={{ mt: 2, borderTop: `1px dashed ${theme.palette.divider}`, pt: 1 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
-                        <Typography variant="body2">توسط سرمشاور:</Typography>
-                        <Typography variant="body2" fontWeight={600}>{data?.hcon_finalized || 0}</Typography>
-                      </Box>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
                         <Typography variant="body2">توسط مشاور:</Typography>
                         <Typography variant="body2" fontWeight={600}>{data?.con_finalized || 0}</Typography>
                       </Box>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
                         <Typography variant="body2">درصد تکمیل:</Typography>
                         <Typography variant="body2" fontWeight={600}>
-                          {Math.round(((data?.hcon_finalized + data?.con_finalized) / data?.stu_count) * 100) || 0}%
+                          {Math.round(((data?.con_finalized) / data?.stu_count) * 100) || 0}%
                         </Typography>
                       </Box>
                     </Box>
                   </Box>
-                </Grid>
+                </Grid> */}
 
                 {/* Talent Info - Completed */}
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                   <Box sx={{
                     p: 3,
                     backgroundColor: 'rgba(255, 183, 77, 0.1)',
@@ -386,7 +360,7 @@ const Institute = ({ userInfo }) => {
                 </Grid>
 
                 {/* Talent Info - Progress */}
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} sm={8} md={4}>
                   <Box sx={{
                     p: 3,
                     backgroundColor: 'rgba(171, 71, 188, 0.1)',

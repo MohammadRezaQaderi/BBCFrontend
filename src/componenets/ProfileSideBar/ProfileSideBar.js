@@ -118,6 +118,17 @@ export const ProfileSideBar = () => {
     }
     navigate(path);
   };
+
+  const getName = () => {
+    if (["ins"].includes(Info?.data?.role)) {
+      return Info?.data?.name;
+    } else {
+      return `${Info?.data.first_name} ${Info?.data.last_name}`;
+    }
+  };
+
+  if (!Role || !NavData[Role]) return null;
+
   return (
     <Container>
       <UserCard
@@ -145,7 +156,7 @@ export const ProfileSideBar = () => {
         />
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Body fontWeight={FontWeight.Meduim} color={"#000"}>
-            {Info?.data.first_name + " " + Info?.data.last_name}
+            {getName()}
           </Body>
         </div>
       </UserCard>

@@ -10,14 +10,14 @@ import {
   Paper,
   Box,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material";
 import MaterialReactTable from "material-react-table";
 import { MRT_Localization_FA } from "material-react-table/locales/fa";
 import "./style.css";
-import { toast } from "react-toastify";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FaUserCheck, FaUserPlus } from "react-icons/fa";
@@ -81,6 +81,14 @@ const StudentList = () => {
   const [openUserInfoModal, setOpenUserInfoModal] = useState(false);
   const [accessMenuAnchor, setAccessMenuAnchor] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const handleOpenUser = (user_id) => {
     select_student_data(user_id).then(() => {
@@ -135,8 +143,7 @@ const StudentList = () => {
           {user?.[kind] === 1 ? <FaUserCheck /> : <FaUserPlus />}
         </ListItemIcon>
         <ListItemText>
-          {kind === "GL" && "سراسری"}
-          {kind === "GLF" && "فرهنگیان"}
+          {kind === "hoshmand" && "هوشمند"}
           {kind === "FR" && "آزاد"}
           {kind === "AG" && "استعدادسنجی"}
         </ListItemText>
@@ -235,108 +242,6 @@ const StudentList = () => {
         },
         Cell: ({ cell }) => {
           const row = cell.row.original;
-          const hasAccess =
-            row.GL === 1 || row.GLF === 1 || row.FR === 1 || row.AG === 1;
-          return (
-            <IconButton onClick={(e) => handleOpenAccessMenu(row.user_id, e)}>
-              <SettingsIcon />
-            </IconButton>
-          );
-        },
-      },
-    ],
-    hCon: [
-      {
-        accessorKey: "name",
-        header: "نام",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          const user_id = cell.row.original.user_id;
-          return (
-            <span
-              onClick={() => handleOpenUser(user_id)}
-              style={{ cursor: "pointer" }}
-            >
-              {row}
-            </span>
-          );
-        },
-      },
-      {
-        accessorKey: "phone",
-        header: "نام کاربری",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام کاربری" },
-      },
-      {
-        accessorKey: "password",
-        header: "رمز عبور",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رمز عبور" },
-      },
-      {
-        accessorKey: "field",
-        header: "رشته",
-        size: 75,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <span>{barnch(row)}</span>;
-        },
-      },
-      {
-        accessorKey: "rank",
-        header: "رتبه",
-        size: 75,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رتبه" },
-      },
-      {
-        accessorKey: "access",
-        header: "دسترسی‌ها",
-        size: 50,
-        enableColumnFilter: false,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        Cell: ({ cell }) => {
-          const row = cell.row.original;
-          const hasAccess =
-            row.GL === 1 || row.GLF === 1 || row.FR === 1 || row.AG === 1;
           return (
             <IconButton onClick={(e) => handleOpenAccessMenu(row.user_id, e)}>
               <SettingsIcon />
@@ -435,111 +340,9 @@ const StudentList = () => {
         },
         Cell: ({ cell }) => {
           const row = cell.row.original;
-          const hasAccess =
-            row.GL === 1 || row.GLF === 1 || row.FR === 1 || row.AG === 1;
           return (
             <IconButton onClick={(e) => handleOpenAccessMenu(row.user_id, e)}>
               <SettingsIcon />
-            </IconButton>
-          );
-        },
-      },
-    ],
-    oCon: [
-      {
-        accessorKey: "name",
-        header: "نام",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          const user_id = cell.row.original.user_id;
-          return (
-            <span
-              onClick={() => handleOpenUser(user_id)}
-              style={{ cursor: "pointer" }}
-            >
-              {row}
-            </span>
-          );
-        },
-      },
-      {
-        accessorKey: "phone",
-        header: "نام کاربری",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام کاربری" },
-      },
-      {
-        accessorKey: "password",
-        header: "رمز عبور",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رمز عبور" },
-      },
-      {
-        accessorKey: "field",
-        header: "رشته",
-        size: 75,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <span>{barnch(row)}</span>;
-        },
-      },
-      {
-        accessorKey: "rank",
-        header: "رتبه",
-        size: 75,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رتبه" },
-      },
-      {
-        accessorKey: "access",
-        header: "دسترسی‌ها",
-        size: 50,
-        enableColumnFilter: false,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        Cell: ({ cell }) => {
-          const row = cell.row.original;
-          const hasAccess =
-            row.GL === 1 || row.GLF === 1 || row.FR === 1 || row.AG === 1;
-          return (
-            <IconButton onClick={(e) => handleOpenAccessMenu(row.user_id, e)}>
-              {<SettingsIcon />}
             </IconButton>
           );
         },
@@ -564,10 +367,18 @@ const StudentList = () => {
       if (response.data.tracking_code !== null) {
         setConsultants(response?.data?.response?.con);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -586,10 +397,18 @@ const StudentList = () => {
       if (response.data.tracking_code !== null) {
         setData(response?.data?.response?.stu);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -609,10 +428,18 @@ const StudentList = () => {
       if (response.data.tracking_code !== null) {
         setUserDetails(response?.data?.response?.stu);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -622,7 +449,7 @@ const StudentList = () => {
     } else {
       setLoading(true);
       select_students().then(() => {
-        if (["ins", "hCon"].includes(userRole)) {
+        if (["ins"].includes(userRole)) {
           select_cons_stu().then(() => {
             setLoading(false);
           });
@@ -676,7 +503,7 @@ const StudentList = () => {
         </Box>
         {data?.length > 0 ? (
           <div style={{ marginTop: "50px" }}>
-            {["ins", "oCon"].includes(userRole) ? (
+            {["ins"].includes(userRole) ? (
               <ThemeProvider theme={createTheme({ direction: "rtl" })}>
                 <MaterialReactTable
                   autoResetPageIndex={false}
@@ -759,13 +586,7 @@ const StudentList = () => {
           onClose={handleCloseAccessMenu}
         >
           <AccessMenuItem
-            kind="GL"
-            userId={selectedUserId}
-            data={data}
-            onClick={handleAccessSelection}
-          />
-          <AccessMenuItem
-            kind="GLF"
+            kind="hoshmand"
             userId={selectedUserId}
             data={data}
             onClick={handleAccessSelection}
@@ -804,6 +625,20 @@ const StudentList = () => {
           />
         )}
       </Paper>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </StudentContainer>
   );
 };

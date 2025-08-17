@@ -15,16 +15,18 @@ import {
   Paper,
   Box,
   Divider,
+  Snackbar,
+  Alert,
+  Fade,
+  CircularProgress
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MaterialReactTable from "material-react-table";
 import { MRT_Localization_FA } from "material-react-table/locales/fa";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { toast } from "react-toastify";
+import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
 import { FaDownload, FaUserCheck, FaUserPlus } from "react-icons/fa";
 import { GetButtonColor } from "../../../helper/buttonColor";
 import Loader from "../../../helper/Loader";
@@ -55,26 +57,59 @@ const ReportContainer = styled.div`
   }
 `;
 
-const ProgressBarContainer = styled.div`
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+
+const ProgressOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  background-color: transparent;
-  border-radius: 50px;
-  border: 10px solid #fff;
-  margin-top: 10px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+`;
+
+const ProgressContainer = styled.div`
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+  animation: ${pulse} 2s infinite;
 `;
 
 const ProgressBar = styled.div`
-  height: 10px;
-  border-radius: 50px;
-  background-color: ${({ color }) => color};
+  height: 8px;
+  border-radius: 4px;
+  background: #f0f0f0;
+  margin: 1rem 0;
+  overflow: hidden;
+`;
+
+const ProgressFill = styled.div`
+  height: 100%;
+  background: ${({ color }) => color};
   width: ${({ progress }) => progress}%;
-  transition: width 0.2s ease;
+  transition: width 0.3s ease-out;
+  border-radius: 4px;
 `;
 
 const ProgressText = styled.div`
-  margin-top: 5px;
-  font-size: 14px;
-  color: #555;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0.5rem;
 `;
 
 const barnch = (filed) => {
@@ -106,6 +141,14 @@ const AcademicGuidanceList = () => {
   const [modalAction, setModalAction] = useState(null);
   const [kind, setKind] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const select_report = async () => {
     try {
@@ -122,10 +165,18 @@ const AcademicGuidanceList = () => {
       if (response.data.tracking_code !== null) {
         setData(response?.data?.response?.stu);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -144,7 +195,11 @@ const AcademicGuidanceList = () => {
     try {
       await handleDownload(report, report_name, phone, setDownloadProgress);
     } catch (error) {
-      toast.error("خطا در دانلود فایل");
+      setSnackbar({
+        open: true,
+        message: "خطا در دانلود فایل",
+        severity: "error",
+      });
     }
   };
 
@@ -190,8 +245,6 @@ const AcademicGuidanceList = () => {
 
   const handleConfirmAccessChange = async () => {
     try {
-      console.log({ userDetails });
-
       setLoading(true);
       const response = await axios.post(
         "https://student.baazmoon.com/bbc_api/update_request",
@@ -209,14 +262,25 @@ const AcademicGuidanceList = () => {
       );
 
       if (response.data.tracking_code !== null) {
-        toast.success("دسترسی با موفقیت تغییر یافت");
-        // Refresh the data
+        setSnackbar({
+          open: true,
+          message: "دسترسی با موفقیت تغییر یافت",
+          severity: "success",
+        });
         await select_report();
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در تغییر دسترسی");
+      setSnackbar({
+        open: true,
+        message: "خطا در تغییر دسترسی",
+        severity: "error",
+      });
     } finally {
       setLoading(false);
       handleCloseModal();
@@ -316,24 +380,6 @@ const AcademicGuidanceList = () => {
               <FaDownload color="#000" />
             </Button>
           );
-        },
-      },
-      {
-        accessorKey: "hCon_name",
-        header: "سرمشاور",
-        size: 50,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: {
-          placeholder: "سرمشاور",
-        },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <>{row}</>;
         },
       },
       {
@@ -463,95 +509,6 @@ const AcademicGuidanceList = () => {
               <SettingsIcon />
             </IconButton>
           );
-        },
-      },
-    ],
-    hCon: [
-      {
-        accessorKey: "name",
-        header: "نام",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-      },
-      {
-        accessorKey: "phone",
-        header: "نام کاربری",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام کاربری" },
-      },
-      {
-        accessorKey: "field",
-        header: "رشته",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <span>{barnch(row)}</span>;
-        },
-      },
-      {
-        accessorKey: "report",
-        header: "کارنامه استعدادسنجی",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: {
-          placeholder: "کارنامه استعدادسنجی",
-        },
-        Cell: ({ cell }) => {
-          const phone = cell.row.original.phone;
-          return (
-            <Button
-              onClick={() =>
-                handleDownloadWithProgress(
-                  "get_report",
-                  phone,
-                  "استعدادسنجی.pdf"
-                )
-              }
-              sx={{ boxShadow: "none", borderRadius: "5px" }}
-            >
-              <FaDownload color="#000" />
-            </Button>
-          );
-        },
-      },
-      {
-        accessorKey: "con_name",
-        header: "مشاور",
-        size: 50,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "مشاور" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <>{row}</>;
         },
       },
     ],
@@ -807,16 +764,37 @@ const AcademicGuidanceList = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          {downloadProgress > 0 && (
-            <ProgressBarContainer>
-              <ProgressBar
-                progress={downloadProgress}
-                color={GetButtonColor(userInfo?.data?.sex)}
-              />
-              <ProgressText>{downloadProgress}%</ProgressText>
-            </ProgressBarContainer>
-          )}
+          <Fade in={downloadProgress} timeout={300}>
+            <ProgressOverlay>
+              <ProgressContainer>
+                <CircularProgress
+                  size={60}
+                  thickness={4}
+                  style={{ color: GetButtonColor(userInfo?.data?.sex) }}
+                />
+                <ProgressText>در حال آماده‌سازی فایل PDF</ProgressText>
+                <ProgressBar>
+                  <ProgressFill progress={downloadProgress} color={GetButtonColor(userInfo?.data?.sex)} />
+                </ProgressBar>
+                <ProgressText>{Math.min(100, Math.round(downloadProgress))}%</ProgressText>
+              </ProgressContainer>
+            </ProgressOverlay>
+          </Fade>
         </Paper>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </ReportContainer>
     </>
   );

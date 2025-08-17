@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Autocomplete,
   Button,
   Dialog,
   DialogTitle,
   Grid,
+  Snackbar,
   TextField,
 } from "@mui/material";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -18,9 +18,16 @@ import { GetButtonColor } from "../../helper/buttonColor";
 
 const AddConsultantForm = ({ data, setReload }) => {
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
-  const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
@@ -82,7 +89,7 @@ const AddConsultantForm = ({ data, setReload }) => {
         "https://student.baazmoon.com/bbc_api/insert_request",
         {
           table: "users",
-          method_type: "insert_consultant",
+          method_type: "add_consultant",
           data: {
             first_name: formik.values.first_name,
             last_name: formik.values.last_name,
@@ -93,15 +100,27 @@ const AddConsultantForm = ({ data, setReload }) => {
         }
       );
       if (response.data.tracking_code !== null) {
-        toast.success(response.data.response.message);
+        setSnackbar({
+          open: true,
+          message: response.data.response.message,
+          severity: "success",
+        });
         setReload((perv) => !perv);
         setOpen(false);
         formik.resetForm();
       } else {
-        toast.error(response.data.error);
+         setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در ثبت اطلاعات کاربر",
+        severity: "error",
+      });
     }
   };
 
@@ -255,6 +274,20 @@ const AddConsultantForm = ({ data, setReload }) => {
           </Grid>
         </form>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

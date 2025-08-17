@@ -52,6 +52,14 @@ const Navbar = ({ toggle }) => {
     scroll.scrollToTop();
   };
 
+  const getName = () => {
+    if (["ins"].includes(userInfo?.data?.role)) {
+      return userInfo?.data?.name;
+    } else {
+      return userInfo?.data.first_name + " " + userInfo?.data.last_name;
+    }
+  };
+
   // Filter out the signin route from other navigation items
   const filteredNavItems = NavData.other.filter(item => item.path !== "/signin");
 
@@ -108,7 +116,7 @@ const Navbar = ({ toggle }) => {
                 onClick={() => navigate("/dashboard")}
               >
                 <Body fontWeight={FontWeight.Meduim} color={"#000"}>
-                  {userInfo?.data.first_name + " " + userInfo?.data.last_name}
+                  {getName()}
                 </Body>
                 <MdPersonOutline size="1.8em" color="#000" />
               </NavBtn>

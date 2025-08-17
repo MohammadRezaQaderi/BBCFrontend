@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
+import { Alert, Box, Divider, Grid, Paper, Snackbar, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import AddConsultantForm from "../../Modals/AddConsultant";
 import { createTheme, ThemeProvider } from "@mui/material";
@@ -8,9 +8,7 @@ import { tableConfig } from "./tableConfig";
 import "./style.css";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import axios from "axios";
-import "react-toastify/dist/ReactToastify.css";
 import EditConsultantForm from "../../Modals/EditConsultant";
 import { GetButtonColor } from "../../../helper/buttonColor";
 import Loader from "../../../helper/Loader";
@@ -40,10 +38,17 @@ const ConsultantList = () => {
   const navigate = useNavigate();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
-  const [hConData, setHConData] = useState([]);
   const [conData, setConData] = useState([]);
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const conColumns = useMemo(() => tableConfig["con"], []);
 
@@ -62,10 +67,18 @@ const ConsultantList = () => {
       if (response.data.tracking_code !== null) {
         setConData(response?.data?.response?.con);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -141,9 +154,7 @@ const ConsultantList = () => {
                       type="edit"
                       setReload={setReload}
                       data={row.original}
-                      headConsultants={hConData}
                       userInfo={userInfo}
-                      userRole={userRole}
                     />
                   )}
                   localization={MRT_Localization_FA}
@@ -179,12 +190,26 @@ const ConsultantList = () => {
               action={"⚠️"}
               title={"اطلاعاتی در مورد مشاوران یافت نشد"}
               description={
-                "لطفا با استفاده از دکمه افزودن مشاور برای موسسه خود مشاور تعریف کنید.(البته در ابتدا برای خود سرمشاور تعریف کنید)"
+                "لطفا با استفاده از دکمه افزودن مشاور برای موسسه خود مشاور تعریف کنید."
               }
             />
           )}
         </Paper>
       </ConsultantContainer>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </ConContainer>
   );
 };
