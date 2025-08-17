@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Alert,
   Autocomplete,
   Button,
   Checkbox,
@@ -7,13 +8,12 @@ import {
   DialogTitle,
   FormControlLabel,
   Grid,
+  Snackbar,
   TextField,
 } from "@mui/material";
 import provinces from "../../Data/provinces.json";
 import fields from "../../Data/fields.json";
 import quotas from "../../Data/quotas.json";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -34,6 +34,15 @@ const EditInfoModal = ({
   const [loading, setLoading] = useState(false);
   const [showZaban, setShowZaban] = useState(false);
   const [showHonar, setShowHonar] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
+
   const formik = useFormik({
     initialValues: {
       sex: userData?.sex,
@@ -138,7 +147,11 @@ const EditInfoModal = ({
       );
 
       if (response.data.tracking_code !== null) {
-        toast.success(response?.data?.response?.message);
+        setSnackbar({
+          open: true,
+          message: response?.data?.response?.message,
+          severity: "success",
+        });
         if (response?.data?.response?.finalized === 1) {
           handleCloseFinalize(stu_id);
         } else {
@@ -149,10 +162,18 @@ const EditInfoModal = ({
           onClose();
         }
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -231,7 +252,7 @@ const EditInfoModal = ({
               value={provinces.find(
                 (province) =>
                   province.id ===
-                    parseInt(formik.values?.province?.split(",")[0]) ||
+                  parseInt(formik.values?.province?.split(",")[0]) ||
                   province.name === formik.values?.province?.split(",")[1]
               )}
               getOptionLabel={(option) => option.name || ""}
@@ -460,7 +481,7 @@ const EditInfoModal = ({
                   type="text"
                 />
                 {formik.touched.full_number_zaban &&
-                formik.errors.full_number_zaban ? (
+                  formik.errors.full_number_zaban ? (
                   <div>
                     <p style={{ fontSize: 10, color: "red" }}>
                       {formik.errors.full_number_zaban}
@@ -490,7 +511,7 @@ const EditInfoModal = ({
                   type="text"
                 />
                 {formik.touched.rank_all_zaban &&
-                formik.errors.rank_all_zaban ? (
+                  formik.errors.rank_all_zaban ? (
                   <div>
                     <p style={{ fontSize: 10, color: "red" }}>
                       {formik.errors.rank_all_zaban}
@@ -564,7 +585,7 @@ const EditInfoModal = ({
                   type="text"
                 />
                 {formik.touched.full_number_honar &&
-                formik.errors.full_number_honar ? (
+                  formik.errors.full_number_honar ? (
                   <div>
                     <p style={{ fontSize: 10, color: "red" }}>
                       {formik.errors.full_number_honar}
@@ -594,7 +615,7 @@ const EditInfoModal = ({
                   type="text"
                 />
                 {formik.touched.rank_all_honar &&
-                formik.errors.rank_all_honar ? (
+                  formik.errors.rank_all_honar ? (
                   <div>
                     <p style={{ fontSize: 10, color: "red" }}>
                       {formik.errors.rank_all_honar}
@@ -648,6 +669,20 @@ const EditInfoModal = ({
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };

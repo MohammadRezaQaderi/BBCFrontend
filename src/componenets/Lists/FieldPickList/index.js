@@ -57,6 +57,7 @@ const FieldPickList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState();
   const [userField, setUserField] = useState();
+  const [detailsLoading, setDetailsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -137,8 +138,8 @@ const FieldPickList = () => {
           },
         },
         {
-          accessorKey: "GL",
-          header: "سراسری",
+          accessorKey: "hoshmand",
+          header: "هوشمند",
           size: 100,
           muiTableHeadCellProps: {
             align: "center",
@@ -146,7 +147,7 @@ const FieldPickList = () => {
           muiTableBodyCellProps: {
             align: "center",
           },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "سراسری" },
+          muiTableHeadCellFilterTextFieldProps: { placeholder: "هوشمند" },
           Cell: ({ cell }) => {
             const row = cell.getValue();
             const user_id = cell.row.original.user_id;
@@ -162,40 +163,6 @@ const FieldPickList = () => {
                       style={{ cursor: "pointer" }}
                       title="انتخاب رشته"
                       onClick={() => goToPickField(user_id, finalized)}
-                    />
-                  </div>
-                ) : (
-                  <>-</>
-                )}
-              </>
-            );
-          },
-        },
-        {
-          accessorKey: "GLF",
-          header: "فرهنگیان",
-          size: 100,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "فرهنگیان" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const user_id = cell.row.original.user_id;
-            return (
-              <>
-                {row === 1 ? (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <FiSearch
-                      size={20}
-                      style={{ cursor: "pointer" }}
-                      title="انتخاب رشته"
-                      onClick={() => navigate("/pfglf/" + user_id)}
                     />
                   </div>
                 ) : (
@@ -598,6 +565,7 @@ const FieldPickList = () => {
   }, [tableConfig, userRole]);
 
   const select_student_data = async (user_id) => {
+    setDetailsLoading(true);
     try {
       const response = await axios.post(
         "https://student.baazmoon.com/bbc_api/select_request",
@@ -625,6 +593,8 @@ const FieldPickList = () => {
         message: "خطا در دریافت اطلاعات",
         severity: "error",
       });
+    } finally {
+      setDetailsLoading(false); // End loading regardless of success/failure
     }
   };
 
@@ -677,6 +647,22 @@ const FieldPickList = () => {
   return (
     <>
       <FPContainer>
+        {detailsLoading && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999
+          }}>
+            <Loader color={GetButtonColor(userInfo?.data?.sex)} />
+          </div>
+        )}
         <Paper
           elevation={3}
           sx={{

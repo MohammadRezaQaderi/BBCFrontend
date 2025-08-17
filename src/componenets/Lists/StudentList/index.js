@@ -81,6 +81,7 @@ const StudentList = () => {
   const [openUserInfoModal, setOpenUserInfoModal] = useState(false);
   const [accessMenuAnchor, setAccessMenuAnchor] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -413,6 +414,7 @@ const StudentList = () => {
   };
 
   const select_student_data = async (user_id) => {
+    setDetailsLoading(true);
     try {
       const response = await axios.post(
         "https://student.baazmoon.com/bbc_api/select_request",
@@ -440,6 +442,8 @@ const StudentList = () => {
         message: "خطا در دریافت اطلاعات",
         severity: "error",
       });
+    } finally {
+      setDetailsLoading(false); // End loading regardless of success/failure
     }
   };
 
@@ -466,6 +470,22 @@ const StudentList = () => {
 
   return (
     <StudentContainer>
+      {detailsLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 9999
+        }}>
+          <Loader color={GetButtonColor(userInfo?.data?.sex)} />
+        </div>
+      )}
       <Paper
         elevation={3}
         sx={{

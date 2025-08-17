@@ -5,11 +5,11 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { GetButtonColor } from "../../../helper/buttonColor";
 
 const EditStuAccess = ({
@@ -24,6 +24,14 @@ const EditStuAccess = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [hasNoAccess, setHasNoAccess] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
@@ -52,20 +60,32 @@ const EditStuAccess = ({
         }
       );
       if (response.data.tracking_code !== null) {
-        toast.success(response?.data?.response?.message);
+        setSnackbar({
+          open: true,
+          message: response?.data?.response?.message,
+          severity: "success",
+        });
         setReload((perv) => !perv);
         setOpen(false);
         setHasNoAccess(false);
         onClose();
       } else {
-        toast.error(response?.data?.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
         setReload((perv) => !perv);
         setOpen(false);
         setHasNoAccess(false);
         onClose();
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -90,8 +110,8 @@ const EditStuAccess = ({
           {kind === "hoshmand"
             ? "انتخاب رشته هوشمند"
             : kind === "FR"
-            ? "انتخاب رشته آزاد"
-            : "استعداد سنجی "}
+              ? "انتخاب رشته آزاد"
+              : "استعداد سنجی "}
           {" به دانش‌آموز"}
         </DialogTitle>
         <Grid item xs={12}>
@@ -104,7 +124,7 @@ const EditStuAccess = ({
         <p style={{ marginBottom: "30px" }}>
           از دادن این خدمت به دانش‌آموز اطمینان دارید؟
         </p>
-        {(kind === "hoshmand" || kind === "FR" ) && (
+        {(kind === "hoshmand" || kind === "FR") && (
           <FormControlLabel
             control={
               <Checkbox
@@ -161,6 +181,20 @@ const EditStuAccess = ({
           </div>
         </Grid>
       </div>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };

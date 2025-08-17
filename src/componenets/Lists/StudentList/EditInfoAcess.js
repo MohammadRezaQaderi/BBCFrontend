@@ -8,6 +8,8 @@ import {
   DialogContent,
   IconButton,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { GetButtonColor } from "../../../helper/buttonColor";
@@ -52,6 +54,14 @@ const EditInfoAccess = ({
 }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [accessModalOpen, setAccessModalOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
   const formatValue = (value) => {
     if (value === null || value === undefined) return "---";
     if (typeof value === "number") return value.toLocaleString("fa-IR");
@@ -318,6 +328,20 @@ const EditInfoAccess = ({
           onClose={onClose}
         />
       )}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
