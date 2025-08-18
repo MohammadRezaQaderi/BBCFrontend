@@ -76,7 +76,7 @@ const FRBTrashList = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-  const { field, part } = useParams();
+  const { field, part, stu_id } = useParams();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
@@ -107,7 +107,7 @@ const FRBTrashList = () => {
     () => [
       {
         accessorKey: "city",
-        header: "نام استان",
+        header: "استان",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -115,11 +115,11 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام استان" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "استان" },
       },
       {
         accessorKey: "university",
-        header: "نام واحد",
+        header: "واحد",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -127,11 +127,11 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام واحد" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "واحد" },
       },
       {
         accessorKey: "field",
-        header: "نام رشته",
+        header: "رشته",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -139,7 +139,7 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام رشته" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
       },
       {
         accessorKey: "filedCode",
@@ -155,7 +155,7 @@ const FRBTrashList = () => {
       },
       {
         accessorKey: "sex",
-        header: "جنسیت پذیرش",
+        header: "پذیرش",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -163,15 +163,15 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "جنسیت پذیرش" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "پذیرش" },
         Cell: ({ cell }) => {
-          const row = cell.getValue();
+          const row = cell?.getValue();
           return <span>{row === 3 ? "زن/مرد" : row === 1 ? "مرد" : "زن"}</span>;
         },
       },
       {
         accessorKey: "dorm",
-        header: "وضعیت خوابگاه",
+        header: "خوابگاه",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -179,29 +179,12 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "وضعیت خوابگاه" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "خوابگاه" },
         Cell: ({ cell }) => {
-          const row = cell.getValue();
+          const row = cell?.getValue();
           return <span>{row === 0 ? "ندارد" : "دارد"}</span>;
         },
       },
-      // {
-      //   accessorKey: "partTime",
-      //   header: "پاره وقت",
-      //   maxSize: 50,
-      //   muiTableHeadCellProps: {
-      //     align: "center",
-      //   },
-      //   muiTableBodyCellProps: {
-      //     align: "center",
-      //   },
-      //   enableColumnFilter: false,
-      //   muiTableHeadCellFilterTextFieldProps: { placeholder: "پاره وقت" },
-      //   Cell: ({ cell }) => {
-      //     const row = cell.getValue();
-      //     return <span>{row === 0 ? "تمام وقت" : "پاره وقت"}</span>;
-      //   },
-      // },
     ],
     []
   );
@@ -212,9 +195,10 @@ const FRBTrashList = () => {
         "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
-          method_type: "select_student_accept_check",
+          method_type: "select_student_field_info",
           data: {
-            user_id: userInfo?.data.user_id,
+            kind: "FR",
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -249,12 +233,12 @@ const FRBTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/bbc_fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfrb_list",
             data: {
-              user_id: userInfo?.data?.user_id,
+              stu_id: parseInt(stu_id),
               field: parseInt(field),
               part: parseInt(part),
               special_list: JSON.stringify(specialList),
@@ -289,12 +273,12 @@ const FRBTrashList = () => {
   const select_spfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfrb_list",
           data: {
-            user_id: userInfo?.data?.user_id,
+            stu_id: parseInt(stu_id),
             field: parseInt(field),
             part: parseInt(part),
             token: JSON.parse(localStorage.getItem("token")),
@@ -329,12 +313,12 @@ const FRBTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/bbc_fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_trfrb_list",
             data: {
-              user_id: userInfo?.data?.user_id,
+              stu_id: parseInt(stu_id),
               field: parseInt(field),
               part: parseInt(part),
               trash_list: JSON.stringify(data),
@@ -368,12 +352,12 @@ const FRBTrashList = () => {
   const select_trfrb_list = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_trfrb_list",
           data: {
-            user_id: userInfo?.data?.user_id,
+            stu_id: parseInt(stu_id),
             field: parseInt(field),
             part: parseInt(part),
             token: JSON.parse(localStorage.getItem("token")),
@@ -463,8 +447,11 @@ const FRBTrashList = () => {
 
   useEffect(() => {
     if (Object.keys(UserData).length !== 0) {
+      setSearchLoading(true);
       select_spfrb_list().then(() => {
-        select_trfrb_list().then(() => { });
+        select_trfrb_list().then(() => {
+          setSearchLoading(false);
+        });
       });
     }
   }, [UserData, update]);
@@ -699,7 +686,7 @@ const FRBTrashList = () => {
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
                   }}
-                  onClick={() => navigate("/pffrb/" + field + "/" + part)}
+                  onClick={() => navigate("/pffrb/" + stu_id + "/" + field + "/" + part)}
                 >
                   <FiSearch color="#fff" size={isMobile ? 16 : 18} />
                   {!isMobile && (
@@ -715,7 +702,7 @@ const FRBTrashList = () => {
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
                   }}
-                  onClick={() => navigate("/spfrb/" + field + "/" + part)}
+                  onClick={() => navigate("/spfrb/" + stu_id + "/" + field + "/" + part)}
                 >
                   <MdFormatListNumbered
                     color="#fff"

@@ -36,13 +36,24 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { font } from "../404/font";
 import imgData from "../../assets/images/logo.png";
+import {
+  Battery20,
+  Battery50,
+  BatteryFull,
+  Favorite,
+} from "@mui/icons-material";
+
+import {
+  Warning as WarningIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
 
 const pulse = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 `;
-
 
 const ProgressOverlay = styled.div`
   position: fixed;
@@ -94,7 +105,7 @@ const ProgressText = styled.div`
 
 const SELECTED_LIST_LIMIT = 150;
 
-const SPList = ({ userInfo, nextStep }) => {
+const SPList = ({ userInfo, nextStep, stu_id }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -145,9 +156,13 @@ const SPList = ({ userInfo, nextStep }) => {
     <HelperInfo
       userInfo={userInfo}
       title="راهنمایی"
-      content={[`در این صفحه می‌توانید لیست نهایی خود را مشاهده و تغییرات مد نظرتان را بر آن اعمال کنید. با کلیک بر روی چند کدرشته می‌توانید آن‌ها به صورت یکجا جا به جا کنید. با استفاده از دکمه جست و جوی پیشرفته می‌توانید به تمامی کدرشته‌های موجود در دفترچه با کمک فیلترهای مختلف دسترسی داشته و در صورت صلاحدید آن‌ها را به انتهای لیست نهایی خود اضافه کنید. در نظر داشته باشید تعداد کد رشته‌های این صفحه نمی‌تواند فراتر از ${SELECTED_LIST_LIMIT} کدرشته باشد`]}
+      content={[
+        `در این صفحه می‌توانید لیست نهایی خود را مشاهده و تغییرات مد نظرتان را بر آن اعمال کنید. با کلیک بر روی چند کدرشته می‌توانید آن‌ها به صورت یکجا جا به جا کنید. با استفاده از دکمه جست و جوی پیشرفته می‌توانید به تمامی کدرشته‌های موجود در دفترچه با کمک فیلترهای مختلف دسترسی داشته و در صورت صلاحدید آن‌ها را به انتهای لیست نهایی خود اضافه کنید. در نظر داشته باشید تعداد کد رشته‌های این صفحه نمی‌تواند فراتر از ${SELECTED_LIST_LIMIT} کدرشته باشد`,
+      ]}
       secondTitle={"نکته‌ی مهم"}
-      additionalTips={[`در صورتی که لیست نهایی پروفسور کمتر از ${SELECTED_LIST_LIMIT} کدرشته دارد به شما پیشنهاد می‌کنیم یا به صورت دستی با زدن دکمه جست و جوی پیشرفته کدرشته‌هایی با احتمال قبولی بالا به لیست خود اضافه کنید یا با بازگشت به مراحل قبل، اولویت‌های خود را تغییر دهید.`]}
+      additionalTips={[
+        `در صورتی که لیست نهایی پروفسور کمتر از ${SELECTED_LIST_LIMIT} کدرشته دارد به شما پیشنهاد می‌کنیم یا به صورت دستی با زدن دکمه جست و جوی پیشرفته کدرشته‌هایی با احتمال قبولی بالا به لیست خود اضافه کنید یا با بازگشت به مراحل قبل، اولویت‌های خود را تغییر دهید.`,
+      ]}
     />
   );
 
@@ -178,6 +193,59 @@ const SPList = ({ userInfo, nextStep }) => {
         muiTableHeadCellFilterTextFieldProps: {
           placeholder: "رشته",
           sx: { width: "75%", marginRight: "8px", marginLeft: "8px" },
+        },
+      },
+      {
+        accessorKey: "hedayat",
+        header: "تناسب",
+        size: 25,
+        enableColumnFilter: false,
+        Cell: ({ cell }) => {
+          if (cell.getValue()) {
+            return (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  padding: "0 8px",
+                }}
+              >
+                {cell.getValue() === 1 && (
+                  <Tooltip title="توصیه اولویت اول" arrow placement="left">
+                    <BatteryFull
+                      fontSize="small"
+                      sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+                {cell.getValue() === 3 && (
+                  <Tooltip title="توصیه با احتیاط" arrow placement="left">
+                    <Battery50
+                      fontSize="small"
+                      sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+                {cell.getValue() === 2 && (
+                  <Tooltip title="عدم توصیه" arrow placement="left">
+                    <Battery20
+                      fontSize="small"
+                      sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+              </Box>
+            );
+          }
+          return null;
+        },
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
         },
       },
       {
@@ -264,13 +332,14 @@ const SPList = ({ userInfo, nextStep }) => {
         accessorKey: "explain",
         header: "توضیح",
         size: 100,
+        maxSize: 150,
         muiTableHeadCellProps: { align: "center" },
         muiTableBodyCellProps: { align: "center" },
         muiTableHeadCellFilterTextFieldProps: {
           placeholder: "توضیح",
           sx: { width: "75%", marginRight: "8px", marginLeft: "8px" },
         },
-        enableResizing: true,
+        enableResizing: false,
         Cell: ({ cell }) => (
           <Tooltip
             title={cell.getValue()}
@@ -296,32 +365,56 @@ const SPList = ({ userInfo, nextStep }) => {
       {
         accessorKey: "admissionKind",
         header: "",
-        maxSize: 50,
+        maxSize: 25,
         muiTableHeadCellProps: { align: "center" },
         muiTableBodyCellProps: { align: "center" },
         enableColumnFilter: false,
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return (
-            <span
-              style={{
-                backgroundColor:
-                  row === 3
-                    ? "#fa7373"
-                    : row === 2
-                      ? "#f5eb69"
-                      : row === 1
-                        ? "#8ef78b"
-                        : row === 0
-                          ? "#c7c7c7"
-                          : "white",
-                borderRadius: "50%",
-                paddingTop: 3,
-                paddingLeft: 10,
-                paddingRight: 10,
-                color: "white",
-              }}
-            ></span>
+            <Tooltip
+              title={
+                row === 1
+                  ? "احتمال بالا"
+                  : row === 2
+                    ? "احتمال متوسط"
+                    : row === 3
+                      ? "احتمال کم"
+                      : "صرفا با سوابق"
+              }
+              arrow
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    row === 1
+                      ? "#4caf50"
+                      : row === 2
+                        ? "#ff9800"
+                        : row === 3
+                          ? "#f44336"
+                          : "#acacac",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mr: 1,
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                {row === 1 && (
+                  <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 2 && (
+                  <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 3 && (
+                  <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+              </Box>
+            </Tooltip>
           );
         },
       },
@@ -333,11 +426,12 @@ const SPList = ({ userInfo, nextStep }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand_api/select_request",
         {
           table: "users",
-          method_type: "get_hoshmand_sp_list",
+          method_type: "select_hoshmand_sp_list",
           data: {
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -377,7 +471,7 @@ const SPList = ({ userInfo, nextStep }) => {
     try {
       setSaving(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_sp_list",
@@ -385,6 +479,7 @@ const SPList = ({ userInfo, nextStep }) => {
             token: JSON.parse(localStorage.getItem("token")),
             selected_list: data,
             trash_list: trashList,
+            stu_id: parseInt(stu_id),
           },
         }
       );
@@ -470,7 +565,7 @@ const SPList = ({ userInfo, nextStep }) => {
   };
 
   const renderSearchButton = () => (
-    <Tooltip title="جستجوی پیشرفته">
+    <Tooltip title="اضافه کردن کدرشته">
       <Button
         style={{
           background: GetButtonColor(userInfo?.data?.sex),
@@ -481,7 +576,7 @@ const SPList = ({ userInfo, nextStep }) => {
         onClick={() => setOpenSearchModal(true)}
         variant="contained"
       >
-        جستجوی پیشرفته
+        اضافه کردن کدرشته
       </Button>
     </Tooltip>
   );
@@ -493,7 +588,7 @@ const SPList = ({ userInfo, nextStep }) => {
       maxWidth="md"
       fullWidth
     >
-      <DialogTitle>جستجوی پیشرفته رشته‌ها</DialogTitle>
+      <DialogTitle>اضافه کردن کدرشته</DialogTitle>
       <DialogContent>
         <Box
           sx={{
@@ -609,6 +704,12 @@ const SPList = ({ userInfo, nextStep }) => {
               muiTableContainerProps={{
                 sx: {
                   maxHeight: "350px",
+                },
+              }}
+              muiTableProps={{
+                sx: {
+                  tableLayout: isMobile ? "auto" : "fixed",
+                  minWidth: isMobile ? "300px" : "100%",
                 },
               }}
               muiTableHeadCellProps={{
@@ -797,27 +898,28 @@ const SPList = ({ userInfo, nextStep }) => {
     doc.setFont("IRANSansWeb");
 
     doc.setFontSize(14);
-    doc.text(
-      `نام: ${userData?.first_name} ${userData?.last_name}`,
-      400,
-      40,
-      { align: "right" }
-    );
+    doc.text(`نام: ${userData?.first_name} ${userData?.last_name}`, 400, 40, {
+      align: "right",
+    });
 
-    const image = userInfo?.data?.pic || imgData;
+    const image =
+      userInfo?.data?.pic === null
+        ? imgData
+        : `https://student.baazmoon.com/bbc_api/get_user_pic/${userInfo?.data?.pic}`;
     doc.addImage(image, "PNG", 50, 40, 80, 80);
 
     const interval = setInterval(() => {
-      setPdfProgress(prev => {
+      setPdfProgress((prev) => {
         const newProgress = prev + Math.random() * 10;
         if (newProgress >= 100) {
           clearInterval(interval);
 
-          const headers = columns.map(col => col.header);
-          const dataPdf = data.map(item =>
-            columns.map(col => {
+          const headers = columns.map((col) => col.header);
+          const dataPdf = data.map((item) =>
+            columns.map((col) => {
               const value = item[col.accessorKey];
-              if (col.Cell) return col.Cell({ cell: { getValue: () => value } });
+              if (col.Cell)
+                return col.Cell({ cell: { getValue: () => value } });
               return value;
             })
           );
@@ -827,7 +929,10 @@ const SPList = ({ userInfo, nextStep }) => {
             body: dataPdf,
             startY: 140,
             styles: { font: "IRANSansWeb", fontSize: 10, halign: "center" },
-            headStyles: { fillColor: [40, 53, 147], textColor: [255, 255, 255] },
+            headStyles: {
+              fillColor: [40, 53, 147],
+              textColor: [255, 255, 255],
+            },
           });
 
           setTimeout(() => {
@@ -846,12 +951,12 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_provinces = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_provinces",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             sex: userData?.sex,
             nativeProvince: userData?.city?.split(",")[0],
             field: userData?.field,
@@ -882,12 +987,12 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_cities = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_cities",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             sex: userData?.sex,
             nativeProvince: userData?.city?.split(",")[0],
@@ -919,12 +1024,12 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_universities = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_universities",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             cities: citiesName,
             sex: userData?.sex,
@@ -957,12 +1062,12 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_majors = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_majors",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             cities: citiesName,
             universityName: universityName,
@@ -996,12 +1101,12 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_exam_types = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_exam_types",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             cities: citiesName,
             universityName: universityName,
@@ -1037,12 +1142,12 @@ const SPList = ({ userInfo, nextStep }) => {
     try {
       setLoadingSearchTable(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/bbc_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "fp_search_fields",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             cities: citiesName,
             universityName: universityName,
@@ -1160,7 +1265,8 @@ const SPList = ({ userInfo, nextStep }) => {
       message += ` (${duplicateItems.length} مورد تکراری نادیده گرفته شد)`;
     }
     if (selectedItems.length > availableSpace) {
-      message += ` (${selectedItems.length - availableSpace} مورد اضافه نشد چون لیست پر است)`;
+      message += ` (${selectedItems.length - availableSpace
+        } مورد اضافه نشد چون لیست پر است)`;
     }
 
     setSnackbar({
@@ -1180,43 +1286,34 @@ const SPList = ({ userInfo, nextStep }) => {
 
   // Effects for search filters
   useEffect(() => {
-    if (openSearchModal && provinces.length === 0) {
+    if (openSearchModal) {
       fp_provinces();
     }
-  }, [openSearchModal]);
+  }, [openSearchModal, userData]);
 
   useEffect(() => {
-    if (provincesName.length > 0) {
+    if (openSearchModal) {
       fp_cities();
     }
-  }, [provincesName]);
+  }, [provincesName, userData, openSearchModal]);
 
   useEffect(() => {
-    if (citiesName.length > 0 || provincesName.length > 0) {
+    if (openSearchModal) {
       fp_universities();
     }
-  }, [citiesName, provincesName]);
+  }, [citiesName, provincesName, userData, openSearchModal]);
 
   useEffect(() => {
-    if (
-      universityName.length > 0 ||
-      citiesName.length > 0 ||
-      provincesName.length > 0
-    ) {
+    if (openSearchModal) {
       fp_majors();
     }
-  }, [universityName, citiesName, provincesName]);
+  }, [universityName, citiesName, provincesName, userData, openSearchModal]);
 
   useEffect(() => {
-    if (
-      fieldName.length > 0 ||
-      universityName.length > 0 ||
-      citiesName.length > 0 ||
-      provincesName.length > 0
-    ) {
+    if (openSearchModal) {
       fp_exam_types();
     }
-  }, [fieldName, universityName, citiesName, provincesName]);
+  }, [fieldName, universityName, citiesName, provincesName, userData, openSearchModal]);
 
   if (loading) {
     return <Loader color={GetButtonColor(userInfo?.data?.sex)} />;
@@ -1255,7 +1352,7 @@ const SPList = ({ userInfo, nextStep }) => {
               {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
             </Button>
           </Tooltip>
-          <Tooltip title="سطل زباله">
+          <Tooltip title="کدرشته‌های حذف شده">
             <Button
               style={{
                 background: GetButtonColor(userInfo?.data?.sex),
@@ -1266,10 +1363,10 @@ const SPList = ({ userInfo, nextStep }) => {
               onClick={() => setOpenTrashModal(true)}
               variant="contained"
             >
-              سطل زباله ({trashList.length})
+              کدرشته‌های حذف شده ({trashList.length})
             </Button>
           </Tooltip>
-          <Tooltip title="ذخیره تغییرات">
+          <Tooltip title="خروجی PDF">
             <Button
               style={{
                 background: GetButtonColor(userInfo?.data?.sex),
@@ -1292,7 +1389,7 @@ const SPList = ({ userInfo, nextStep }) => {
             autoResetPageIndex={false}
             columns={columns}
             data={data || []}
-            enableSorting={true}
+            enableSorting={false}
             enableRowOrdering
             onColumnVisibilityChange={setColumnVisibility}
             enableDensityToggle={false}
@@ -1305,6 +1402,12 @@ const SPList = ({ userInfo, nextStep }) => {
               sx: {
                 m: "0.5rem 0",
                 width: "100%",
+              },
+            }}
+            muiTableProps={{
+              sx: {
+                tableLayout: isMobile ? "auto" : "fixed",
+                minWidth: isMobile ? "300px" : "100%",
               },
             }}
             muiTableBodyCellProps={({ row }) => {
@@ -1466,6 +1569,12 @@ const SPList = ({ userInfo, nextStep }) => {
                     zIndex: 1,
                   },
                 }}
+                muiTableProps={{
+                  sx: {
+                    tableLayout: isMobile ? "auto" : "fixed",
+                    minWidth: isMobile ? "300px" : "100%",
+                  },
+                }}
                 muiTableBodyCellProps={({ row }) => {
                   return {
                     sx: {
@@ -1524,7 +1633,8 @@ const SPList = ({ userInfo, nextStep }) => {
             sx: {
               borderRadius: "12px",
               overflow: "hidden",
-              background: "linear-gradient(to bottom, #ffffff 0%, #f5f7fa 100%)",
+              background:
+                "linear-gradient(to bottom, #ffffff 0%, #f5f7fa 100%)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
             },
           }}
@@ -1535,7 +1645,7 @@ const SPList = ({ userInfo, nextStep }) => {
               py: 3,
               position: "relative",
               backgroundColor: "#f8f9fa",
-              borderBottom: `1px solid ${lightColor}`
+              borderBottom: `1px solid ${lightColor}`,
             }}
           >
             <Box
@@ -1560,13 +1670,14 @@ const SPList = ({ userInfo, nextStep }) => {
                 p: 2,
                 backgroundColor: "#f8f9fa",
                 borderRadius: "8px",
-                border: `1px solid ${lightColor}`
+                border: `1px solid ${lightColor}`,
               }}
             >
               <Typography variant="body1" sx={{ mb: 1 }}>
                 <span style={{ fontWeight: 600, color: baseColor }}>
                   {selectedRows.length} ردیف
-                </span> انتخاب شده‌اند
+                </span>{" "}
+                انتخاب شده‌اند
               </Typography>
 
               <Typography variant="body1" sx={{ mb: 2 }}>
@@ -1628,7 +1739,9 @@ const SPList = ({ userInfo, nextStep }) => {
             </Box>
           </DialogContent>
 
-          <DialogActions sx={{ justifyContent: "center", pb: 3, px: 3, gap: 2 }}>
+          <DialogActions
+            sx={{ justifyContent: "center", pb: 3, px: 3, gap: 2 }}
+          >
             <Button
               onClick={() => setMoveDialogOpen(false)}
               variant="outlined"
@@ -1678,7 +1791,9 @@ const SPList = ({ userInfo, nextStep }) => {
             <ProgressBar>
               <ProgressFill progress={pdfProgress} color={baseColor} />
             </ProgressBar>
-            <ProgressText>{Math.min(100, Math.round(pdfProgress))}%</ProgressText>
+            <ProgressText>
+              {Math.min(100, Math.round(pdfProgress))}%
+            </ProgressText>
           </ProgressContainer>
         </ProgressOverlay>
       </Fade>

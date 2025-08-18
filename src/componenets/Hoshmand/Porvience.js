@@ -34,7 +34,7 @@ const pulse = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
 `;
 
-const Province = ({ userInfo, nextStep }) => {
+const Province = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
@@ -72,12 +72,12 @@ const Province = ({ userInfo, nextStep }) => {
         setLoading(true);
 
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_province",
+            method_type: "select_hoshmand_province",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -240,12 +240,12 @@ const Province = ({ userInfo, nextStep }) => {
     const province6 = boxes[5].items.join(",");
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_province",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             data: boxes,
             province1: province1,

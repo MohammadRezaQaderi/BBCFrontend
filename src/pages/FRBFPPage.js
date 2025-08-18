@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ScrollToTop from "../componenets/ScrollToTop";
-// import { ProfileSideBar } from "../componenets/ProfileSideBar/ProfileSideBar";
 import styled from "styled-components";
 import Sidebar from "../componenets/Sidebar";
 import Navbar from "../componenets/Navbar";
@@ -17,7 +16,6 @@ const FRBFPPage = () => {
       <Navbar toggle={toggle} />
       <ScrollToTop />
       <FRBFPContainer>
-        {/* <ProfileSideBar /> */}
         <FRBFieldPickTable />
       </FRBFPContainer>
     </>

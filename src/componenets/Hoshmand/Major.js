@@ -36,7 +36,7 @@ const pulse = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
 `;
 
-const Majors = ({ userInfo, nextStep }) => {
+const Majors = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
@@ -72,12 +72,12 @@ const Majors = ({ userInfo, nextStep }) => {
         setAllItems([]);
 
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_major",
+            method_type: "select_hoshmand_major",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -245,12 +245,12 @@ const Majors = ({ userInfo, nextStep }) => {
         .flatMap((box) => box.flatMap((layer) => layer))
         .join(",");
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_major",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             data: result,
             major1: major1,
@@ -364,7 +364,7 @@ const Majors = ({ userInfo, nextStep }) => {
                   gutterBottom
                   sx={{ color: baseColor }}
                 >
-                  همه رشته‌ها
+                  همه رشته های موجود با توجه به دوره های انتخابی
                 </Typography>
 
                 <Droppable droppableId="availableItems">
@@ -430,12 +430,12 @@ const Majors = ({ userInfo, nextStep }) => {
                   gutterBottom
                   sx={{ color: baseColor }}
                 >
-                  دسته‌بندی رشته‌ها
+                  اولویت بندی رشته‌ها با توجه به علاقه شما
                 </Typography>
 
                 {error && (
                   <Typography color="error" variant="caption" sx={{ mb: 2 }}>
-                    لطفا حداقل یک رشته را در دسته‌ها قرار دهید
+                    لطفا حداقل یک رشته را در اولویت‌ها قرار دهید
                   </Typography>
                 )}
 
@@ -457,7 +457,7 @@ const Majors = ({ userInfo, nextStep }) => {
                           variant="subtitle2"
                           sx={{ mb: 1, color: baseColor }}
                         >
-                          دسته {boxIndex + 1}
+                          اولویت {boxIndex + 1}
                         </Typography>
 
                         <Droppable

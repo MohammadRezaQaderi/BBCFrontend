@@ -77,7 +77,7 @@ const pulseAnimation = keyframes`
   100% { transform: scale(1); }
 `;
 
-const Chain = ({ userInfo, nextStep }) => {
+const Chain = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
@@ -121,7 +121,9 @@ const Chain = ({ userInfo, nextStep }) => {
       userInfo={userInfo}
       title="راهنمایی"
       secondTitle={"نکات مهم مشاوره‌ای:"}
-      content={["دانش آموز عزیز در این مرحله با توجه به انتخاب‌های قبلی شما، به صورت هوشمند زنجیره‌هایی متشکل از رشته-دانشگاه-دوره تولید شده است که می‌توانید به صلاح دید خود، آن‌ها را حذف و یا با هم جا به جا کنید."]}
+      content={[
+        "دانش آموز عزیز در این مرحله با توجه به انتخاب‌های قبلی شما، به صورت هوشمند زنجیره‌هایی متشکل از رشته-دانشگاه-دوره تولید شده است که می‌توانید به صلاح دید خود، آن‌ها را حذف و یا با هم جا به جا کنید.",
+      ]}
       additionalTips={[
         "تعداد زنجیره‌های تولید شده بر اساس انتخاب‌های شما ممکن است زیاد باشد. به شما توصیه می‌کنیم تعدادی از این زنجیره‌ها که تمایل به تحصیل در آن رشته-دانشگاه-دوره‌ها ندارید را حذف کنید.",
         "با کلیک کردن بر روی عنوان رشته یا دانشگاه می‌توانید اسامی رشته‌ها و دانشگاه‌های موجود در هر زنجیره را مشاهده کنید. همچنین با کلیک بر روی آیکون چشم می‌توانید به صورت دقیق لیست کدرشته‌های موجود در هر زنجیره را به ترتیب احتمال قبولی از زیاد به کم مشاهده کنید.",
@@ -135,12 +137,12 @@ const Chain = ({ userInfo, nextStep }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_chains",
+            method_type: "select_hoshmand_chains",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -189,12 +191,12 @@ const Chain = ({ userInfo, nextStep }) => {
         ({ id, originalIndex, ...rest }) => rest
       );
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_chains",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             chains: chainsToSave,
             deleted_chains: deletedChainsToSave,
@@ -261,16 +263,16 @@ const Chain = ({ userInfo, nextStep }) => {
       setTableLoading(true);
       const sortedCodes = chain["CodeReshteh"]
         .sort((a, b) => a.RowId - b.RowId)
-        .map(item => item.CodeReshteh)
+        .map((item) => item.CodeReshteh)
         .join(",");
 
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand_api/select_request",
         {
           table: "users",
-          method_type: "get_hoshmand_chain_code",
+          method_type: "select_hoshmand_chain_code",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             codes: sortedCodes,
           },
@@ -431,7 +433,7 @@ const Chain = ({ userInfo, nextStep }) => {
 
     if (tableData) {
       return (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2}}>
           {/* Header with stats */}
           <Box
             sx={{
@@ -776,6 +778,7 @@ const Chain = ({ userInfo, nextStep }) => {
     }
 
     // For majors/universities list modal
+    // For majors/universities list modal
     return (
       <Box
         sx={{
@@ -811,41 +814,75 @@ const Chain = ({ userInfo, nextStep }) => {
             overflow: "hidden",
           }}
         >
-          {modalContent?.items.map((item, index) => (
-            <React.Fragment key={index}>
-              <ListItem
-                button
-                sx={{
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    backgroundColor: lightColor,
-                    transform: "translateX(5px)",
-                  },
-                }}
-              >
-                <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: lightColor }}>
-                    {modalContent?.title.includes("رشته") ? (
-                      <MenuBookIcon sx={{ color: baseColor }} />
-                    ) : (
-                      <AccountBalanceIcon sx={{ color: baseColor }} />
-                    )}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item}
-                  primaryTypographyProps={{
-                    fontWeight: "medium",
-                    color: "text.primary",
-                  }}
-                />
-                {/* <ChevronLeftIcon color="action" /> */}
-              </ListItem>
-              {index < modalContent.items.length - 1 && (
-                <Divider variant="inset" component="li" />
-              )}
-            </React.Fragment>
-          ))}
+          {/* For Majors */}
+          {modalContent?.title.includes("رشته") &&
+            modalContent?.items
+              .sort((a, b) => a.major_order - b.major_order) // Sort by major_order ascending
+              .map((item, index) => (
+                <React.Fragment key={index}>
+                  <ListItem
+                    button
+                    sx={{
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        backgroundColor: lightColor,
+                        transform: "translateX(5px)",
+                      },
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: lightColor }}>
+                        <MenuBookIcon sx={{ color: baseColor }} />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.Major} // Access Major property
+                      primaryTypographyProps={{
+                        fontWeight: "medium",
+                        color: "text.primary",
+                      }}
+                    />
+                  </ListItem>
+                  {index < modalContent.items.length - 1 && (
+                    <Divider variant="inset" component="li" />
+                  )}
+                </React.Fragment>
+              ))}
+
+          {/* For Universities */}
+          {!modalContent?.title.includes("رشته") &&
+            modalContent?.items
+              .sort((a, b) => a.university_rank - b.university_rank) // Sort by university_rank ascending
+              .map((item, index) => (
+                <React.Fragment key={index}>
+                  <ListItem
+                    button
+                    sx={{
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        backgroundColor: lightColor,
+                        transform: "translateX(5px)",
+                      },
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar sx={{ bgcolor: lightColor }}>
+                        <AccountBalanceIcon sx={{ color: baseColor }} />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.University} // Access University property
+                      primaryTypographyProps={{
+                        fontWeight: "medium",
+                        color: "text.primary",
+                      }}
+                    />
+                  </ListItem>
+                  {index < modalContent.items.length - 1 && (
+                    <Divider variant="inset" component="li" />
+                  )}
+                </React.Fragment>
+              ))}
         </List>
       </Box>
     );
@@ -1179,7 +1216,10 @@ const Chain = ({ userInfo, nextStep }) => {
                                 type: "period",
                                 data: [chain.TypeExamTurn],
                                 label: "دوره",
-                                name: chain.obligation_category === 0 ? `${chain.TypeExamTurn} - بدون‌ تعهدی` : `${chain.TypeExamTurn} - دارای تعهد`,
+                                name:
+                                  chain.obligation_category === 0
+                                    ? `${chain.TypeExamTurn} - بدون‌ تعهدی`
+                                    : `${chain.TypeExamTurn} - دارای تعهد`,
                                 onclick: false,
                               },
                             ].map((item, i) => (
@@ -1292,8 +1332,8 @@ const Chain = ({ userInfo, nextStep }) => {
               position: "absolute",
               top: "50%",
               left: "50%",
+              width: "95%",
               transform: "translate(-50%, -50%)",
-              width: isMobile ? "95%" : "60%",
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: 1,

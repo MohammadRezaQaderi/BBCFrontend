@@ -39,6 +39,11 @@ import ErrorState from "../../../../helper/ErrorState";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { FaAward, FaBook, FaMapMarkerAlt, FaUser, FaVenusMars } from "react-icons/fa";
+import {
+  Warning as WarningIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
 
 const LoadingOverlay = MuiStyled(Box)(({ theme }) => ({
   position: 'fixed',
@@ -75,7 +80,7 @@ const FRTrashList = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-  const { field } = useParams();
+  const { field, stu_id } = useParams();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -106,7 +111,7 @@ const FRTrashList = () => {
     () => [
       {
         accessorKey: "city",
-        header: "نام استان",
+        header: "استان",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -114,31 +119,31 @@ const FRTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام استان" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "استان" },
       },
       {
         accessorKey: "university",
-        header: "نام واحد",
-        size: 80,
+        header: "واحد",
+        size: 150,
         muiTableHeadCellProps: {
           align: "center",
         },
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام واحد" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "واحد" },
       },
       {
         accessorKey: "field",
-        header: "نام رشته",
-        size: 100,
+        header: "رشته",
+        size: 150,
         muiTableHeadCellProps: {
           align: "center",
         },
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام رشته" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
       },
       {
         accessorKey: "filedCode",
@@ -151,10 +156,11 @@ const FRTrashList = () => {
           align: "center",
         },
         muiTableHeadCellFilterTextFieldProps: { placeholder: "کد رشته" },
+        size: 150
       },
       {
         accessorKey: "sex",
-        header: "جنسیت پذیرش",
+        header: "پذیرش",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -170,7 +176,7 @@ const FRTrashList = () => {
       },
       {
         accessorKey: "dorm",
-        header: "وضعیت خوابگاه",
+        header: "خوابگاه",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -178,7 +184,7 @@ const FRTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "وضعیت خوابگاه" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "خوابگاه" },
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return <span>{row === 0 ? "ندارد" : "دارد"}</span>;
@@ -186,7 +192,7 @@ const FRTrashList = () => {
       },
       {
         accessorKey: "first",
-        header: "ظرفیت نیمسال اول",
+        header: "نیمسال‌اول",
         maxSize: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -196,7 +202,7 @@ const FRTrashList = () => {
         },
         enableColumnFilter: false,
         muiTableHeadCellFilterTextFieldProps: {
-          placeholder: "ظرفیت نیمسال اول",
+          placeholder: "نیمسال‌اول",
         },
         Cell: ({ cell }) => {
           const row = cell.getValue();
@@ -205,8 +211,8 @@ const FRTrashList = () => {
       },
       {
         accessorKey: "second",
-        header: "ظرفیت نیمسال دوم",
-        maxSize: 100,
+        header: "نیمسال‌دوم",
+        size: 100,
         muiTableHeadCellProps: {
           align: "center",
         },
@@ -215,11 +221,86 @@ const FRTrashList = () => {
         },
         enableColumnFilter: false,
         muiTableHeadCellFilterTextFieldProps: {
-          placeholder: "ظرفیت نیمسال دوم",
+          placeholder: "نیمسال‌دوم",
         },
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return <span>{row}</span>;
+        },
+      },
+      {
+        accessorKey: "admissionKind",
+        header: "",
+        size: 50,
+        muiTableHeadCellProps: { align: "center" },
+        muiTableBodyCellProps: { align: "center" },
+        enableColumnFilter: false,
+        Cell: ({ cell }) => {
+          const row = cell.getValue();
+          return (
+            // <span
+            //   style={{
+            //     backgroundColor:
+            //       row === 3
+            //         ? "#fa7373"
+            //         : row === 2
+            //           ? "#f5eb69"
+            //           : row === 1
+            //             ? "#8ef78b"
+            //             : row === 0
+            //               ? "#c7c7c7"
+            //               : "white",
+            //     borderRadius: "50%",
+            //     paddingTop: 3,
+            //     paddingLeft: 10,
+            //     paddingRight: 10,
+            //     color: "white",
+            //   }}
+            // ></span>
+            <Tooltip
+              title={
+                row === 1
+                  ? "احتمال بالا"
+                  : row === 2
+                    ? "احتمال متوسط"
+                    : row === 3
+                      ? "احتمال کم"
+                      : "صرفا با سوابق"
+              }
+              arrow
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    row === 1
+                      ? "#4caf50"
+                      : row === 2
+                        ? "#ff9800"
+                        : row === 3
+                          ? "#f44336"
+                          : "#acacac",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mr: 1,
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                {row === 1 && (
+                  <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 2 && (
+                  <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 3 && (
+                  <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+              </Box>
+            </Tooltip>
+          );
         },
       },
     ],
@@ -232,9 +313,10 @@ const FRTrashList = () => {
         "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
-          method_type: "select_student_accept_check",
+          method_type: "select_student_field_info",
           data: {
-            user_id: userInfo?.data.user_id,
+            kind: "FR",
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -270,12 +352,12 @@ const FRTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/bbc_fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfr_list",
             data: {
-              user_id: userInfo?.data?.user_id,
+              stu_id: parseInt(stu_id),
               special_list: JSON.stringify(specialList),
               token: JSON.parse(localStorage.getItem("token")),
             },
@@ -308,12 +390,12 @@ const FRTrashList = () => {
   const select_spfr_list = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfr_list",
           data: {
-            user_id: userInfo?.data?.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -346,12 +428,12 @@ const FRTrashList = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/bbc_fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_trfr_list",
             data: {
-              user_id: userInfo?.data?.user_id,
+              stu_id: parseInt(stu_id),
               trash_list: JSON.stringify(data),
               token: JSON.parse(localStorage.getItem("token")),
             },
@@ -383,12 +465,12 @@ const FRTrashList = () => {
   const select_trfr_list = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_trfr_list",
           data: {
-            user_id: userInfo?.data?.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -476,8 +558,11 @@ const FRTrashList = () => {
 
   useEffect(() => {
     if (Object.keys(UserData).length !== 0) {
+      setSearchLoading(true);
       select_spfr_list().then(() => {
-        select_trfr_list().then(() => { });
+        select_trfr_list().then(() => {
+          setSearchLoading(false);
+        });
       });
     }
   }, [UserData, update]);
@@ -710,7 +795,7 @@ const FRTrashList = () => {
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
                   }}
-                  onClick={() => navigate("/pffr/" + field)}
+                  onClick={() => navigate("/pffr/" + stu_id + "/" + field)}
                 >
                   <FiSearch color="#fff" size={isMobile ? 16 : 18} />
                   {!isMobile && (
@@ -726,7 +811,7 @@ const FRTrashList = () => {
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
                   }}
-                  onClick={() => navigate("/spfr/" + field)}
+                  onClick={() => navigate("/spfr/" + stu_id + "/" + field)}
                 >
                   <MdFormatListNumbered
                     color="#fff"

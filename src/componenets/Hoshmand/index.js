@@ -25,6 +25,7 @@ import FPList from "./FPList";
 import TermsAndConditions from "./TermsAndConditions";
 import axios from "axios";
 import Loader from "../../helper/Loader";
+import { useParams } from "react-router-dom";
 
 const steps = [
   "اولویت‌ها",
@@ -75,6 +76,7 @@ const Hoshmand = () => {
   const [userInfo] = useState(
     JSON.parse(localStorage.getItem("user-info")) || {}
   );
+  const { stu_id } = useParams();
   const baseColor = GetButtonColor(userInfo?.data?.sex);
   const lightColor = GetLightColor(userInfo?.data?.sex);
   const [snackbar, setSnackbar] = useState({
@@ -92,12 +94,12 @@ const Hoshmand = () => {
     const fetchInfo = async () => {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_info",
+            method_type: "select_hoshmand_info",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -138,12 +140,12 @@ const Hoshmand = () => {
     const saveChanges = async () => {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/update_request",
+          "https://student.baazmoon.com/hoshmand_api/update_request",
           {
             table: "users",
             method_type: "update_hoshmand_info",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
               terms_accepted: 1,
               current_step: 1,
@@ -185,21 +187,21 @@ const Hoshmand = () => {
   const StepContent = ({ step, userInfo }) => {
     switch (step) {
       case 1:
-        return <Question userInfo={userInfo} nextStep={nextStep} />;
+        return <Question userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 2:
-        return <ExamType userInfo={userInfo} nextStep={nextStep} />;
+        return <ExamType userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 3:
-        return <Major userInfo={userInfo} nextStep={nextStep} />;
+        return <Major userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 4:
-        return <Porvience userInfo={userInfo} nextStep={nextStep} />;
+        return <Porvience userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 5:
-        return <PriorityTable userInfo={userInfo} nextStep={nextStep} />;
+        return <PriorityTable userInfo={userInfo} nextStep={nextStep} prevStep={prevStep} stu_id={stu_id} />;
       case 6:
-        return <Chain userInfo={userInfo} nextStep={nextStep} />;
+        return <Chain userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 7:
-        return <FPList userInfo={userInfo} nextStep={nextStep} />;
+        return <FPList userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       case 8:
-        return <SPList userInfo={userInfo} nextStep={nextStep} />;
+        return <SPList userInfo={userInfo} nextStep={nextStep} stu_id={stu_id} />;
       // case 9:
       //   return <PDFList userInfo={userInfo} nextStep={nextStep} />
       default:
@@ -264,7 +266,7 @@ const Hoshmand = () => {
             steps.map((label, index) => (
               <Step key={label} completed={index < currentStep - 1}>
                 <StepLabel
-                  onClick={() => goToStep(index + 1)}
+                // onClick={() => goToStep(index + 1)}
                 >
                   {label}
                 </StepLabel>

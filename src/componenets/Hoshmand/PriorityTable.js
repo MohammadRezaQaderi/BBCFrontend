@@ -28,6 +28,7 @@ import {
   useMediaQuery,
   DialogContent,
   DialogContentText,
+  Tooltip,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -40,6 +41,10 @@ import axios from "axios";
 import Loader from "../../helper/Loader";
 import HelperInfo from "./HelperInfo";
 import { sha256 } from 'js-sha256';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from "react-router-dom";
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -52,8 +57,15 @@ const pulse = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
 `;
 
-const PriorityTable = ({ userInfo, nextStep }) => {
+const PaymentModalPulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+const PriorityTable = ({ userInfo, nextStep, prevStep, stu_id }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
   const lightColor = GetLightColor(userInfo?.data?.sex);
@@ -73,6 +85,8 @@ const PriorityTable = ({ userInfo, nextStep }) => {
   const [modalContent, setModalContent] = useState(null);
   const [initialHash, setInitialHash] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // New state for payment modal
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
   const generateHash = (data) => {
     return sha256(JSON.stringify(data));
@@ -83,17 +97,23 @@ const PriorityTable = ({ userInfo, nextStep }) => {
       try {
         setLoading(true);
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_tables",
+            method_type: "select_hoshmand_tables",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
         );
         if (response.data && response.data.status === 200) {
+          // Check for the 'lock' property
+          // if (response.data.response.lock === 0) {
+          //   setPaymentModalOpen(true);
+          //   return;
+          // }
+
           setTimeout(() => {
             setInitialHash(generateHash({
               skills: response.data.response.skills || [],
@@ -162,12 +182,12 @@ const PriorityTable = ({ userInfo, nextStep }) => {
     try {
       setSaving(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_tables",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             skills: tableData["skills"],
             universities: tableData["universities"],
@@ -202,7 +222,6 @@ const PriorityTable = ({ userInfo, nextStep }) => {
 
   const handleNext = async () => {
     try {
-
       const currentHash = generateHash({
         skills: tableData["skills"],
         universities: tableData["universities"],
@@ -296,10 +315,19 @@ const PriorityTable = ({ userInfo, nextStep }) => {
                   "&:hover": {
                     backgroundColor: row.data ? lightColor : "inherit",
                   },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 1,
                 }}
                 onClick={() => row.data && handleRowNameClick(row, tableType)}
               >
                 {row.name}
+                {row.data && (
+                  <Tooltip title="اطلاعات">
+                    <ChevronLeftIcon fontSize="small" sx={{ color: baseColor }} />
+                  </Tooltip>
+                )}
               </TableCell>
               {row.values.map((value, colIndex) => (
                 <TableCell
@@ -333,6 +361,9 @@ const PriorityTable = ({ userInfo, nextStep }) => {
     setModalOpen(false);
   };
 
+  // If the payment modal is open, blur the content behind it
+  const mainContentStyle = paymentModalOpen ? { filter: 'blur(5px)', pointerEvents: 'none' } : {};
+
   if (loading) {
     return <Loader color={GetButtonColor(userInfo?.data?.sex)} />;
   }
@@ -351,296 +382,382 @@ const PriorityTable = ({ userInfo, nextStep }) => {
   );
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper
-        elevation={2}
-        sx={{
-          p: 2,
-          mb: 2,
-          backgroundColor: lightColor,
-          borderLeft: `4px solid ${baseColor}`,
-        }}
-      >
-        {descriptionContent}
-      </Paper>
-
-      <Typography variant="h6" gutterBottom sx={{ mt: 2, color: baseColor }}>
-        جدول رشته‌‌ها
-      </Typography>
-      {renderTable(tableData.skills, "skills", "رشته‌ / دوره")}
-
-      <Typography variant="h6" gutterBottom sx={{ mt: 4, color: baseColor }}>
-        جدول دانشگاه‌ها
-      </Typography>
-      {renderTable(tableData.universities, "universities", "دانشگاه / دوره")}
-
-      <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={
-            saving ? (
-              <CircularProgress size={20} color="inherit" />
-            ) : (
-              <SaveIcon />
-            )
-          }
-          onClick={handleNext}
-          disabled={saving}
-          sx={{
-            mt: 2,
-            backgroundColor: baseColor,
-            "&:hover": { backgroundColor: baseColor, opacity: 0.9 },
-            "&:disabled": { opacity: 0.7 },
-          }}
-        >
-          {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
-        </Button>
-      </Box>
-
-      {/* Modal for showing details */}
+    <>
       <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="detail-modal"
-        aria-describedby="detail-modal-description"
+        open={paymentModalOpen}
+        aria-labelledby="payment-modal-title"
+        aria-describedby="payment-modal-description"
+        disableEscapeKeyDown
+        disablebackdropClick
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
         <Box
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: "90%", sm: "80%", md: "60%" },
-            maxWidth: 600,
-            bgcolor: "background.paper",
-            borderRadius: 2,
+            width: { xs: "90%", sm: 450 },
+            p: 4,
+            bgcolor: 'background.paper',
+            borderRadius: 4,
             boxShadow: 24,
-            outline: "none",
+            textAlign: 'center',
+            outline: 'none',
+            animation: `${PaymentModalPulse} 2s ease-in-out infinite`,
+            borderTop: `8px solid ${baseColor}`,
           }}
         >
           <Box
             sx={{
-              p: 3,
-              maxHeight: "70vh",
-              overflow: "auto",
+              backgroundColor: lightColor,
+              width: 80,
+              height: 80,
+              borderRadius: '50%',
+              margin: '0 auto 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: `0 0 0 8px ${lightColor}`,
             }}
           >
-            <Typography
-              variant="h6"
-              gutterBottom
+            <LockOutlinedIcon sx={{ fontSize: 48, color: baseColor }} />
+          </Box>
+          <Typography id="payment-modal-title" variant="h5" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
+            دسترسی محدود شده است
+          </Typography>
+          <Typography id="payment-modal-description" sx={{ mb: 3, color: 'text.secondary', lineHeight: 1.8 }}>
+            برای ادامه و دسترسی به جداول هوشمندسازی شده، نیاز به تکمیل فرآیند پرداخت دارید. لطفاً ابتدا پرداخت را انجام دهید.
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBackIcon />}
+              onClick={prevStep}
               sx={{
-                color: baseColor,
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                mb: 3,
-              }}
-            >
-              {modalContent?.title.includes("رشته") ? (
-                <MenuBookIcon />
-              ) : (
-                <AccountBalanceIcon />
-              )}
-              {modalContent?.title}
-            </Typography>
-
-            <List
-              sx={{
-                bgcolor: "background.paper",
                 borderRadius: 2,
-                boxShadow: 1,
-                overflow: "hidden",
+                borderColor: baseColor,
+                color: baseColor,
+                '&:hover': {
+                  borderColor: baseColor,
+                  backgroundColor: lightColor,
+                }
               }}
             >
-              {modalContent?.items.map((item, index) => (
-                <React.Fragment key={index}>
-                  <ListItem
-                    button
-                    sx={{
-                      transition: "all 0.2s",
-                      "&:hover": {
-                        backgroundColor: lightColor,
-                        transform: "translateX(5px)",
-                      },
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar sx={{ bgcolor: lightColor }}>
-                        {modalContent?.title.includes("رشته") ? (
-                          <MenuBookIcon sx={{ color: baseColor }} />
-                        ) : (
-                          <AccountBalanceIcon sx={{ color: baseColor }} />
-                        )}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={item}
-                      primaryTypographyProps={{
-                        fontWeight: "medium",
-                        color: "text.primary",
-                      }}
-                    />
-                    {/* <ChevronLeftIcon color="action" /> */}
-                  </ListItem>
-                  {index < modalContent.items.length - 1 && (
-                    <Divider variant="inset" component="li" />
-                  )}
-                </React.Fragment>
-              ))}
-            </List>
+              بازگشت
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<AttachMoneyIcon />}
+              onClick={() => navigate("/payments")}
+              sx={{
+                borderRadius: 2,
+                backgroundColor: baseColor,
+                '&:hover': {
+                  backgroundColor: baseColor,
+                  opacity: 0.9,
+                }
+              }}
+            >
+              انجام پرداخت
+            </Button>
           </Box>
         </Box>
       </Modal>
-      <Dialog
-        open={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            overflow: 'hidden',
-            animation: `${fadeIn} 0.3s ease-out`,
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-            minWidth: isMobile ? '90vw' : '400px',
-            maxWidth: '95vw',
-            borderTop: `4px solid ${baseColor}`,
-          }
-        }}
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            backgroundColor: lightColor,
-            color: theme.palette.getContrastText(lightColor),
-            py: 2,
-            px: 3,
-            fontWeight: 'bold',
-            fontSize: '1.2rem',
-          }}
-        >
-          {"تغییرات تایید نشده"}
-          <Box
-            sx={{
-              width: '100%',
-              height: '4px',
-              background: `linear-gradient(90deg, ${baseColor}, transparent)`,
-              mt: 1,
-              borderRadius: '2px'
-            }}
-          />
-        </DialogTitle>
+      <Box sx={{ width: "100%" }}>
 
-        <DialogContent sx={{ py: 3, px: 3 }}>
-          <Box
+        {/* Main Content with conditional blur */}
+        <Box sx={mainContentStyle}>
+          <Paper
+            elevation={2}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              p: 2,
               mb: 2,
+              backgroundColor: lightColor,
+              borderLeft: `4px solid ${baseColor}`,
             }}
+          >
+            {descriptionContent}
+          </Paper>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 2, color: baseColor }}>
+            جدول رشته‌‌ها
+          </Typography>
+          {renderTable(tableData.skills, "skills", "رشته‌ / دوره")}
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 4, color: baseColor }}>
+            جدول دانشگاه‌ها
+          </Typography>
+          {renderTable(tableData.universities, "universities", "دانشگاه / دوره")}
+
+          <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={
+                saving ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <SaveIcon />
+                )
+              }
+              onClick={handleNext}
+              disabled={saving}
+              sx={{
+                mt: 2,
+                backgroundColor: baseColor,
+                "&:hover": { backgroundColor: baseColor, opacity: 0.9 },
+                "&:disabled": { opacity: 0.7 },
+              }}
+            >
+              {saving ? "در حال ذخیره..." : "ذخیره تغییرات"}
+            </Button>
+          </Box>
+
+          {/* Modal for showing details */}
+          <Modal
+            open={modalOpen}
+            onClose={handleCloseModal}
+            aria-labelledby="detail-modal"
+            aria-describedby="detail-modal-description"
           >
             <Box
               sx={{
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                backgroundColor: lightColor,
-                color: theme.palette.getContrastText(lightColor),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2,
-                flexShrink: 0,
-                animation: `${pulse} 2s infinite`,
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: { xs: "90%", sm: "80%", md: "60%" },
+                maxWidth: 600,
+                bgcolor: "background.paper",
+                borderRadius: 2,
+                boxShadow: 24,
+                outline: "none",
               }}
             >
-              !
-            </Box>
-            <DialogContentText
-              id="alert-dialog-description"
-              sx={{
-                color: theme.palette.text.primary,
-                fontSize: '0.95rem',
-                lineHeight: 1.6,
-              }}
-            >
-              اطلاعات شما تغییر کرده و با اعمال این تغییرات موارد پیشرو دچار تغییر می‌شود.
-              <br />
-              آیا مایل به ذخیره تغییرات هستید؟
-            </DialogContentText>
-          </Box>
-        </DialogContent>
+              <Box
+                sx={{
+                  p: 3,
+                  maxHeight: "70vh",
+                  overflow: "auto",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{
+                    color: baseColor,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mb: 3,
+                  }}
+                >
+                  {modalContent?.title.includes("رشته") ? (
+                    <MenuBookIcon />
+                  ) : (
+                    <AccountBalanceIcon />
+                  )}
+                  {modalContent?.title}
+                </Typography>
 
-        <DialogActions
-          sx={{
-            justifyContent: 'space-between',
-            px: 3,
-            pb: 3,
-            pt: 0,
-          }}
-        >
-          <Button
-            onClick={() => setShowConfirmation(false)}
-            variant="outlined"
-            sx={{
-              color: theme.palette.text.secondary,
-              borderColor: theme.palette.divider,
-              borderRadius: 2,
-              px: 3,
-              py: 1,
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                borderColor: theme.palette.text.secondary,
+                <List
+                  sx={{
+                    bgcolor: "background.paper",
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    overflow: "hidden",
+                  }}
+                >
+                  {modalContent?.items.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem
+                        button
+                        sx={{
+                          transition: "all 0.2s",
+                          "&:hover": {
+                            backgroundColor: lightColor,
+                            transform: "translateX(5px)",
+                          },
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar sx={{ bgcolor: lightColor }}>
+                            {modalContent?.title.includes("رشته") ? (
+                              <MenuBookIcon sx={{ color: baseColor }} />
+                            ) : (
+                              <AccountBalanceIcon sx={{ color: baseColor }} />
+                            )}
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item}
+                          primaryTypographyProps={{
+                            fontWeight: "medium",
+                            color: "text.primary",
+                          }}
+                        />
+                      </ListItem>
+                      {index < modalContent.items.length - 1 && (
+                        <Divider variant="inset" component="li" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </List>
+              </Box>
+            </Box>
+          </Modal>
+          <Dialog
+            open={showConfirmation}
+            onClose={() => setShowConfirmation(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            PaperProps={{
+              sx: {
+                borderRadius: 3,
+                overflow: 'hidden',
+                animation: `${fadeIn} 0.3s ease-out`,
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+                minWidth: isMobile ? '90vw' : '400px',
+                maxWidth: '95vw',
+                borderTop: `4px solid ${baseColor}`,
               }
             }}
           >
-            انصراف
-          </Button>
-          <Button
-            onClick={() => {
-              setShowConfirmation(false);
-              saveChanges();
-            }}
-            variant="contained"
-            autoFocus
-            sx={{
-              backgroundColor: baseColor,
-              color: "#fff",
-              borderRadius: 2,
-              px: 3,
-              py: 1,
-              boxShadow: 'none',
-              '&:hover': {
-                backgroundColor: baseColor,
-                opacity: 0.9,
-                boxShadow: 'none',
-              },
-              '&:active': {
-                transform: 'scale(0.98)',
-              },
-              transition: 'all 0.2s ease',
-            }}
+            <DialogTitle
+              id="alert-dialog-title"
+              sx={{
+                backgroundColor: lightColor,
+                color: theme.palette.getContrastText(lightColor),
+                py: 2,
+                px: 3,
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+              }}
+            >
+              {"تغییرات تایید نشده"}
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '4px',
+                  background: `linear-gradient(90deg, ${baseColor}, transparent)`,
+                  mt: 1,
+                  borderRadius: '2px'
+                }}
+              />
+            </DialogTitle>
+
+            <DialogContent sx={{ py: 3, px: 3 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  mb: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    backgroundColor: lightColor,
+                    color: theme.palette.getContrastText(lightColor),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mr: 2,
+                    flexShrink: 0,
+                    animation: `${pulse} 2s infinite`,
+                  }}
+                >
+                  !
+                </Box>
+                <DialogContentText
+                  id="alert-dialog-description"
+                  sx={{
+                    color: theme.palette.text.primary,
+                    fontSize: '0.95rem',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  اطلاعات شما تغییر کرده و با اعمال این تغییرات موارد پیشرو دچار تغییر می‌شود.
+                  <br />
+                  آیا مایل به ذخیره تغییرات هستید؟
+                </DialogContentText>
+              </Box>
+            </DialogContent>
+
+            <DialogActions
+              sx={{
+                justifyContent: 'space-between',
+                px: 3,
+                pb: 3,
+                pt: 0,
+              }}
+            >
+              <Button
+                onClick={() => setShowConfirmation(false)}
+                variant="outlined"
+                sx={{
+                  color: theme.palette.text.secondary,
+                  borderColor: theme.palette.divider,
+                  borderRadius: 2,
+                  px: 3,
+                  py: 1,
+                  '&:hover': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                    borderColor: theme.palette.text.secondary,
+                  }
+                }}
+              >
+                انصراف
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowConfirmation(false);
+                  saveChanges();
+                }}
+                variant="contained"
+                autoFocus
+                sx={{
+                  backgroundColor: baseColor,
+                  color: "#fff",
+                  borderRadius: 2,
+                  px: 3,
+                  py: 1,
+                  boxShadow: 'none',
+                  '&:hover': {
+                    backgroundColor: baseColor,
+                    opacity: 0.9,
+                    boxShadow: 'none',
+                  },
+                  '&:active': {
+                    transform: 'scale(0.98)',
+                  },
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                ذخیره تغییرات
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            ذخیره تغییرات
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Box>
+            <Alert
+              onClose={handleCloseSnackbar}
+              severity={snackbar.severity}
+              sx={{ width: "100%" }}
+            >
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
+        </Box>
+      </Box >
+    </>
   );
 };
 

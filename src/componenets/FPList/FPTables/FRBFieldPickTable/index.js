@@ -59,7 +59,7 @@ const FRBFieldPickTable = ({ }) => {
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const navigate = useNavigate();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
-  const { field, part } = useParams();
+  const { field, part, stu_id } = useParams();
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
@@ -95,7 +95,7 @@ const FRBFieldPickTable = ({ }) => {
     () => [
       {
         accessorKey: "city",
-        header: "نام استان",
+        header: "استان",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -103,11 +103,11 @@ const FRBFieldPickTable = ({ }) => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام استان" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "استان" },
       },
       {
         accessorKey: "university",
-        header: "نام واحد",
+        header: "واحد",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -115,11 +115,11 @@ const FRBFieldPickTable = ({ }) => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام واحد" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "واحد" },
       },
       {
         accessorKey: "field",
-        header: "نام رشته",
+        header: "رشته",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -127,7 +127,7 @@ const FRBFieldPickTable = ({ }) => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام رشته" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
       },
       {
         accessorKey: "filedCode",
@@ -143,7 +143,7 @@ const FRBFieldPickTable = ({ }) => {
       },
       {
         accessorKey: "sex",
-        header: "جنسیت پذیرش",
+        header: "پذیرش",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -151,7 +151,7 @@ const FRBFieldPickTable = ({ }) => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "جنسیت پذیرش" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "پذیرش" },
         Cell: ({ cell }) => {
           const row = cell?.getValue();
           return <span>{row === 3 ? "زن/مرد" : row === 1 ? "مرد" : "زن"}</span>;
@@ -159,7 +159,7 @@ const FRBFieldPickTable = ({ }) => {
       },
       {
         accessorKey: "dorm",
-        header: "وضعیت خوابگاه",
+        header: "خوابگاه",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -167,7 +167,7 @@ const FRBFieldPickTable = ({ }) => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "وضعیت خوابگاه" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "خوابگاه" },
         Cell: ({ cell }) => {
           const row = cell?.getValue();
           return <span>{row === 0 ? "ندارد" : "دارد"}</span>;
@@ -183,9 +183,10 @@ const FRBFieldPickTable = ({ }) => {
         "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
-          method_type: "select_student_accept_check",
+          method_type: "select_student_field_info",
           data: {
-            user_id: userInfo?.data.user_id,
+            kind: "FR",
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -218,12 +219,12 @@ const FRBFieldPickTable = ({ }) => {
     } else {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/fieldpick_api/update_request",
+          "https://student.baazmoon.com/bbc_fieldpick_api/update_request",
           {
             table: "users",
             method_type: "update_spfrb_list",
             data: {
-              user_id: userInfo?.data?.user_id,
+              stu_id: parseInt(stu_id),
               field: parseInt(field),
               part: parseInt(part),
               special_list: JSON.stringify(specialList),
@@ -256,14 +257,13 @@ const FRBFieldPickTable = ({ }) => {
 
   const select_spfrb_list = async () => {
     try {
-      setSearchLoading(true)
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "select_spfrb_list",
           data: {
-            user_id: userInfo?.data?.user_id,
+            stu_id: parseInt(stu_id),
             field: parseInt(field),
             part: parseInt(part),
             token: JSON.parse(localStorage.getItem("token")),
@@ -285,8 +285,6 @@ const FRBFieldPickTable = ({ }) => {
         message: "خطا در ارتباط با سامانه",
         severity: "error",
       });
-    } finally {
-      setSearchLoading(false); // Hide loading overlay
     }
   };
 
@@ -299,7 +297,7 @@ const FRBFieldPickTable = ({ }) => {
           table: "users",
           method_type: "frb_search_fields",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             universityName: universityName,
             fieldName: fieldName,
@@ -344,20 +342,18 @@ const FRBFieldPickTable = ({ }) => {
         message: "خطا در جستجو",
         severity: "error",
       });
-    } finally {
-      setSearchLoading(false); // Hide loading overlay
     }
   };
 
   const frb_majors = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "frb_majors",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             universityName: universityName,
             sex: UserData?.sex,
@@ -400,12 +396,12 @@ const FRBFieldPickTable = ({ }) => {
   const frb_universities = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "frb_universities",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             provinces: provincesName,
             sex: UserData?.sex,
             field: parseInt(field),
@@ -446,12 +442,12 @@ const FRBFieldPickTable = ({ }) => {
   const frb_provinces = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/fieldpick_api/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "frb_provinces",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             sex: UserData?.sex,
             field: parseInt(field),
             secondField: "NULL",
@@ -520,7 +516,9 @@ const FRBFieldPickTable = ({ }) => {
   const Search = () => {
     if (Object.keys(UserData).length !== 0) {
       frb_search_fields().then(() => {
-        select_spfrb_list().then(() => { });
+        select_spfrb_list().then(() => {
+          setSearchLoading(false);
+        });
       });
     } else {
       setSnackbar({
@@ -539,6 +537,7 @@ const FRBFieldPickTable = ({ }) => {
         severity: "error",
       });
     } else {
+      setSearchLoading(true);
       check_added_to_list().then((equal) => {
         update_spfrb_list().then(() => {
           select_spfrb_list().then(() => {
@@ -549,6 +548,7 @@ const FRBFieldPickTable = ({ }) => {
                 severity: "warning",
               });
             }
+            setSearchLoading(false);
           });
         });
       });
@@ -878,7 +878,7 @@ const FRBFieldPickTable = ({ }) => {
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
                   }}
-                  onClick={() => navigate("/spfrb/" + field + "/" + part)}
+                  onClick={() => navigate("/spfrb/" + stu_id + "/" + field + "/" + part)}
                 >
                   <MdFormatListNumbered
                     color="#fff"

@@ -112,7 +112,7 @@ const yesNoDefualtQuestions = [
     id: 4,
     value: '1,0', // Default to "همه رشته‌ها"
     key: "obligation",
-    question: "در مورد رشته‌های تعهدی، تمایل به تحصیل .......... دارم.",
+    question: "در مورد رشته‌های تعهدی، تمایل به تحصیل در .......... دارم.",
     icon: "⚖️",
     options: [
       { value: '1', label: 'فقط رشته‌های دارای تعهد' },
@@ -134,7 +134,7 @@ const yesNoDefualtQuestions = [
   },
 ];
 
-const Question = ({ userInfo, nextStep }) => {
+const Question = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
@@ -193,12 +193,12 @@ const Question = ({ userInfo, nextStep }) => {
     const fetchQuestions = async () => {
       try {
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_questions",
+            method_type: "select_hoshmand_questions",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -264,12 +264,12 @@ const Question = ({ userInfo, nextStep }) => {
       });
 
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_questions",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             ...responseData,
           },

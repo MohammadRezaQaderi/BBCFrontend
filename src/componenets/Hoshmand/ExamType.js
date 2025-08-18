@@ -36,7 +36,7 @@ const pulse = keyframes`
   100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
 `;
 
-const ExamType = ({ userInfo, nextStep }) => {
+const ExamType = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const baseColor = GetButtonColor(userInfo?.data?.sex);
@@ -87,12 +87,12 @@ const ExamType = ({ userInfo, nextStep }) => {
         setLoading(true);
 
         const response = await axios.post(
-          "https://student.baazmoon.com/hoshmand/select_request",
+          "https://student.baazmoon.com/hoshmand_api/select_request",
           {
             table: "users",
-            method_type: "get_hoshmand_examtype",
+            method_type: "select_hoshmand_examtype",
             data: {
-              user_id: userInfo?.data.user_id,
+              stu_id: parseInt(stu_id),
               token: JSON.parse(localStorage.getItem("token")),
             },
           }
@@ -182,12 +182,12 @@ const ExamType = ({ userInfo, nextStep }) => {
         .map((item) => item.examType)
         .join(",");
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_examtype",
           data: {
-            user_id: userInfo?.data.user_id,
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             data: selectedItems,
             examtypes: examTypesString,
@@ -342,7 +342,7 @@ const ExamType = ({ userInfo, nextStep }) => {
                 gutterBottom
                 sx={{ color: baseColor }}
               >
-                دوره‌های انتخابی (اولویت‌بندی)
+                دوره های انتخابی شما (اولویت‌بندی)
               </Typography>
 
               {error && (

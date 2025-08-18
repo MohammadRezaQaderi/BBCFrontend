@@ -63,7 +63,8 @@ function App() {
               <Route path="/info_show/:id" element={<InfoShowPage />} />
               <Route path="/fieldsCategory" element={<FieldsCategoryPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
-              {/* <Route
+              <Route path="/hoshmand/:stu_id" element={<HoshmandPage />} />
+              <Route
                 path="/pffrb/:stu_id/:field/:part"
                 element={<FRBFPPage />}
               />
@@ -77,12 +78,12 @@ function App() {
               />
               <Route path="/pffr/:stu_id/:field" element={<FRFPPage />} />
               <Route path="/spfr/:stu_id/:field" element={<FRSPPage />} />
-              <Route path="/trfr/:stu_id/:field" element={<FRTRPage />} /> */}
+              <Route path="/trfr/:stu_id/:field" element={<FRTRPage />} />
               <Route path="/*" element={<DashboardPage />} />
             </>
           ) : userRole === "con" ? (
             <>
-              {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/student_show" element={<StudentPage />} />
               <Route path="/fieldpick_show" element={<FieldPickPage />} />
               <Route
@@ -98,9 +99,7 @@ function App() {
               <Route path="/info_show/:id" element={<InfoShowPage />} />
               <Route path="/fieldsCategory" element={<FieldsCategoryPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
-              {/* <Route path="/pfgl/:stu_id" element={<GLFPPage />} />
-              <Route path="/spgl/:stu_id" element={<GLSPPage />} />
-              <Route path="/trgl/:stu_id" element={<GLTRPage />} /> */}
+              <Route path="/hoshmand/:stu_id" element={<HoshmandPage />} />
               <Route
                 path="/pffrb/:stu_id/:field/:part"
                 element={<FRBFPPage />}
@@ -120,7 +119,7 @@ function App() {
             </>
           ) : userRole === "stu" ? (
             <>
-              {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/pick_field" element={<PickFieldKindPage />} />
               <Route path="/setting" element={<SettingPage />} />
               <Route path="/changePassword" element={<PasswordPage />} />
@@ -128,14 +127,24 @@ function App() {
               <Route path="/changeReportInfo" element={<InfoReportPage />} />
               <Route path="/majors" element={<MajorsPage />} />
               <Route path="/fields/:id" element={<FieldsPage />} />
+              <Route path="/hoshmand/:stu_id" element={<HoshmandPage />} />
               <Route path="/info_show/:id" element={<InfoShowPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
-              <Route path="/pffrb/:field/:part" element={<FRBFPPage />} />
-              <Route path="/spfrb/:field/:part" element={<FRBSPPage />} />
-              <Route path="/trfrb/:field/:part" element={<FRBTRPage />} />
-              <Route path="/pffr/:field" element={<FRFPPage />} />
-              <Route path="/spfr/:field" element={<FRSPPage />} />
-              <Route path="/trfr/:field" element={<FRTRPage />} />
+              <Route
+                path="/pffrb/:stu_id/:field/:part"
+                element={<FRBFPPage />}
+              />
+              <Route
+                path="/spfrb/:stu_id/:field/:part"
+                element={<FRBSPPage />}
+              />
+              <Route
+                path="/trfrb/:stu_id/:field/:part"
+                element={<FRBTRPage />}
+              />
+              <Route path="/pffr/:stu_id/:field" element={<FRFPPage />} />
+              <Route path="/spfr/:stu_id/:field" element={<FRSPPage />} />
+              <Route path="/trfr/:stu_id/:field" element={<FRTRPage />} />
               <Route path="/entekhab_hoshmand" element={<HoshmandPage />} />
               <Route path="/*" element={<DashboardPage />} />
             </>

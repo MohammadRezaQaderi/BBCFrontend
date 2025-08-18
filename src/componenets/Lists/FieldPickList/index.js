@@ -69,7 +69,7 @@ const FieldPickList = () => {
 
   const goToPickField = (user_id, finalized) => {
     if (finalized === 2) {
-      navigate("/pfgl/" + user_id);
+      navigate("/hoshmand/" + user_id);
     } else {
       setSnackbar({
         open: true,

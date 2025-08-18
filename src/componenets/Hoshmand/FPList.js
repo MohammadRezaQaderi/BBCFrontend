@@ -19,9 +19,7 @@ import {
   DialogContent,
   DialogActions,
   Typography,
-  Slide,
   Zoom,
-  Avatar,
   Divider,
   styled,
   CircularProgress,
@@ -29,28 +27,38 @@ import {
 import Loader from "../../helper/Loader";
 import { GetButtonColor, GetLightColor } from "../../helper/buttonColor";
 import HelperInfo from "./HelperInfo";
-import { Delete as DeleteIcon, Favorite } from "@mui/icons-material";
+import {
+  Battery20,
+  Battery50,
+  BatteryFull,
+  Delete as DeleteIcon,
+  Favorite,
+} from "@mui/icons-material";
 import { motion } from "framer-motion";
 
+import {
+  Warning as WarningIcon,
+  Check as CheckIcon,
+  Close as CloseIcon,
+} from "@mui/icons-material";
 
 const LoadingOverlay = styled(Box)(({ theme }) => ({
-  position: 'fixed',
+  position: "fixed",
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  backdropFilter: 'blur(4px)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  backgroundColor: "rgba(255, 255, 255, 0.7)",
+  backdropFilter: "blur(4px)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   zIndex: theme.zIndex.modal + 1,
 }));
 
 const SPECIAL_LIST_LIMIT = 150;
 
-
-const FPList = ({ userInfo, nextStep }) => {
+const FPList = ({ userInfo, nextStep, stu_id }) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -67,7 +75,7 @@ const FPList = ({ userInfo, nextStep }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHoshmand, setIsHoshmand] = useState(false);
   const [hoshmandLoading, setHoshmandLoading] = useState(false);
-
+  const [under150, setUnder150] = useState(false)
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -83,7 +91,9 @@ const FPList = ({ userInfo, nextStep }) => {
     <HelperInfo
       userInfo={userInfo}
       title="راهنمای لیست رشته‌ها"
-      content={["در این صفحه با توجه به اولویت شما در مراحل قبل، لیست رشته‌های موجود، به ترتیب پیشنهادی، به شما نمایش داده شده است. در این صفحه می توانید به دو روش لیست منتخب نهایی 150تایی خود را تولید کنید: 1- به صورت دستی: با کلیک بر روی کدرشته‌های مد نظر و زدن دکمه «اضافه به لیست منتخب کاربر» و در نهایت کلیک بر روی دکمه ذخیره تغییرات 2- به صورت هوشمند: با کلیک بر روی دکمه «چینش نهایی توسط پروفسور»"]}
+      content={[
+        "در این صفحه با توجه به اولویت شما در مراحل قبل، لیست رشته‌های موجود، به ترتیب پیشنهادی، به شما نمایش داده شده است. در این صفحه می توانید به دو روش لیست منتخب نهایی 150تایی خود را تولید کنید: 1- به صورت دستی: با کلیک بر روی کدرشته‌های مد نظر و زدن دکمه «اضافه به لیست منتخب کاربر» و در نهایت کلیک بر روی دکمه ذخیره تغییرات 2- به صورت هوشمند: با کلیک بر روی دکمه «چینش نهایی توسط پروفسور»",
+      ]}
       secondTitle={"نکات مهم مشاوره‌ای"}
       additionalTips={[
         "چه زمانی باید از چینش دستی استفاده کنم؟ هنگامی که از این سامانه در کنار یک مشاور در حال استفاده هستید و یا آگاهی کامل از عوامل اثرگذار بر چینش لیست نهایی خود دارید (مانند احتمال قبولی، ضوابط و اصول انتخاب رشته و سایر موارد) می‌توانید از قابلیت چینش دستی این سامانه استفاده کنید.",
@@ -121,6 +131,59 @@ const FPList = ({ userInfo, nextStep }) => {
         muiTableHeadCellFilterTextFieldProps: {
           placeholder: "رشته",
           sx: { width: "75%", marginRight: "8px", marginLeft: "8px" },
+        },
+      },
+      {
+        accessorKey: "hedayat",
+        header: "تناسب",
+        size: 25,
+        enableColumnFilter: false,
+        Cell: ({ cell }) => {
+          if (cell.getValue()) {
+            return (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  padding: "0 8px",
+                }}
+              >
+                {cell.getValue() === 1 && (
+                  <Tooltip title="توصیه اولویت اول" arrow placement="left">
+                    <BatteryFull
+                      fontSize="small"
+                      sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+                {cell.getValue() === 3 && (
+                  <Tooltip title="توصیه با احتیاط" arrow placement="left">
+                    <Battery50
+                      fontSize="small"
+                      sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+                {cell.getValue() === 2 && (
+                  <Tooltip title="عدم توصیه" arrow placement="left">
+                    <Battery20
+                      fontSize="small"
+                      sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+              </Box>
+            );
+          }
+          return null;
+        },
+        muiTableHeadCellProps: {
+          align: "center",
+        },
+        muiTableBodyCellProps: {
+          align: "center",
         },
       },
       {
@@ -207,13 +270,14 @@ const FPList = ({ userInfo, nextStep }) => {
         accessorKey: "explain",
         header: "توضیح",
         size: 100,
+        maxSize: 150,
         muiTableHeadCellProps: { align: "center" },
         muiTableBodyCellProps: { align: "center" },
         muiTableHeadCellFilterTextFieldProps: {
           placeholder: "توضیح",
-          sx: { width: "75%", marginRight: "8px", marginLeft: "8px" },
+          sx: { width: "100%", marginRight: "8px", marginLeft: "8px" },
         },
-        enableResizing: true,
+        enableResizing: false,
         Cell: ({ cell }) => (
           <Tooltip
             title={cell.getValue()}
@@ -227,7 +291,6 @@ const FPList = ({ userInfo, nextStep }) => {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-                width: "100%",
                 textAlign: "center",
               }}
             >
@@ -239,32 +302,75 @@ const FPList = ({ userInfo, nextStep }) => {
       {
         accessorKey: "admissionKind",
         header: "",
-        maxSize: 50,
         muiTableHeadCellProps: { align: "center" },
         muiTableBodyCellProps: { align: "center" },
         enableColumnFilter: false,
+        size: 50,
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return (
-            <span
-              style={{
-                backgroundColor:
-                  row === 3
-                    ? "#fa7373"
-                    : row === 2
-                      ? "#f5eb69"
-                      : row === 1
-                        ? "#8ef78b"
-                        : row === 0
-                          ? "#c7c7c7"
-                          : "white",
-                borderRadius: "50%",
-                paddingTop: 3,
-                paddingLeft: 10,
-                paddingRight: 10,
-                color: "white",
-              }}
-            ></span>
+            // <span
+            //   style={{
+            //     backgroundColor:
+            //       row === 3
+            //         ? "#fa7373"
+            //         : row === 2
+            //         ? "#f5eb69"
+            //         : row === 1
+            //         ? "#8ef78b"
+            //         : row === 0
+            //         ? "#c7c7c7"
+            //         : "white",
+            //     borderRadius: "50%",
+            //     paddingTop: 3,
+            //     paddingLeft: 10,
+            //     paddingRight: 10,
+            //     color: "white",
+            //   }}
+            // ></span>
+            <Tooltip
+              title={
+                row === 1
+                  ? "احتمال بالا"
+                  : row === 2
+                    ? "احتمال متوسط"
+                    : row === 3
+                      ? "احتمال کم"
+                      : "صرفا با سوابق"
+              }
+              arrow
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    row === 1
+                      ? "#4caf50"
+                      : row === 2
+                        ? "#ff9800"
+                        : row === 3
+                          ? "#f44336"
+                          : "#acacac",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mr: 1,
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                {row === 1 && (
+                  <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 2 && (
+                  <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+                {row === 3 && (
+                  <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                )}
+              </Box>
+            </Tooltip>
           );
         },
       },
@@ -275,11 +381,12 @@ const FPList = ({ userInfo, nextStep }) => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand_api/select_request",
         {
           table: "users",
-          method_type: "get_hoshmand_fields",
+          method_type: "select_hoshmand_fields",
           data: {
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -363,10 +470,14 @@ const FPList = ({ userInfo, nextStep }) => {
     }
 
     setSpecialList([...specialList, ...newItems]);
-    setData(data.filter((item) =>
-      !selectedItems.some(selected => selected.filedCode === item.filedCode) ||
-      newItems.some(newItem => newItem.filedCode === item.filedCode)
-    ));
+    setData(
+      data.filter(
+        (item) =>
+          !selectedItems.some(
+            (selected) => selected.filedCode === item.filedCode
+          ) || newItems.some((newItem) => newItem.filedCode === item.filedCode)
+      )
+    );
     setRowSelection({});
 
     let message = `ردیف‌های انتخاب شده به لیست ویژه اضافه شدند (${newItems.length} مورد)`;
@@ -374,7 +485,8 @@ const FPList = ({ userInfo, nextStep }) => {
       message += ` (${duplicateItems.length} مورد تکراری نادیده گرفته شد)`;
     }
     if (selectedItems.length > availableSpace) {
-      message += ` (${selectedItems.length - availableSpace} مورد اضافه نشد چون لیست پر است)`;
+      message += ` (${selectedItems.length - availableSpace
+        } مورد اضافه نشد چون لیست پر است)`;
     }
 
     setSnackbar({
@@ -392,17 +504,18 @@ const FPList = ({ userInfo, nextStep }) => {
 
   const handleHoshmandList = async () => {
     if (isHoshmand) {
-      setShowThankYouModal(true)
-      return
+      setShowThankYouModal(true);
+      return;
     }
     try {
       setHoshmandLoading(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/select_request",
+        "https://student.baazmoon.com/hoshmand_api/select_request",
         {
           table: "users",
-          method_type: "get_hoshmand_list",
+          method_type: "select_hoshmand_list",
           data: {
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
@@ -412,7 +525,10 @@ const FPList = ({ userInfo, nextStep }) => {
         setData(response.data.response.data || []);
         setSpecialList(response.data.response.selected_list || []);
         setIsHoshmand(response.data.response.is_hoshmand);
-        setShowThankYouModal(true)
+        if (response.data.response.selected_list.length < 150) {
+          setUnder150(true)
+        }
+        setShowThankYouModal(true);
         setSnackbar({
           open: true,
           message: "لیست هوشمند با موفقیت اعمال شد",
@@ -448,11 +564,12 @@ const FPList = ({ userInfo, nextStep }) => {
     try {
       setSaving(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/update_request",
+        "https://student.baazmoon.com/hoshmand_api/update_request",
         {
           table: "users",
           method_type: "update_hoshmand_fields",
           data: {
+            stu_id: parseInt(stu_id),
             token: JSON.parse(localStorage.getItem("token")),
             fields_list: data,
             selected_list: specialList,
@@ -582,7 +699,7 @@ const FPList = ({ userInfo, nextStep }) => {
               onClick={handleAddToSpecialList}
               variant="contained"
             >
-              اضافه به لیست ویژه
+              افزودن به لیست منتخب
             </Button>
           </Tooltip>
 
@@ -597,7 +714,7 @@ const FPList = ({ userInfo, nextStep }) => {
               onClick={() => setOpenSpecialListModal(true)}
               variant="contained"
             >
-              مشاهده لیست ویژه ({specialList.length})
+              مشاهده لیست منتخب ({specialList.length})
             </Button>
           </Tooltip>
           <Tooltip title="حذف هوشمند">
@@ -612,7 +729,7 @@ const FPList = ({ userInfo, nextStep }) => {
               variant="contained"
               disabled={loading}
             >
-              {loading ? "در حال پردازش..." : "حذف هوشمند"}
+              {loading ? "در حال پردازش..." : "چینش ال‌پروفسور"}
             </Button>
           </Tooltip>
         </div>
@@ -623,7 +740,7 @@ const FPList = ({ userInfo, nextStep }) => {
             autoResetPageIndex={false}
             columns={columns}
             data={data || []}
-            enableSorting={true}
+            enableSorting={false}
             enableDensityToggle={false}
             initialState={{
               density: "compact",
@@ -763,6 +880,17 @@ const FPList = ({ userInfo, nextStep }) => {
               <Typography variant="body1" paragraph>
                 من لیست منتخبت رو بر حسب اونایی که انتخاب کرده بودی چیدم
               </Typography>
+              {under150 && (
+                <>
+                  <Typography variant="body2" paragraph>
+                    دانش آموز عزیز
+                    در نظر داشته باشید پروفسور به احتمال قبولی شما در چینش لیست حساس است. با توجه به گزینه‌هایی که تاکنون انتخاب کرده‌اید، لیست شما کمتر از ۱۵۰ کدرشته دارد.
+                  </Typography>
+                  <Typography variant="body2" paragraph>
+                    لطفا یا به صورت دستی به لیست نهایی خود کدرشته با احتمال قبولی بالا اضافه کنید یا با برگشتن به مراحل قبل و تغییر اولویت‌ها و علائق خود، لیست خود را مجددا تولید کنید.
+                  </Typography>
+                </>
+              )}
             </Box>
           </DialogContent>
           <Divider />
@@ -790,7 +918,9 @@ const FPList = ({ userInfo, nextStep }) => {
         maxWidth="lg"
         fullWidth
       >
-        <DialogTitle>لیست منتخب ({specialList.length} از {SPECIAL_LIST_LIMIT} آیتم)</DialogTitle>
+        <DialogTitle>
+          لیست منتخب ({specialList.length} از {SPECIAL_LIST_LIMIT} آیتم)
+        </DialogTitle>
         <DialogContent>
           <ThemeProvider theme={createTheme({ direction: "rtl" })}>
             <MaterialReactTable
@@ -799,13 +929,20 @@ const FPList = ({ userInfo, nextStep }) => {
               columns={columns}
               data={specialList || []}
               enableDensityToggle={false}
+              enableSorting={false}
               initialState={{
                 density: "compact",
-                pagination: { pageSize: 10 },
+                pagination: { pageSize: 50 },
               }}
               style={{ direction: "rtl", width: "100%" }}
               muiTableHeadCellFilterTextFieldProps={{
                 sx: { m: "0.5rem 0", width: "100%" },
+              }}
+              muiTableProps={{
+                sx: {
+                  tableLayout: isMobile ? "auto" : "fixed",
+                  minWidth: isMobile ? "300px" : "100%",
+                },
               }}
               muiTableContainerProps={{
                 sx: {

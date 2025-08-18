@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Sidebar from "../componenets/Sidebar";
 import Navbar from "../componenets/Navbar";
 import styled from "styled-components";
-import { ProfileSideBar } from "../componenets/ProfileSideBar/ProfileSideBar";
 import Hoshmand from "../componenets/Hoshmand";
 
 const HoshmandPage = () => {
@@ -15,7 +14,6 @@ const HoshmandPage = () => {
       <Sidebar isOpen={isOpen} toggle={toggle} setIsOpen={setIsOpen} />
       <Navbar toggle={toggle} />
       <HelpContainer>
-        {/* <ProfileSideBar /> */}
         <Hoshmand />
       </HelpContainer>
     </>
