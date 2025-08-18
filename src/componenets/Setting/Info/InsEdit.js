@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Button, TextField, Typography } from "@mui/material";
+import { Alert, Button, Snackbar, TextField, Typography } from "@mui/material";
 import styled from "styled-components";
 import { SettingData } from "./SettingData";
 import Images from "../../Typography/Image";
@@ -31,32 +29,56 @@ const InsEdit = ({ userRole, userInfo }) => {
   const [image, setImage] = useState(userInfo?.data.pic);
   const [showPic, setShowPic] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const update_user_file = async () => {
-    const formData = new FormData();
-    formData.append("token", JSON.parse(localStorage.getItem("token")));
-    formData.append("name", formik.values.name);
-    formData.append("pic", formik.values.pic);
-    formData.append("last_pic", image);
-    let response = await axios.post(
-      "https://student.baazmoon.com/bbc_api/update_user_ins_file",
-      formData,
-      {
-        headers: {
-          "content-type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-        },
+    try {
+      const formData = new FormData();
+      formData.append("token", JSON.parse(localStorage.getItem("token")));
+      formData.append("name", formik.values.name);
+      formData.append("pic", formik.values.pic);
+      formData.append("last_pic", image);
+      let response = await axios.post(
+        "https://student.baazmoon.com/bbc_api/update_user_ins_file",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+      if (response?.data?.tracking_code !== null) {
+        let user = JSON.parse(localStorage.getItem("user-info"));
+        user["data"]["name"] = response?.data?.response?.data.name;
+        user["data"]["pic"] = response?.data?.response?.data.pic;
+        setLocalStorageLogin("user-info", user, () => { });
+        setSnackbar({
+          open: true,
+          message: response?.data?.response?.message,
+          severity: "success",
+        });
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
-    );
-    if (response?.data?.tracking_code !== null) {
-      let user = JSON.parse(localStorage.getItem("user-info"));
-      user["data"]["name"] = response?.data?.response?.data.name;
-      user["data"]["pic"] = response?.data?.response?.data.pic;
-      setLocalStorageLogin("user-info", user, () => {});
-      toast.success(response?.data?.response?.message);
-      setTimeout(() => window.location.reload(), 1500);
-    } else {
-      toast.error(response?.data?.error);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -77,14 +99,26 @@ const InsEdit = ({ userRole, userInfo }) => {
       if (response.data.tracking_code !== null) {
         let user = JSON.parse(localStorage.getItem("user-info"));
         user["data"]["name"] = response?.data?.response?.data.name;
-        setLocalStorageLogin("user-info", user, () => {});
-        toast.success(response?.data?.response?.message);
+        setLocalStorageLogin("user-info", user, () => { });
+        setSnackbar({
+          open: true,
+          message: response?.data?.response?.message,
+          severity: "success",
+        });
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -109,59 +143,75 @@ const InsEdit = ({ userRole, userInfo }) => {
   });
 
   return (
-    <Form
-      onSubmit={formik.handleSubmit}
-      width="50%"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "5px",
-      }}
-    >
-      <Typography
-        component="h4"
-        variant="h6"
-        color="mainText"
-        style={{ marginBottom: "20px" }}
-        fontWeight="bold"
-      >
-        {SettingData[userRole].InfoChangeName}
-      </Typography>
-      <Images formik={formik} pic={showPic} setPic={setShowPic} />
-      <hr
+    <>
+      <Form
+        onSubmit={formik.handleSubmit}
+        width="50%"
         style={{
-          borderTop: `2px solid ${GetButtonColor(userInfo?.data?.sex)}`,
-          height: "2px",
-          width: "80%",
-          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: "5px",
         }}
-      ></hr>
-      <TextField
-        label={"نام موسسه"}
-        value={formik.values.name}
-        fullWidth
-        onChange={(e) => formik.setFieldValue("name", e.target.value)}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        style={{ width: "80%" }}
-      />
-      <Button
-        variant="contained"
-        style={{
-          width: "80%",
-          marginTop: "20px",
-          marginBottom: "20px",
-          background: GetButtonColor(userInfo?.data?.sex),
-        }}
-        type="submit"
-        disabled={loading}
       >
-        تغییر اطلاعات
-      </Button>
-    </Form>
+        <Typography
+          component="h4"
+          variant="h6"
+          color="mainText"
+          style={{ marginBottom: "20px" }}
+          fontWeight="bold"
+        >
+          {SettingData[userRole].InfoChangeName}
+        </Typography>
+        <Images formik={formik} pic={showPic} setPic={setShowPic} />
+        <hr
+          style={{
+            borderTop: `2px solid ${GetButtonColor(userInfo?.data?.sex)}`,
+            height: "2px",
+            width: "80%",
+            marginTop: "10px",
+          }}
+        ></hr>
+        <TextField
+          label={"نام موسسه"}
+          value={formik.values.name}
+          fullWidth
+          onChange={(e) => formik.setFieldValue("name", e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ width: "80%" }}
+        />
+        <Button
+          variant="contained"
+          style={{
+            width: "80%",
+            marginTop: "20px",
+            marginBottom: "20px",
+            background: GetButtonColor(userInfo?.data?.sex),
+          }}
+          type="submit"
+          disabled={loading}
+        >
+          تغییر اطلاعات
+        </Button>
+      </Form>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

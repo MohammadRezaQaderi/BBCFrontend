@@ -41,13 +41,13 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
     formik.setFieldValue("con_id", id);
   };
 
-  const update_stu_con = async () => {
+  const update_student_consult = async () => {
     try {
       const response = await axios.post(
         "https://student.baazmoon.com/bbc_api/update_request",
         {
           table: "users",
-          method_type: "update_stu_con",
+          method_type: "update_student_consult",
           data: {
             con_id: parseInt(formik.values.con_id),
             stu_id: InputData?.user_id,
@@ -85,7 +85,7 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
     validationSchema: validationSchema,
     onSubmit: () => {
       setLoading(true);
-      update_stu_con().then(() => {});
+      update_student_consult().then(() => {});
     },
   });
 

@@ -67,19 +67,17 @@ const ChangePassword = ({ userInfo }) => {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleRePasswordVisibility = () => setShowRePassword(!showRePassword);
 
-  const updatePassword = async (values) => {
+  const updatePassword = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/update_password",
+        "https://student.baazmoon.com/bbc_api/update_request",
         {
           table: "users",
           method_type: "update_password",
           data: {
-            user_id: userInfo?.data.user_id,
-            phone: userInfo?.data.phone,
-            password: values.password,
-            re_password: values.re_password,
+            password: formik.values.password,
+            re_password: formik.values.re_password,
             token: JSON.parse(localStorage.getItem("token")),
           },
         }

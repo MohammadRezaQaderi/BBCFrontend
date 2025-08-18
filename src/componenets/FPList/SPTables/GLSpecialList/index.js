@@ -315,7 +315,7 @@ const GLSpecialList = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",
@@ -597,7 +597,7 @@ const GLSpecialList = () => {
     const image =
       userInfo?.data?.pic === null
         ? imgData
-        : `https://student.baazmoon.com/ERS/get_ins_pic/${userInfo?.data?.pic}`;
+        : `https://student.baazmoon.com/bbc_api/get_ins_pic/${userInfo?.data?.pic}`;
 
     let data_pdf = data.map((elt, index) => [
       elt.admissionKind === 1

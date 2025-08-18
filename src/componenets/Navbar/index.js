@@ -71,7 +71,7 @@ const Navbar = ({ toggle }) => {
             <LogoIcon
               src={
                 userInfo?.data?.pic
-                  ? `https://student.baazmoon.com/ERS/get_user_pic/${userInfo?.data?.pic}`
+                  ? `https://student.baazmoon.com/bbc_api/get_user_pic/${userInfo?.data?.pic}`
                   : logo
               }
               to="/"

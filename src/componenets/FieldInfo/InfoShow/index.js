@@ -318,7 +318,7 @@ const InfoShow = () => {
         </FieldName>
         {data.picture && (
           <Image
-            src={`https://student.baazmoon.com/ERS/get_pic_info/field/${data.picture}`}
+            src={`https://student.baazmoon.com/bbc_api/get_pic_info/field/${data.picture}`}
             alt={data.name}
           />
         )}

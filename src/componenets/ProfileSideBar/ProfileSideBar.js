@@ -86,7 +86,7 @@ export const ProfileSideBar = () => {
   const delete_token = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/delete_request",
+        "https://student.baazmoon.com/bbc_api/delete_request",
         {
           table: "users",
           method_type: "delete_token",
@@ -143,7 +143,7 @@ export const ProfileSideBar = () => {
         <img
           src={
             Info?.data?.pic
-              ? `https://student.baazmoon.com/ERS/get_user_pic/${Info?.data?.pic}`
+              ? `https://student.baazmoon.com/bbc_api/get_user_pic/${Info?.data?.pic}`
               : logo
           }
           style={{

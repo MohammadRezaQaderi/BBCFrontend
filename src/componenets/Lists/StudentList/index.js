@@ -642,6 +642,7 @@ const StudentList = () => {
             userDetails={userDetails}
             open={openUserInfoModal}
             onClose={handleCloseUser}
+            userInfo={userInfo}
           />
         )}
       </Paper>

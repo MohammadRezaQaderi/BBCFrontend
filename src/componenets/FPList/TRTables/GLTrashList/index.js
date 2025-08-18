@@ -246,7 +246,7 @@ const GLTrashList = () => {
   const get_student_info = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "select_student_accept_check",

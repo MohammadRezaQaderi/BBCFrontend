@@ -586,6 +586,7 @@ const FieldPickList = () => {
               userDetails={userDetails}
               open={openUserInfoModal}
               onClose={handleCloseUser}
+              userInfo={userInfo}
             />
           )}
         </Paper>

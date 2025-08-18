@@ -14,9 +14,9 @@ import { GetButtonColor } from "../../../helper/buttonColor";
 import { ConvertField, ConvertQuota } from "../../../helper/FieldCheck";
 import ErrorState from "../../FPList/NoUser";
 
-const ShowInfoFP = ({ userDetails, open, onClose }) => {
+const ShowInfoFP = ({ userDetails, open, onClose, userInfo }) => {
   const theme = useTheme();
-  const accentColor = GetButtonColor(userDetails?.sex);
+  const accentColor = GetButtonColor(userInfo?.data?.sex);
 
   const formatValue = (value) => {
     if (value === null || value === undefined) return "---";

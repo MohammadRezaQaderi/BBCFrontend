@@ -130,7 +130,7 @@ const Majors = () => {
                 isfemale={userInfo?.data?.sex}
               >
                 <IconWrapper
-                  src={`https://student.baazmoon.com/ERS/get_pic_info/field/${field.image}`}
+                  src={`https://student.baazmoon.com/bbc_api/get_pic_info/field/${field.image}`}
                   alt={field.major}
                 />
                 <MajorText variant={isMobile ? "body1" : "h6"} sx={{ fontSize: getFontSize() }}>

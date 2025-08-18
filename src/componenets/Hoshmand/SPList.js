@@ -846,7 +846,7 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_provinces = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_provinces",
@@ -882,7 +882,7 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_cities = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_cities",
@@ -919,7 +919,7 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_universities = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_universities",
@@ -957,7 +957,7 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_majors = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_majors",
@@ -996,7 +996,7 @@ const SPList = ({ userInfo, nextStep }) => {
   const fp_exam_types = async () => {
     try {
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_exam_types",
@@ -1037,7 +1037,7 @@ const SPList = ({ userInfo, nextStep }) => {
     try {
       setLoadingSearchTable(true);
       const response = await axios.post(
-        "https://student.baazmoon.com/ERS/select_request",
+        "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
           method_type: "fp_search_fields",

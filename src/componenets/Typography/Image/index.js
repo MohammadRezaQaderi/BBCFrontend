@@ -116,7 +116,7 @@ export default function Index({ formik, pic, setPic }) {
           <img
             src={
               formik.values.pic
-                ? `https://student.baazmoon.com/ERS/get_user_pic/${formik.values.pic}`
+                ? `https://student.baazmoon.com/bbc_api/get_user_pic/${formik.values.pic}`
                 : AvatarSVG
             }
             style={{

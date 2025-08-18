@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Grid } from "@mui/material";
+import { Alert, Grid, Snackbar } from "@mui/material";
 import StuEdit from "./StuEdit";
 import InsEdit from "./InsEdit";
 import ConEdit from "./ConEdit";
@@ -16,6 +16,14 @@ const Container = styled.div`
 const StudentInfo = () => {
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <>
@@ -50,8 +58,21 @@ const StudentInfo = () => {
           ) : (
             <></>
           )}
-
         </Grid>
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Container>
     </>
   );

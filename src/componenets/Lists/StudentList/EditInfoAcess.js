@@ -222,7 +222,7 @@ const EditInfoAccess = ({
                   }}
                   style={{
                     color: "white",
-                    background: GetButtonColor(userDetails?.sex),
+                    background: GetButtonColor(userInfo?.data?.sex),
                   }}
                   onClick={handleEditClick}
                 >
@@ -242,7 +242,7 @@ const EditInfoAccess = ({
                   }}
                   style={{
                     color: "white",
-                    background: GetButtonColor(userDetails?.sex),
+                    background: GetButtonColor(userInfo?.data?.sex),
                   }}
                   onClick={handleAccessClick}
                 >
@@ -276,7 +276,7 @@ const EditInfoAccess = ({
                       height: "100%",
                       borderLeft: (theme) =>
                         `4px solid ${field.important
-                          ? GetButtonColor(userDetails?.sex)
+                          ? GetButtonColor(userInfo?.data?.sex)
                           : theme.palette.divider
                         }`,
                     }}

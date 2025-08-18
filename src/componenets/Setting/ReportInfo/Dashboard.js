@@ -28,7 +28,7 @@ const Dashboard = () => {
     try {
       const response = await axios({
         method: "POST",
-        url: "https://student.baazmoon.com/ERS/select_request",
+        url: "https://student.baazmoon.com/bbc_api/select_request",
         headers: {
           "content-type": "application/json",
           "Access-Control-Allow-Origin": "*",

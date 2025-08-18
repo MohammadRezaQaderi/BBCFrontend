@@ -117,7 +117,7 @@ const EditStuAccess = ({
         <Grid item xs={12}>
           <hr
             style={{
-              border: `1px solid ${GetButtonColor(sex)}`,
+              border: `1px solid ${GetButtonColor(userInfo?.data?.sex)}`,
             }}
           />
         </Grid>
@@ -150,7 +150,7 @@ const EditStuAccess = ({
               variant="contained"
               type="submit"
               style={{
-                background: GetButtonColor(sex),
+                background: GetButtonColor(userInfo?.data?.sex),
                 color: "white",
               }}
               sx={{

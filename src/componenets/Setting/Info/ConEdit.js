@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Button, TextField, Typography } from "@mui/material";
+import { Alert, Button, Snackbar, TextField, Typography } from "@mui/material";
 import styled from "styled-components";
 import { SettingData } from "./SettingData";
 import { setLocalStorageLogin } from "../../../pages/localStorage";
@@ -28,6 +28,14 @@ const Form = styled.form`
 
 const ConEdit = ({ userRole, userInfo }) => {
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const update_user = async () => {
     try {
@@ -47,14 +55,26 @@ const ConEdit = ({ userRole, userInfo }) => {
         let user = JSON.parse(localStorage.getItem("user-info"));
         user["data"]["first_name"] = response?.data?.response?.data.first_name;
         user["data"]["last_name"] = response?.data?.response?.data.last_name;
-        setLocalStorageLogin("user-info", user, () => {});
-        toast.success(response?.data?.response?.message);
+        setLocalStorageLogin("user-info", user, () => { });
+        setSnackbar({
+          open: true,
+          message: response?.data?.response?.message,
+          severity: "success",
+        });
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات",
+        severity: "error",
+      });
     }
   };
 
@@ -73,69 +93,85 @@ const ConEdit = ({ userRole, userInfo }) => {
   });
 
   return (
-    <Form
-      onSubmit={formik.handleSubmit}
-      width="50%"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderRadius: "5px",
-      }}
-    >
-      <Typography
-        component="h4"
-        variant="h6"
-        color="mainText"
-        style={{ marginBottom: "20px" }}
-        fontWeight="bold"
-      >
-        {SettingData[userRole].InfoChangeName}
-      </Typography>
-      <hr
+    <>
+      <Form
+        onSubmit={formik.handleSubmit}
+        width="50%"
         style={{
-          borderTop: `2px solid ${GetButtonColor(userInfo?.data?.sex)}`,
-          height: "2px",
-          width: "80%",
-          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          alignItems: "center",
+          borderRadius: "5px",
         }}
-      ></hr>
-      <TextField
-        label="نام"
-        value={formik.values.first_name}
-        fullWidth
-        onChange={(e) => formik.setFieldValue("first_name", e.target.value)}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        style={{ marginBottom: "20px", width: "80%" }}
-      />
-      <TextField
-        label="نام‌خانوادگی"
-        value={formik.values.last_name}
-        fullWidth
-        onChange={(e) => formik.setFieldValue("last_name", e.target.value)}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        style={{ marginBottom: "20px", width: "80%" }}
-      />
+      >
+        <Typography
+          component="h4"
+          variant="h6"
+          color="mainText"
+          style={{ marginBottom: "20px" }}
+          fontWeight="bold"
+        >
+          {SettingData[userRole].InfoChangeName}
+        </Typography>
+        <hr
+          style={{
+            borderTop: `2px solid ${GetButtonColor(userInfo?.data?.sex)}`,
+            height: "2px",
+            width: "80%",
+            marginTop: "10px",
+          }}
+        ></hr>
+        <TextField
+          label="نام"
+          value={formik.values.first_name}
+          fullWidth
+          onChange={(e) => formik.setFieldValue("first_name", e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ marginBottom: "20px", width: "80%" }}
+        />
+        <TextField
+          label="نام‌خانوادگی"
+          value={formik.values.last_name}
+          fullWidth
+          onChange={(e) => formik.setFieldValue("last_name", e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{ marginBottom: "20px", width: "80%" }}
+        />
 
-      <Button
-        variant="contained"
-        type="submit"
-        disabled={loading}
-        style={{
-          width: "80%",
-          marginTop: "20px",
-          marginBottom: "20px",
-          background: GetButtonColor(userInfo?.data?.sex),
-        }}
+        <Button
+          variant="contained"
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "80%",
+            marginTop: "20px",
+            marginBottom: "20px",
+            background: GetButtonColor(userInfo?.data?.sex),
+          }}
+        >
+          تغییر اطلاعات
+        </Button>
+      </Form>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        تغییر اطلاعات
-      </Button>
-    </Form>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

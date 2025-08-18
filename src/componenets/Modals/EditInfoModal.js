@@ -4,12 +4,18 @@ import {
   Autocomplete,
   Button,
   Checkbox,
-  Dialog,
-  DialogTitle,
+  Card,
+  CardContent,
+  CircularProgress,
   FormControlLabel,
   Grid,
   Snackbar,
   TextField,
+  Typography,
+  useTheme,
+  Box,
+  Dialog,
+  Divider,
 } from "@mui/material";
 import provinces from "../../Data/provinces.json";
 import fields from "../../Data/fields.json";
@@ -30,69 +36,59 @@ const EditInfoModal = ({
   onClose,
   handleCloseFinalize,
 }) => {
+
+  const theme = useTheme();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [loading, setLoading] = useState(false);
-  const [showZaban, setShowZaban] = useState(false);
-  const [showHonar, setShowHonar] = useState(false);
+  const [showZaban, setShowZaban] = useState(!!userData?.rank_zaban);
+  const [showHonar, setShowHonar] = useState(!!userData?.rank_honar);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success",
   });
+
+  const accentColor = GetButtonColor(userInfo?.data?.sex);
+
   const handleCloseSnackbar = () => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   const formik = useFormik({
     initialValues: {
-      sex: userData?.sex,
-      birth_date: userData?.birth_date,
-      province: userData?.city,
-      field: userData?.field,
-      quota: userData?.quota,
-      full_number: userData?.full_number,
-      rank: userData?.rank,
-      rank_all: userData?.rank_all,
-      last_rank: userData?.last_rank,
-      rank_zaban: userData?.rank_zaban,
-      full_number_zaban: userData?.full_number_zaban,
-      rank_all_zaban: userData?.rank_all_zaban,
-      rank_honar: userData?.rank_honar,
-      full_number_honar: userData?.full_number_honar,
-      rank_all_honar: userData?.rank_all_honar,
+      sex: userData?.sex || null,
+      birth_date: userData?.birth_date || "",
+      province: userData?.city || null,
+      field: userData?.field || null,
+      quota: userData?.quota || null,
+      full_number: userData?.full_number || "",
+      rank: userData?.rank || "",
+      rank_all: userData?.rank_all || "",
+      last_rank: userData?.last_rank || "",
+      rank_zaban: userData?.rank_zaban || "",
+      full_number_zaban: userData?.full_number_zaban || "",
+      rank_all_zaban: userData?.rank_all_zaban || "",
+      rank_honar: userData?.rank_honar || "",
+      full_number_honar: userData?.full_number_honar || "",
+      rank_all_honar: userData?.rank_all_honar || "",
+      finalized: userData?.finalized || null,
+      first_name: userData?.first_name || null,
+      last_name: userData?.last_name || null,
     },
     validationSchema: Yup.object({
       birth_date: Yup.string()
-        .test(
-          "checkBirthDate",
-          "سال تولد به اشتباهی وارد شده",
-          function check_national_id(code) {
-            var str = code.toString();
-            var strLen = str.length,
-              strVal = parseInt(str);
-            if (strLen < 4 || strLen > 4 || isNaN(strVal) || strVal === 0)
-              return false;
-            else return true;
-          }
-        )
-        .required(""),
+        .matches(/^\d{4}$/, "سال تولد باید 4 رقمی باشد")
+        .required("سال تولد الزامی است"),
       full_number: Yup.number()
-        .min(2000, "تراز وارد شده صحیح نمی‌باشد.")
+        .min(2000, "تراز باید حداقل 2000 باشد")
         .required("تراز الزامی است"),
       rank_all: Yup.number()
-        .test(
-          "check-rank-all",
-          "رتبه کشوری شما کمتر از رتبه در سهمیه است!",
-          function (value) {
-            const { rank } = this.parent;
-            return value >= rank;
-          }
-        )
+        .min(Yup.ref('rank'), "رتبه کشوری باید بزرگ‌تر یا مساوی رتبه سهمیه باشد")
         .required("رتبه کشوری الزامی است"),
     }),
     onSubmit: () => {
       setLoading(true);
-      update_stu_info().then(() => {
+      update_student_info().then(() => {
         setLoading(false);
       });
     },
@@ -111,10 +107,16 @@ const EditInfoModal = ({
     formik.resetForm();
   };
 
-  const update_stu_info = async () => {
+  const update_student_info = async () => {
     try {
       const payload = {
         ...formik.values,
+        first_name: formik.values.first_name || null,
+        last_name: formik.values.last_name || null,
+        sex: formik.values.sex || null,
+        city: formik.values.province || null,
+        field: formik.values.field || null,
+        quota: formik.values.quota || null,
         full_number: parseInt(formik.values.full_number, 10),
         rank: parseInt(formik.values.rank, 10),
         rank_all: parseInt(formik.values.rank_all, 10),
@@ -134,6 +136,7 @@ const EditInfoModal = ({
           ? parseInt(formik.values.rank_all_honar, 10)
           : null,
         stu_id: stu_id,
+        finalized: parseInt(formik.values.finalized),
         token: JSON.parse(localStorage.getItem("token")),
       };
 
@@ -141,7 +144,7 @@ const EditInfoModal = ({
         "https://student.baazmoon.com/bbc_api/update_request",
         {
           table: "users",
-          method_type: "update_stu_info",
+          method_type: "update_student_info",
           data: payload,
         }
       );
@@ -177,11 +180,15 @@ const EditInfoModal = ({
     }
   };
 
-  const getOptionById = (options, id) => {
-    return options.find((option) => option.id === id) || null;
+  const handleNumberInput = (e, fieldName) => {
+    const englishDigits = e.target.value.replace(
+      /[۰-۹]/g,
+      (char) => String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
+    );
+    formik.setFieldValue(fieldName, englishDigits.replace(/[^0-9]/g, ""));
   };
 
-  if (!openMo) return <></>;
+  if (!openMo) return null;
 
   return (
     <Dialog
@@ -190,69 +197,129 @@ const EditInfoModal = ({
       fullWidth
       disableEscapeKeyDown
       maxWidth="lg"
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          boxShadow: theme.shadows[5],
+          p: { xs: 2, md: 4 },
+          overflow: "auto"
+        }
+      }}
     >
-      <DialogTitle sx={{ textAlign: "center" }}>
-        {"ثبت اطلاعات کارنامه‌ای دانش‌آموز"}
-      </DialogTitle>
-      <Grid item xs={12}>
-        <hr
-          style={{
-            border: `1px solid ${GetButtonColor(userData.sex)}`,
-          }}
-        />
-      </Grid>
-      <form onSubmit={formik.handleSubmit} style={{ padding: "20px" }}>
-        <Grid container spacing={3} padding={2}>
-          <Grid item md={3} xs={12}>
-            <Autocomplete
+      <Typography variant="h4" gutterBottom sx={{
+        fontWeight: 700,
+        color: 'text.primary',
+        mb: 3,
+        position: 'relative',
+        '&:after': {
+          content: '""',
+          position: 'absolute',
+          bottom: -8,
+          left: 0,
+          width: 80,
+          height: 4,
+          backgroundColor: accentColor,
+          borderRadius: 2
+        }
+      }}>
+        {userData.finalized === 0 ? "ثبت اطلاعات کارنامه‌ای دانش‌آموز" : "ویرایش اطلاعات کارنامه‌ای دانش‌آموز"}
+      </Typography>
+
+      <Divider sx={{
+        borderColor: accentColor,
+        mb: 3,
+        borderWidth: 1
+      }} />
+
+      <form onSubmit={formik.handleSubmit}>
+        <Grid container spacing={3}>
+          {/* Personal Information Section */}
+          <Grid item xs={12}>
+            <Typography variant="h6" sx={{
+              color: 'text.secondary',
+              mb: 2,
+              borderBottom: `2px solid ${theme.palette.divider}`,
+              pb: 1
+            }}>
+              اطلاعات شخصی
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="نام"
+              value={formik.values.first_name}
               fullWidth
+              placeholder="1378"
+              onChange={(e) => handleNumberInput(e, "first_name")}
+              error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+              helperText={formik.touched.first_name && formik.errors.first_name}
+              required
+              variant="outlined"
+              size="small"
+              inputProps={{ maxLength: 4 }}
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="نام خانوادگی"
+              value={formik.values.last_name}
+              fullWidth
+              placeholder="1378"
+              onChange={(e) => handleNumberInput(e, "last_name")}
+              error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+              helperText={formik.touched.last_name && formik.errors.last_name}
+              required
+              variant="outlined"
+              size="small"
+              inputProps={{ maxLength: 4 }}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+            <Autocomplete
               options={sexOptions}
-              value={getOptionById(sexOptions, formik.values.sex)}
+              value={sexOptions.find(opt => opt.id === formik.values.sex) || null}
               onChange={(event, newValue) => {
                 formik.setFieldValue("sex", newValue?.id);
               }}
               getOptionLabel={(option) => option.name || ""}
               renderInput={(params) => (
-                <TextField fullWidth {...params} label="جنسیت" required />
+                <TextField
+                  {...params}
+                  label="جنسیت"
+                  required
+                  error={formik.touched.sex && Boolean(formik.errors.sex)}
+                  helperText={formik.touched.sex && formik.errors.sex}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                />
               )}
             />
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <TextField
               label="سال تولد"
               value={formik.values.birth_date}
               fullWidth
               placeholder="1378"
-              onChange={(event) => {
-                const englishDigits = event.target.value.replace(
-                  /[۰-۹]/g,
-                  (char) =>
-                    String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
-                );
-                formik.setFieldValue(
-                  "birth_date",
-                  englishDigits.replace(/[^0-9]/g, "")
-                );
-              }}
-              type="text"
+              onChange={(e) => handleNumberInput(e, "birth_date")}
+              error={formik.touched.birth_date && Boolean(formik.errors.birth_date)}
+              helperText={formik.touched.birth_date && formik.errors.birth_date}
               required
+              variant="outlined"
+              size="small"
+              inputProps={{ maxLength: 4 }}
             />
-            {formik.touched.birth_date && formik.errors.birth_date ? (
-              <div>
-                <p style={{ fontSize: 10, color: "red" }}>
-                  {formik.errors.birth_date}
-                </p>
-              </div>
-            ) : null}
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <Autocomplete
-              fullWidth
               options={provinces}
               value={provinces.find(
                 (province) =>
-                  province.id ===
-                  parseInt(formik.values?.province?.split(",")[0]) ||
+                  province.id === parseInt(formik.values?.province?.split(",")[0]) ||
                   province.name === formik.values?.province?.split(",")[1]
               )}
               getOptionLabel={(option) => option.name || ""}
@@ -263,412 +330,301 @@ const EditInfoModal = ({
                 );
               }}
               renderInput={(params) => (
-                <TextField fullWidth {...params} label="استان بومی" required />
+                <TextField
+                  {...params}
+                  label="استان بومی"
+                  required
+                  error={formik.touched.province && Boolean(formik.errors.province)}
+                  helperText={formik.touched.province && formik.errors.province}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                />
               )}
             />
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <Autocomplete
-              fullWidth
               options={fields}
-              value={getOptionById(fields, formik.values.field)}
+              value={fields.find(opt => opt.id === formik.values.field) || null}
               getOptionLabel={(option) => option.name || ""}
               onChange={(event, newValue) => {
                 formik.setFieldValue("field", newValue?.id);
               }}
               renderInput={(params) => (
                 <TextField
-                  fullWidth
                   {...params}
                   label="گروه آزمایشی"
                   required
+                  error={formik.touched.field && Boolean(formik.errors.field)}
+                  helperText={formik.touched.field && formik.errors.field}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
                 />
               )}
             />
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          {/* Academic Information Section */}
+          <Grid item xs={12}>
+            <Typography variant="h6" sx={{
+              color: 'text.secondary',
+              mb: 2,
+              borderBottom: `2px solid ${theme.palette.divider}`,
+              pb: 1
+            }}>
+              اطلاعات تحصیلی
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} md={3}>
             <Autocomplete
-              fullWidth
               options={quotas}
-              value={getOptionById(quotas, formik.values.quota)}
+              value={quotas.find(opt => opt.id === formik.values.quota) || null}
               getOptionLabel={(option) => option.name || ""}
               onChange={(event, newValue) => {
                 formik.setFieldValue("quota", newValue?.id);
               }}
               renderInput={(params) => (
                 <TextField
-                  fullWidth
                   {...params}
                   label="سهمیه ثبت‌نامی"
                   required
+                  error={formik.touched.quota && Boolean(formik.errors.quota)}
+                  helperText={formik.touched.quota && formik.errors.quota}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
                 />
               )}
             />
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <TextField
               label="نمره کل"
               value={formik.values.full_number}
               fullWidth
               placeholder="1000"
-              onChange={(event) => {
-                const englishDigits = event.target.value.replace(
-                  /[۰-۹]/g,
-                  (char) =>
-                    String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
-                );
-                formik.setFieldValue(
-                  "full_number",
-                  englishDigits.replace(/[^0-9]/g, "")
-                );
-              }}
-              type="text"
+              onChange={(e) => handleNumberInput(e, "full_number")}
+              error={formik.touched.full_number && Boolean(formik.errors.full_number)}
+              helperText={formik.touched.full_number && formik.errors.full_number}
               required
+              variant="outlined"
+              size="small"
             />
-            {formik.touched.full_number && formik.errors.full_number ? (
-              <div>
-                <p style={{ fontSize: 10, color: "red" }}>
-                  {formik.errors.full_number}
-                </p>
-              </div>
-            ) : null}
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <TextField
               label="رتبه در سهمیه"
               value={formik.values.rank}
               fullWidth
               placeholder="1300"
-              onChange={(event) => {
-                const englishDigits = event.target.value.replace(
-                  /[۰-۹]/g,
-                  (char) =>
-                    String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
-                );
-                formik.setFieldValue(
-                  "rank",
-                  englishDigits.replace(/[^0-9]/g, "")
-                );
-              }}
-              type="text"
+              onChange={(e) => handleNumberInput(e, "rank")}
+              error={formik.touched.rank && Boolean(formik.errors.rank)}
+              helperText={formik.touched.rank && formik.errors.rank}
               required
+              variant="outlined"
+              size="small"
             />
-            {formik.touched.rank && formik.errors.rank ? (
-              <div>
-                <p style={{ fontSize: 10, color: "red" }}>
-                  {formik.errors.rank}
-                </p>
-              </div>
-            ) : null}
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <TextField
               label="رتبه کشوری"
               value={formik.values.rank_all}
               fullWidth
               placeholder="5000"
-              onChange={(event) => {
-                const englishDigits = event.target.value.replace(
-                  /[۰-۹]/g,
-                  (char) =>
-                    String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
-                );
-                formik.setFieldValue(
-                  "rank_all",
-                  englishDigits.replace(/[^0-9]/g, "")
-                );
-              }}
-              type="text"
+              onChange={(e) => handleNumberInput(e, "rank_all")}
+              error={formik.touched.rank_all && Boolean(formik.errors.rank_all)}
+              helperText={formik.touched.rank_all && formik.errors.rank_all}
               required
+              variant="outlined"
+              size="small"
             />
-            {formik.touched.rank_all && formik.errors.rank_all ? (
-              <div>
-                <p style={{ fontSize: 10, color: "red" }}>
-                  {formik.errors.rank_all}
-                </p>
-              </div>
-            ) : null}
           </Grid>
-          <Grid item md={3} xs={12}>
+
+          <Grid item xs={12} md={3}>
             <TextField
               label="آخرین رتبه مجاز سهمیه"
               value={formik.values.last_rank}
               fullWidth
               placeholder="69000"
-              onChange={(event) => {
-                const englishDigits = event.target.value.replace(
-                  /[۰-۹]/g,
-                  (char) =>
-                    String.fromCharCode(char.charCodeAt(0) - 0x06f0 + 0x0030)
-                );
-                formik.setFieldValue(
-                  "last_rank",
-                  englishDigits.replace(/[^0-9]/g, "")
-                );
-              }}
-              type="text"
-              required
+              onChange={(e) => handleNumberInput(e, "last_rank")}
+              error={formik.touched.last_rank && Boolean(formik.errors.last_rank)}
+              helperText={formik.touched.last_rank && formik.errors.last_rank}
+              variant="outlined"
+              size="small"
             />
-            {formik.touched.last_rank && formik.errors.last_rank ? (
-              <div>
-                <p style={{ fontSize: 10, color: "red" }}>
-                  {formik.errors.last_rank}
-                </p>
-              </div>
-            ) : null}
           </Grid>
+
+          {/* Optional Sections */}
           <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={showZaban}
-                  onChange={(e) => setShowZaban(e.target.checked)}
-                />
-              }
-              label="افزودن اطلاعات زبان"
-            />
+            <Box sx={{
+              display: 'flex',
+              gap: 3,
+              mb: 2,
+              flexWrap: 'wrap'
+            }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showZaban}
+                    onChange={(e) => setShowZaban(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="نمایش بخش زبان"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showHonar}
+                    onChange={(e) => setShowHonar(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="نمایش بخش هنر"
+              />
+            </Box>
           </Grid>
+
+          {/* Language Results */}
           {showZaban && (
             <>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="رتبه منطقه زبان"
                   value={formik.values.rank_zaban}
                   fullWidth
                   placeholder="27"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "rank_zaban",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "rank_zaban")}
+                  error={formik.touched.rank_zaban && Boolean(formik.errors.rank_zaban)}
+                  helperText={formik.touched.rank_zaban && formik.errors.rank_zaban}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.rank_zaban && formik.errors.rank_zaban ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.rank_zaban}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="نمره کل زبان"
                   value={formik.values.full_number_zaban}
                   fullWidth
                   placeholder="6000"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "full_number_zaban",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "full_number_zaban")}
+                  error={formik.touched.full_number_zaban && Boolean(formik.errors.full_number_zaban)}
+                  helperText={formik.touched.full_number_zaban && formik.errors.full_number_zaban}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.full_number_zaban &&
-                  formik.errors.full_number_zaban ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.full_number_zaban}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="رتبه کشوری زبان"
                   value={formik.values.rank_all_zaban}
                   fullWidth
                   placeholder="1500"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "rank_all_zaban",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "rank_all_zaban")}
+                  error={formik.touched.rank_all_zaban && Boolean(formik.errors.rank_all_zaban)}
+                  helperText={formik.touched.rank_all_zaban && formik.errors.rank_all_zaban}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.rank_all_zaban &&
-                  formik.errors.rank_all_zaban ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.rank_all_zaban}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
             </>
           )}
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={showHonar}
-                  onChange={(e) => setShowHonar(e.target.checked)}
-                />
-              }
-              label="افزودن اطلاعات هنر"
-            />
-          </Grid>
+
+          {/* Art Results */}
           {showHonar && (
             <>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="رتبه منطقه هنر"
                   value={formik.values.rank_honar}
                   fullWidth
                   placeholder="21"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "rank_honar",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "rank_honar")}
+                  error={formik.touched.rank_honar && Boolean(formik.errors.rank_honar)}
+                  helperText={formik.touched.rank_honar && formik.errors.rank_honar}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.rank_honar && formik.errors.rank_honar ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.rank_honar}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="نمره کل هنر"
                   value={formik.values.full_number_honar}
                   fullWidth
                   placeholder="8000"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "full_number_honar",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "full_number_honar")}
+                  error={formik.touched.full_number_honar && Boolean(formik.errors.full_number_honar)}
+                  helperText={formik.touched.full_number_honar && formik.errors.full_number_honar}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.full_number_honar &&
-                  formik.errors.full_number_honar ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.full_number_honar}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   label="رتبه کشوری هنر"
                   value={formik.values.rank_all_honar}
                   fullWidth
                   placeholder="2500"
-                  onChange={(event) => {
-                    const englishDigits = event.target.value.replace(
-                      /[۰-۹]/g,
-                      (char) =>
-                        String.fromCharCode(
-                          char.charCodeAt(0) - 0x06f0 + 0x0030
-                        )
-                    );
-                    formik.setFieldValue(
-                      "rank_all_honar",
-                      englishDigits.replace(/[^0-9]/g, "")
-                    );
-                  }}
-                  type="text"
+                  onChange={(e) => handleNumberInput(e, "rank_all_honar")}
+                  error={formik.touched.rank_all_honar && Boolean(formik.errors.rank_all_honar)}
+                  helperText={formik.touched.rank_all_honar && formik.errors.rank_all_honar}
+                  variant="outlined"
+                  size="small"
                 />
-                {formik.touched.rank_all_honar &&
-                  formik.errors.rank_all_honar ? (
-                  <div>
-                    <p style={{ fontSize: 10, color: "red" }}>
-                      {formik.errors.rank_all_honar}
-                    </p>
-                  </div>
-                ) : null}
               </Grid>
             </>
           )}
+
+          {/* Submit Buttons */}
           <Grid item xs={12}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
+            <Box sx={{
+              display: 'flex',
+              gap: 2,
+              justifyContent: 'space-between'
+            }}>
               <Button
                 variant="contained"
                 type="submit"
-                style={{
-                  background: GetButtonColor(userInfo?.data?.sex),
-                }}
-                sx={{
-                  boxShadow: "none",
-                  borderRadius: "5px",
-                  padding: "12px 0",
-                  marginRight: "10px",
-                }}
-                fullWidth
                 disabled={loading}
+                sx={{
+                  height: 48,
+                  backgroundColor: accentColor,
+                  '&:hover': {
+                    backgroundColor: accentColor,
+                    opacity: 0.9,
+                  },
+                  flex: 1
+                }}
               >
-                {userData?.finalized === 0
-                  ? "ثبت اولیه اطلاعات"
-                  : "ثبت نهایی اطلاعات"}
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  userData?.finalized === 0 ? "ثبت اولیه اطلاعات" : "ثبت نهایی اطلاعات"
+                )}
               </Button>
               <Button
                 variant="outlined"
                 color="error"
                 sx={{
-                  boxShadow: "none",
-                  borderRadius: "5px",
-                  padding: "12px 0",
+                  height: 48,
+                  flex: 1
                 }}
-                fullWidth
-                onClick={() => handleCancel()}
+                onClick={handleCancel}
               >
                 انصراف
               </Button>
-            </div>
+            </Box>
           </Grid>
         </Grid>
       </form>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

@@ -99,7 +99,7 @@ const FieldCard = ({ title, onClick, icon, isFemale }) => {
     <FieldCardContainer onClick={onClick} isfemale={isFemale}>
       {icon && (
         <CardFieldImage
-          src={`https://student.baazmoon.com/ERS/get_pic_info/field/${icon}`}
+          src={`https://student.baazmoon.com/bbc_api/get_pic_info/field/${icon}`}
           alt={title}
         />
       )}
@@ -146,7 +146,7 @@ const Fields = () => {
 
         {filteredMajor.image && (
           <FieldImage
-            src={`https://student.baazmoon.com/ERS/get_pic_info/field/${filteredMajor.image}`}
+            src={`https://student.baazmoon.com/bbc_api/get_pic_info/field/${filteredMajor.image}`}
             alt={filteredMajor.major}
           />
         )}
