@@ -15,6 +15,10 @@ import PasswordChangePage from "./pages/passwordChange";
 import InfoChangePage from "./pages/infoChange";
 import FieldsCategoryPage from "./pages/fieldsCategory";
 
+import QuizPage from "./pages/quiz";
+import QuizShowPage from "./pages/quizShow";
+import QuizInfoPage from "./pages/quizKind";
+
 // The Free Pick Pages
 import FRFPPage from "./pages/FRFPPage";
 import FRSPPage from "./pages/FRSPPage";
@@ -129,6 +133,9 @@ function App() {
               <Route path="/fields/:id" element={<FieldsPage />} />
               <Route path="/hoshmand/:stu_id" element={<HoshmandPage />} />
               <Route path="/info_show/:id" element={<InfoShowPage />} />
+              <Route path="/quiz_detail" element={<QuizInfoPage />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/quiz/:id" element={<QuizShowPage />} />
               <Route path="/notebookInfo" element={<NoteBookPage />} />
               <Route
                 path="/pffrb/:stu_id/:field/:part"
