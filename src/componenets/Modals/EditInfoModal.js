@@ -319,7 +319,7 @@ const EditInfoModal = ({
               options={provinces}
               value={provinces.find(
                 (province) =>
-                  province.id === parseInt(formik.values?.province?.split(",")[0]) ||
+                  province.id === parseInt(formik.values?.province?.split(",")[1]) ||
                   province.name === formik.values?.province?.split(",")[1]
               )}
               getOptionLabel={(option) => option.name || ""}

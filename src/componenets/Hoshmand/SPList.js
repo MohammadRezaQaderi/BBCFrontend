@@ -958,7 +958,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
           data: {
             stu_id: parseInt(stu_id),
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             field: userData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -995,7 +995,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
             stu_id: parseInt(stu_id),
             provinces: provincesName,
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             field: userData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -1033,7 +1033,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
             provinces: provincesName,
             cities: citiesName,
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             field: userData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -1072,7 +1072,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
             cities: citiesName,
             universityName: universityName,
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             field: userData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -1112,7 +1112,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
             universityName: universityName,
             majors: fieldName,
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             field: userData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -1174,7 +1174,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
                   ? 0
                   : 3,
             sex: userData?.sex,
-            nativeProvince: userData?.city?.split(",")[0],
+            nativeProvince: userData?.city?.split(",")[1],
             rank_in_all: userData?.rank,
             quota: userData?.quota,
             field: userData?.field,

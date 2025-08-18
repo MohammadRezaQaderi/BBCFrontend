@@ -66,15 +66,15 @@ const SelectionModal = ({ open, userInfo, onClose, userField }) => {
     },
   };
 
-  const RenderButton = ({ field, label, pagename, isPartTime = false }) => (
+  const RenderButton = ({ user_id, field, label, pagename, isPartTime = false }) => (
     <Button
       key={field}
       variant="contained"
       onClick={() => {
         onClose();
         pagename === "pffrb"
-          ? navigate(`/${pagename}/${field}/${isPartTime ? 1 : 0}`)
-          : navigate(`/${pagename}/${field}`);
+          ? navigate(`/${pagename}/${user_id}/${field}/${isPartTime ? 1 : 0}`)
+          : navigate(`/${pagename}/${user_id}/${field}`);
       }}
       sx={buttonStyles}
     >
@@ -98,7 +98,7 @@ const SelectionModal = ({ open, userInfo, onClose, userField }) => {
       }}
     >
       <CloseButtonWrapper $isMobile={isMobile}>
-        <IconButton 
+        <IconButton
           onClick={onClose}
           sx={{
             color: theme.palette.grey[500],
@@ -133,6 +133,7 @@ const SelectionModal = ({ open, userInfo, onClose, userField }) => {
                 key={field}
                 field={field}
                 label={label}
+                user_id={userInfo?.data?.user_id}
                 pagename="pffr"
               />
             ))}
@@ -146,6 +147,7 @@ const SelectionModal = ({ open, userInfo, onClose, userField }) => {
             <RenderButton
               key={field}
               field={field}
+              user_id={userInfo?.data?.user_id}
               label={label}
               pagename="pffrb"
             />
@@ -160,6 +162,7 @@ const SelectionModal = ({ open, userInfo, onClose, userField }) => {
             <RenderButton
               key={field}
               field={field}
+              user_id={userInfo?.data?.user_id}
               label={label}
               pagename="pffrb"
               isPartTime

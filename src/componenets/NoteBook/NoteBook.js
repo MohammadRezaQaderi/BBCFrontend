@@ -129,7 +129,7 @@ const NoteBook = () => {
     {
       title: "انسانی",
       icon: userInfo?.data?.sex === 2 ? "EnsaniWoman.svg" : "EnsaniMan.svg",
-      report: "pdf_nootbook",
+      report: "pdf_notebook",
       color: GetButtonColor(userInfo?.data?.sex),
       reportName: "دفترچه انسانی.pdf",
       file: "E1403.pdf",
@@ -137,7 +137,7 @@ const NoteBook = () => {
     {
       title: "تجربی",
       icon: userInfo?.data?.sex === 2 ? "TajrobiWoman.svg" : "TajrobiMan.svg",
-      report: "pdf_nootbook",
+      report: "pdf_notebook",
       color: GetButtonColor(userInfo?.data?.sex),
       reportName: "دفترچه تجربی.pdf",
       file: "T1403.pdf",
@@ -145,7 +145,7 @@ const NoteBook = () => {
     {
       title: "ریاضی",
       icon: userInfo?.data?.sex === 2 ? "RiaziWoman.svg" : "RiaziMan.svg",
-      report: "pdf_nootbook",
+      report: "pdf_notebook",
       color: GetButtonColor(userInfo?.data?.sex),
       reportName: "دفترچه ریاضی.pdf",
       file: "R1403.pdf",
@@ -153,7 +153,7 @@ const NoteBook = () => {
     {
       title: "هنر",
       icon: userInfo?.data?.sex === 2 ? "HonarWoman.svg" : "HonarMan.svg",
-      report: "pdf_nootbook",
+      report: "pdf_notebook",
       color: GetButtonColor(userInfo?.data?.sex),
       reportName: "دفترچه هنر.pdf",
       file: "H1403.pdf",
@@ -161,7 +161,7 @@ const NoteBook = () => {
     {
       title: "زبان",
       icon: userInfo?.data?.sex === 2 ? "ZabanWoman.svg" : "ZabanMan.svg",
-      report: "pdf_nootbook",
+      report: "pdf_notebook",
       color: GetButtonColor(userInfo?.data?.sex),
       reportName: "دفترچه زبان.pdf",
       file: "Z1403.pdf",

@@ -281,7 +281,7 @@ const PickFieldKind = () => {
                   <InfoItem
                     icon={<FaMapMarkerAlt size={14} />}
                     label="استان"
-                    value={data?.city?.split(",")[0]}
+                    value={data?.city?.split(",")[1]}
                   />
                   <InfoItem
                     icon={<FaUser size={14} />}
@@ -315,8 +315,8 @@ const PickFieldKind = () => {
                 transition={{ duration: 0.3, delay: 0.3 }}
               >
                 <PickFieldCard
-                  title="سراسری"
-                  onClick={() => navigate("/pfgl")}
+                  title="هوشمند"
+                  onClick={() => navigate("/hoshmand/" + userInfo?.data?.user_id)}
                   isFemale={userInfo?.data?.sex === 2}
                   icon={<FaUniversity size={24} />}
                   compact

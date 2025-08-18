@@ -382,7 +382,7 @@ const GLFieldPickTable = () => {
                   ? 0
                   : 3,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             rank_in_all: UserData?.rank,
             quota: UserData?.quota,
             field: UserData?.field,
@@ -433,7 +433,7 @@ const GLFieldPickTable = () => {
             universityName: universityName,
             majors: fieldName,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             field: UserData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -472,7 +472,7 @@ const GLFieldPickTable = () => {
             cities: citiesName,
             universityName: universityName,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             field: UserData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -510,7 +510,7 @@ const GLFieldPickTable = () => {
             provinces: provincesName,
             cities: citiesName,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             field: UserData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -547,7 +547,7 @@ const GLFieldPickTable = () => {
             user_id: userInfo?.data.user_id,
             provinces: provincesName,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             field: UserData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -583,7 +583,7 @@ const GLFieldPickTable = () => {
           data: {
             user_id: userInfo?.data.user_id,
             sex: UserData?.sex,
-            nativeProvince: UserData?.city.split(",")[0],
+            nativeProvince: UserData?.city.split(",")[1],
             field: UserData?.field,
             secondField:
               secondField === "زبان" ? 4 : secondField === "هنر" ? 5 : "NULL",
@@ -925,7 +925,7 @@ const GLFieldPickTable = () => {
                       <InfoItem
                         icon={<FaMapMarkerAlt size={14} />}
                         label="استان"
-                        value={UserData?.city?.split(",")[0]}
+                        value={UserData?.city?.split(",")[1]}
                       />
                       <InfoItem
                         icon={<FaUser size={14} />}

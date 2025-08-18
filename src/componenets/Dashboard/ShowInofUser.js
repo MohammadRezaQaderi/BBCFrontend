@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { ConvertField, ConvertQuota } from "../../../helper/FieldCheck";
-import { GetButtonColor } from "../../../helper/buttonColor";
-import ErrorState from "../../../helper/ErrorState";
+import { ConvertField, ConvertQuota } from "../../helper/FieldCheck";
+import { GetButtonColor } from "../../helper/buttonColor";
+import ErrorState from "../../helper/ErrorState";
 
 const ShowInfoUser = ({ userDetails, userInfo }) => {
   const theme = useTheme();
@@ -22,7 +22,7 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
     },
     {
       label: "استان بومی",
-      value: userDetails?.city?.split(",")[1],
+      value: userDetails?.city?.split(",")[0],
       highlight: true,
     },
     {

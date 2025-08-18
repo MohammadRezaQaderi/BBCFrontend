@@ -725,7 +725,7 @@ const FRTrashList = () => {
                       <InfoItem
                         icon={<FaMapMarkerAlt size={14} />}
                         label="استان"
-                        value={UserData?.city?.split(",")[0]}
+                        value={UserData?.city?.split(",")[1]}
                       />
                       <InfoItem
                         icon={<FaUser size={14} />}

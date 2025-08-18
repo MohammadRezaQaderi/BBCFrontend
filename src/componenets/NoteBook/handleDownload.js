@@ -7,7 +7,7 @@ export const handleDownload = async (
 ) => {
   try {
     const response = await fetch(
-      `https://student.baazmoon.com/bbc_api/pdf_nootbook/${file}`
+      `https://student.baazmoon.com/bbc_api/pdf_notebook/${file}`
     );
 
     if (response.ok) {

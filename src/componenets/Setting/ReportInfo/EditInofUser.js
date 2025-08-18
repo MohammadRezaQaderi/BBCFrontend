@@ -60,7 +60,7 @@ const EditInfoUser = ({ userData, final, setReload, reload }) => {
       birth_date: userData?.birth_date || "",
       city: userData?.city
         ? {
-          name: userData.city.split(",")[0],
+          name: userData.city.split(",")[1],
           id: parseInt(userData.city.split(",")[1]),
         }
         : null,
