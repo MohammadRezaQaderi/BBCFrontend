@@ -1,18 +1,17 @@
-import { toast } from "react-toastify";
-
 export const handleDownload = async (
   report,
   report_name,
   file,
-  setProgress
+  setProgress,
+  setSnackbar
 ) => {
   try {
     let url = ''
     if (report === "get_default") {
-      url = `https://entekhab.baazmoon.com/quiz_api/${report}`
+      url = `https://student.baazmoon.com/bbc_quiz_api/${report}`
     }
     else{
-      url = `https://entekhab.baazmoon.com/quiz_api/${report}/${file}`
+      url = `https://student.baazmoon.com/bbc_quiz_api/${report}/${file}`
     }
     const response = await fetch(url);
 
@@ -41,39 +40,47 @@ export const handleDownload = async (
 
       setProgress(0);
     } else if (response.status === 404) {
-      toast.error("فایل مورد نظر شما یافت نشد.", {
-        position: toast.POSITION.BOTTOM_CENTER,
+      setSnackbar({
+        open: true,
+        message: "فایل مورد نظر شما یافت نشد.",
+        severity: "error",
       });
     } else if (response.status === 320) {
-      toast.error(
-        "شماره تلفن شما در سامانه موجود نیست. با پشتیبانی تماس بگیرید.",
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
-      );
+      setSnackbar({
+        open: true,
+        message: "شماره تلفن شما در سامانه موجود نیست. با پشتیبانی تماس بگیرید.",
+        severity: "error",
+      });
     } else if (response.status === 326) {
-      toast.error(
-        "شما به خروجی کارنامه خود دسترسی ندارید. با مشاور خود مطرح کنید.",
-        {
-          position: toast.POSITION.BOTTOM_CENTER,
-        }
-      );
+      setSnackbar({
+        open: true,
+        message: "شما به خروجی کارنامه خود دسترسی ندارید. با مشاور خود مطرح کنید.",
+        severity: "error",
+      });
     } else if (response.status === 321) {
-      toast.error("در حال حاضر آزمون‌های شما به پایان نرسیده است.", {
-        position: toast.POSITION.BOTTOM_CENTER,
+      setSnackbar({
+        open: true,
+        message: "در حال حاضر آزمون‌های شما به پایان نرسیده است.",
+        severity: "error",
       });
     } else if (response.status === 322) {
-      toast.error("کارنامه‌ها درحال آماده سازی می‌باشد.", {
-        position: toast.POSITION.BOTTOM_CENTER,
+      setSnackbar({
+        open: true,
+        message: "کارنامه‌ها درحال آماده سازی می‌باشد.",
+        severity: "error",
       });
     } else {
-      toast.error("مشکلی در سامانه پیش‌آمده لحظاتی دیگر مراجعه نمایید", {
-        position: toast.POSITION.BOTTOM_CENTER,
+      setSnackbar({
+        open: true,
+        message: "مشکلی در سامانه پیش‌آمده لحظاتی دیگر مراجعه نمایید",
+        severity: "error",
       });
     }
   } catch (error) {
-    toast.error("مشکلی در سامانه پیش‌آمده لحظاتی دیگر مراجعه نمایید", {
-      position: toast.POSITION.BOTTOM_CENTER,
+    setSnackbar({
+      open: true,
+      message: "مشکلی در سامانه پیش‌آمده لحظاتی دیگر مراجعه نمایید",
+      severity: "error",
     });
   }
 };

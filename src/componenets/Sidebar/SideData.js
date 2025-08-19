@@ -48,7 +48,7 @@ export const NavData = {
       icon: <IoSettings style={{ width: "30px", height: "30px" }} />,
     },
     {
-      name: "دفترچه کنکور و معرفی رشته",
+      name: "دفترچه و رشته‌ها",
       path: "/information",
       isLast: false,
       icon: <FaBook style={{ width: "30px", height: "30px" }} />,
@@ -92,7 +92,7 @@ export const NavData = {
       icon: <IoSettings style={{ width: "30px", height: "30px" }} />,
     },
     {
-      name: "دفترچه کنکور و معرفی رشته",
+      name: "دفترچه و رشته‌ها",
       path: "/information",
       isLast: false,
       icon: <FaBook style={{ width: "30px", height: "30px" }} />,
@@ -149,34 +149,6 @@ export const NavData = {
     },
   ],
   other: [
-    {
-      name: "خونه",
-      path: "/",
-      isLast: false,
-      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
-      to: "#about",
-    },
-    {
-      name: "خدماتمون",
-      path: "/services",
-      isLast: false,
-      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
-      to: "#about",
-    },
-    {
-      name: "تیممون",
-      path: "/teams",
-      isLast: false,
-      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
-      to: "#about",
-    },
-    {
-      name: "تخمین تراز",
-      path: "/konkor_estimate",
-      isLast: false,
-      icon: <MdSpaceDashboard style={{ width: "30px", height: "30px" }} />,
-      to: "#about",
-    },
     {
       name: "ورود",
       path: "/signin",

@@ -418,7 +418,15 @@ const Consultant = ({ userInfo }) => {
             transition={{ delay: 0.6, duration: 0.5 }}
           >
             <Paper elevation={2} sx={{ p: 3, borderRadius: 3, height: '100%' }}>
-              <Typography variant="h6" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant="h6"
+                sx={{
+                  mb: 3,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  fontWeight: 600,
+                  color: theme.palette.primary.dark
+                }}>
                 <NotificationsIcon color="primary" />
                 اطلاعیه‌ها
               </Typography>

@@ -106,7 +106,7 @@ const Navbar = ({ toggle }) => {
 
                 <NavBtn>
                   <NavBtnLink scrollNav={scrollNav} to="/signin">
-                    ورود / ثبت‌نام
+                    ورود
                   </NavBtnLink>
                 </NavBtn>
               </>

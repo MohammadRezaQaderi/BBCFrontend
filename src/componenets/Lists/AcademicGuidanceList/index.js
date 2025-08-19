@@ -193,7 +193,7 @@ const AcademicGuidanceList = () => {
 
   const handleDownloadWithProgress = async (report, phone, report_name) => {
     try {
-      await handleDownload(report, report_name, phone, setDownloadProgress);
+      await handleDownload(report, report_name, phone, setDownloadProgress, setSnackbar);
     } catch (error) {
       setSnackbar({
         open: true,
@@ -396,99 +396,6 @@ const AcademicGuidanceList = () => {
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return <>{row}</>;
-        },
-      },
-      {
-        accessorKey: "access",
-        header: "دسترسی‌ها",
-        size: 50,
-        enableColumnFilter: false,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        Cell: ({ cell }) => {
-          const row = cell.row.original;
-          return (
-            <IconButton onClick={(e) => handleOpenAccessMenu(row.user_id, e)}>
-              <SettingsIcon />
-            </IconButton>
-          );
-        },
-      },
-    ],
-    oCon: [
-      {
-        accessorKey: "name",
-        header: "نام",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام" },
-      },
-      {
-        accessorKey: "phone",
-        header: "نام کاربری",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "نام کاربری" },
-      },
-      {
-        accessorKey: "field",
-        header: "رشته",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "رشته" },
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return <span>{barnch(row)}</span>;
-        },
-      },
-      {
-        accessorKey: "report",
-        header: "کارنامه استعدادسنجی",
-        size: 100,
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-        muiTableHeadCellFilterTextFieldProps: {
-          placeholder: "کارنامه استعدادسنجی",
-        },
-        Cell: ({ cell }) => {
-          const phone = cell.row.original.phone;
-          return (
-            <Button
-              onClick={() =>
-                handleDownloadWithProgress(
-                  "get_report",
-                  phone,
-                  "استعدادسنجی.pdf"
-                )
-              }
-              sx={{ boxShadow: "none", borderRadius: "5px" }}
-            >
-              <FaDownload color="#000" />
-            </Button>
-          );
         },
       },
       {
@@ -772,7 +679,7 @@ const AcademicGuidanceList = () => {
                   thickness={4}
                   style={{ color: GetButtonColor(userInfo?.data?.sex) }}
                 />
-                <ProgressText>در حال آماده‌سازی فایل PDF</ProgressText>
+                <ProgressText>درحال دریافت کارنامه...</ProgressText>
                 <ProgressBar>
                   <ProgressFill progress={downloadProgress} color={GetButtonColor(userInfo?.data?.sex)} />
                 </ProgressBar>
