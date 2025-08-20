@@ -292,7 +292,7 @@ const FRBFieldPickTable = ({ }) => {
     try {
       setSearchLoading(true)
       const response = await axios.post(
-        "https://student.baazmoon.com/hoshmand/select_request",
+        "https://student.baazmoon.com/bbc_fieldpick_api/select_request",
         {
           table: "users",
           method_type: "frb_search_fields",

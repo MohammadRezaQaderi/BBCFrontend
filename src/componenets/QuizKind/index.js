@@ -145,7 +145,7 @@ const QuizKindShow = () => {
         "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
-          method_type: "select_student_info",
+          method_type: "select_student_info_ag",
           data: {
             user_id: userInfo?.data?.user_id,
             token: JSON.parse(localStorage.getItem("token")),
@@ -153,8 +153,9 @@ const QuizKindShow = () => {
         }
       );
       if (response?.data?.status === 200) {
-        const finalized = response?.data?.response?.data?.lock;
-        if (finalized === 0) {
+        const lock = response?.data?.response?.data?.lock;
+        const ag_access = response?.data?.response?.data?.ag_access;
+        if (ag_access === 0) {
           setLock(true)
           // setSnackbar({
           //   open: true,
@@ -262,7 +263,7 @@ const QuizKindShow = () => {
       case 321:
         setSnackbar({
           open: true,
-          message: "در حال حاضر آزمون‌های دانش‌آموز به پایان نرسیده است.",
+          message: "در حال حاضر آزمون‌های شما به پایان نرسیده است.",
           severity: "error",
         });
         break;

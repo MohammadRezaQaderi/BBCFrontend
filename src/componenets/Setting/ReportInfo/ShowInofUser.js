@@ -8,7 +8,12 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
   const theme = useTheme();
   const accentColor = GetButtonColor(userDetails?.sex);
 
-  const formatValue = (value) => value || "---";
+  const formatValue = (value) => {
+    if (value === null || value === undefined) return "---";
+    if (typeof value === "number") return value.toLocaleString("fa-IR");
+    return value;
+  };
+
 
   const userFields = [
     {
@@ -57,25 +62,25 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
   const additionalFields = [
     ...(userDetails?.rank_zaban || userDetails?.full_number_zaban || userDetails?.rank_all_zaban
       ? [
-          { label: "رتبه زبان", value: userDetails?.rank_zaban },
-          { 
-            label: "رتبه کشوری زبان", 
-            value: userDetails?.rank_all_zaban,
-            highlight: true 
-          },
-          { label: "نمره زبان", value: userDetails?.full_number_zaban },
-        ]
+        { label: "رتبه زبان", value: userDetails?.rank_zaban },
+        {
+          label: "رتبه کشوری زبان",
+          value: userDetails?.rank_all_zaban,
+          highlight: true
+        },
+        { label: "نمره زبان", value: userDetails?.full_number_zaban },
+      ]
       : []),
     ...(userDetails?.rank_honar || userDetails?.full_number_honar || userDetails?.rank_all_honar
       ? [
-          { label: "رتبه هنر", value: userDetails?.rank_honar },
-          { 
-            label: "رتبه کشوری هنر", 
-            value: userDetails?.rank_all_honar,
-            highlight: true 
-          },
-          { label: "نمره هنر", value: userDetails?.full_number_honar },
-        ]
+        { label: "رتبه هنر", value: userDetails?.rank_honar },
+        {
+          label: "رتبه کشوری هنر",
+          value: userDetails?.rank_all_honar,
+          highlight: true
+        },
+        { label: "نمره هنر", value: userDetails?.full_number_honar },
+      ]
       : []),
   ];
 
@@ -94,7 +99,7 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
   }
 
   return (
-    <Box sx={{ 
+    <Box sx={{
       p: { xs: 2, md: 4 },
       maxWidth: 1400,
       mx: 'auto',
@@ -102,15 +107,15 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
       borderRadius: 2
     }}>
       {/* Header Section */}
-      <Box sx={{ 
-        mb: 4, 
+      <Box sx={{
+        mb: 4,
         textAlign: 'center',
         position: 'relative'
       }}>
-        <Typography 
-          variant="h4" 
-          gutterBottom 
-          sx={{ 
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
             fontWeight: 700,
             color: 'text.primary',
             position: 'relative',
@@ -155,7 +160,7 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
                 variant="subtitle2"
                 color="textSecondary"
                 gutterBottom
-                sx={{ 
+                sx={{
                   fontWeight: field.highlight ? 600 : 500,
                   fontSize: '0.875rem'
                 }}
@@ -164,7 +169,7 @@ const ShowInfoUser = ({ userDetails, userInfo }) => {
               </Typography>
               <Typography
                 variant="h6"
-                sx={{ 
+                sx={{
                   fontWeight: field.highlight ? 700 : 500,
                   color: field.highlight ? 'text.primary' : 'text.secondary'
                 }}
