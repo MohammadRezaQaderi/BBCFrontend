@@ -106,7 +106,7 @@ export const NavBtn = styled.nav`
 
 export const NavBtnLink = styled(LinkR)`
   border-radius: 8px;
-  background: ${({ scrollNav }) => (scrollNav ? "#36ae7c" : "#36ae7c")};
+  background: ${({ scrollNav }) => (scrollNav ? "#5ab2ff" : "#5ab2ff")};
   white-space: nowarp;
   padding: 10px 22px;
   color: ${({ scrollNav }) => (scrollNav ? "#fff" : "#fff")};
@@ -126,7 +126,7 @@ export const NavBtnLink = styled(LinkR)`
 
 export const NavBtnLink1 = styled(LinkR)`
   border-radius: 8px;
-  background: ${({ scrollNav }) => (scrollNav ? "#36ae7c" : "#36ae7c")};
+  background: ${({ scrollNav }) => (scrollNav ? "#5ab2ff" : "#5ab2ff")};
   white-space: nowarp;
   padding: 10px 22px;
   color: ${({ scrollNav }) => (scrollNav ? "#fff" : "#fff")};

@@ -104,7 +104,7 @@ export const SidebarLink = styled(LinkS)`
   color: #fff;
   margin-top: 15px;
   border-radius: 15px;
-  background: #36ae7c;
+  background: #5ab2ff;
   width: 75%;
   height: 50px;
   cursor: pointer;
@@ -113,7 +113,7 @@ export const SidebarLink = styled(LinkS)`
   animation-delay: ${({ delay }) => delay || "0s"}; /* Add staggered delay */
 
   &:hover {
-    color: #36ae7c;
+    color: #5ab2ff;
     transform: scale(1.05);
     transition: color 0.2s ease-in-out, transform 0.3s ease;
   }
@@ -127,7 +127,7 @@ export const SideBtnWrap = styled.div`
 
 export const SidebarRoute = styled(LinkR)`
   border-radius: 50px;
-  background: #36ae7c;
+  background: #5ab2ff;
   white-space: nowarp;
   padding: 16px 64px;
   color: #fff;

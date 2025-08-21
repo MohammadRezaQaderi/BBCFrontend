@@ -69,7 +69,7 @@ h2 {
 }
 
 .nav-link:hover {
-  color: #36ae7c;
+  color: #5ab2ff;
 }
 
 .nav-link-underline {
@@ -78,7 +78,7 @@ h2 {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #36ae7c;
+  background-color: #5ab2ff;
   transition: width 0.3s ease;
 }
 

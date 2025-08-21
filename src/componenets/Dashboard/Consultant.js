@@ -247,7 +247,7 @@ const Consultant = ({ userInfo }) => {
                   }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.info.dark }}>
-                        {data?.con_count + data?.stu_count || 0}
+                        {data?.stu_count || 0}
                       </Typography>
                       <PeopleIcon sx={{
                         fontSize: 40,
@@ -259,10 +259,6 @@ const Consultant = ({ userInfo }) => {
                       کاربران سیستم
                     </Typography>
                     <Box sx={{ mt: 2, borderTop: `1px dashed ${theme.palette.divider}`, pt: 1 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
-                        <Typography variant="body2">مشاوران:</Typography>
-                        <Typography variant="body2" fontWeight={600}>{data?.con_count || 0}</Typography>
-                      </Box>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', py: 0.5 }}>
                         <Typography variant="body2">دانش‌آموزان:</Typography>
                         <Typography variant="body2" fontWeight={600}>{data?.stu_count || 0}</Typography>

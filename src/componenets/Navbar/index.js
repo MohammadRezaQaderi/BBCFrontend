@@ -79,7 +79,7 @@ const Navbar = ({ toggle }) => {
             />
 
             <MobileIcon onClick={toggle}>
-              <FaBars style={{ color: "#36ae7c" }} />
+              <FaBars style={{ color: "#5ab2ff" }} />
             </MobileIcon>
 
             {!loggedIn ? (

@@ -172,7 +172,7 @@ const Signin = () => {
           برای ورود اطلاعات خود را وارد کنید
         </Typography>
 
-        <Divider sx={{ my: 2, borderColor: "#36ae7c", borderWidth: 2 }} />
+        <Divider sx={{ my: 2, borderColor: "#5ab2ff", borderWidth: 2 }} />
 
         <TextField
           fullWidth
@@ -222,7 +222,7 @@ const Signin = () => {
           sx={{
             mt: 2,
             mb: 2,
-            backgroundColor: "#36ae7c",
+            backgroundColor: "#5ab2ff",
             "&:hover": {
               backgroundColor: "#2d9968",
             },
