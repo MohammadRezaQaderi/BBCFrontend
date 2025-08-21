@@ -103,7 +103,7 @@ const ProgressText = styled.div`
   margin-top: 0.5rem;
 `;
 
-const SELECTED_LIST_LIMIT = 150;
+const SELECTED_LIST_LIMIT = 400;
 
 const SPList = ({ userInfo, nextStep, stu_id }) => {
   const navigate = useNavigate();

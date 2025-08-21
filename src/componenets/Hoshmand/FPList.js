@@ -56,7 +56,7 @@ const LoadingOverlay = styled(Box)(({ theme }) => ({
   zIndex: theme.zIndex.modal + 1,
 }));
 
-const SPECIAL_LIST_LIMIT = 150;
+const SPECIAL_LIST_LIMIT = 400;
 
 const FPList = ({ userInfo, nextStep, stu_id }) => {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHoshmand, setIsHoshmand] = useState(false);
   const [hoshmandLoading, setHoshmandLoading] = useState(false);
-  const [under150, setUnder150] = useState(false)
+  const [under400, setUnder400] = useState(false)
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -92,7 +92,7 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
       userInfo={userInfo}
       title="راهنمای لیست رشته‌ها"
       content={[
-        "در این صفحه با توجه به اولویت شما در مراحل قبل، لیست رشته‌های موجود، به ترتیب پیشنهادی، به شما نمایش داده شده است. در این صفحه می توانید به دو روش لیست منتخب نهایی 150تایی خود را تولید کنید: 1- به صورت دستی: با کلیک بر روی کدرشته‌های مد نظر و زدن دکمه «اضافه به لیست منتخب کاربر» و در نهایت کلیک بر روی دکمه ذخیره تغییرات 2- به صورت هوشمند: با کلیک بر روی دکمه «چینش نهایی توسط پروفسور»",
+        "در این صفحه با توجه به اولویت شما در مراحل قبل، لیست رشته‌های موجود، به ترتیب پیشنهادی، به شما نمایش داده شده است. در این صفحه می توانید به دو روش لیست منتخب نهایی 400تایی خود را تولید کنید: 1- به صورت دستی: با کلیک بر روی کدرشته‌های مد نظر و زدن دکمه «اضافه به لیست منتخب کاربر» و در نهایت کلیک بر روی دکمه ذخیره تغییرات 2- به صورت هوشمند: با کلیک بر روی دکمه «چینش نهایی توسط پروفسور»",
       ]}
       secondTitle={"نکات مهم مشاوره‌ای"}
       additionalTips={[
@@ -525,8 +525,8 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
         setData(response.data.response.data || []);
         setSpecialList(response.data.response.selected_list || []);
         setIsHoshmand(response.data.response.is_hoshmand);
-        if (response.data.response.selected_list.length < 150) {
-          setUnder150(true)
+        if (response.data.response.selected_list.length < 400) {
+          setUnder400(true)
         }
         setShowThankYouModal(true);
         setSnackbar({
@@ -880,11 +880,11 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
               <Typography variant="body1" paragraph>
                 من لیست منتخبت رو بر حسب اونایی که انتخاب کرده بودی چیدم
               </Typography>
-              {under150 && (
+              {under400 && (
                 <>
                   <Typography variant="body2" paragraph>
                     دانش آموز عزیز
-                    در نظر داشته باشید پروفسور به احتمال قبولی شما در چینش لیست حساس است. با توجه به گزینه‌هایی که تاکنون انتخاب کرده‌اید، لیست شما کمتر از ۱۵۰ کدرشته دارد.
+                    در نظر داشته باشید پروفسور به احتمال قبولی شما در چینش لیست حساس است. با توجه به گزینه‌هایی که تاکنون انتخاب کرده‌اید، لیست شما کمتر از 150 کدرشته دارد.
                   </Typography>
                   <Typography variant="body2" paragraph>
                     لطفا یا به صورت دستی به لیست نهایی خود کدرشته با احتمال قبولی بالا اضافه کنید یا با برگشتن به مراحل قبل و تغییر اولویت‌ها و علائق خود، لیست خود را مجددا تولید کنید.
