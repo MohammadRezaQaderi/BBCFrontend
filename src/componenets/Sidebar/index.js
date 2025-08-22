@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, toggle, setIsOpen }) => {
       if (!loggedIn) {
         delete_token().then(() => {
           localStorage.clear();
-          navigate("/");
+          navigate("/signin");
           window.location.reload();
         });
       } else {

@@ -224,7 +224,7 @@ const Signin = () => {
             mb: 2,
             backgroundColor: "#5ab2ff",
             "&:hover": {
-              backgroundColor: "#2d9968",
+              backgroundColor: "#5ab2ff",
             },
             height: "48px",
           }}

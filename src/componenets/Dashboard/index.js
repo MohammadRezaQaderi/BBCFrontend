@@ -9,22 +9,25 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [userRole] = useState(JSON.parse(localStorage.getItem("user-role")));
-  
+
   useEffect(() => {
     if (userInfo?.data?.user_id === undefined) {
       navigate("/signin");
     }
   }, [userInfo]);
-  
+
   return (
     <>
       <Page>
         {userRole === "stu" ? (
-          <Student userInfo={userInfo} />
+          // <Student userInfo={userInfo} />
+          <></>
         ) : userRole === "con" ? (
-          <Consultant userInfo={userInfo} />
+          // <Consultant userInfo={userInfo} />
+          <></>
         ) : userRole === "ins" ? (
-          <Institute userInfo={userInfo} />
+          // <Institute userInfo={userInfo} />
+          <></>
         ) : (
           <></>
         )}

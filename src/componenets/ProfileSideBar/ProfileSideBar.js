@@ -112,7 +112,7 @@ export const ProfileSideBar = () => {
     if (path === "/signin") {
       delete_token().then(() => {
         localStorage.clear();
-        navigate("/")
+        navigate("/signin")
         window.location.reload();
       });
     }
