@@ -9,10 +9,10 @@ import {
   Tooltip,
   FormControlLabel,
   Checkbox,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -24,7 +24,14 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
   const handleClose = (event, reason) => {
     if (reason !== "backdropClick") {
       handleCancel();
@@ -51,41 +58,51 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
           data: {
             con_id: parseInt(formik.values.con_id),
             stu_id: InputData?.user_id,
-            gl_limit: formik.values.gl_limit ? 0 : 1,
+            hoshmand_limit: formik.values.hoshmand_limit ? 0 : 1,
             fr_limit: formik.values.fr_limit ? 0 : 1,
-            glf_limit: formik.values.glf_limit ? 0 : 1,
             token: JSON.parse(localStorage.getItem("token")),
           },
         }
       );
       if (response.data.tracking_code !== null) {
-        toast.success(response?.data?.response.message);
+        setSnackbar({
+          open: true,
+          message: response?.data?.response.message,
+          severity: "success",
+        });
         setLoading(false);
         setOpen(false);
         formik.resetForm();
         setReload((perv) => !perv);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
         setLoading(false);
         setOpen(false);
         formik.resetForm();
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات کاربر",
+        severity: "error",
+      });
     }
   };
 
   const formik = useFormik({
     initialValues: {
       con_id: InputData ? InputData.con_id : "",
-      gl_limit: InputData ? InputData.gl_limit === 0 : false,
+      hoshmand_limit: InputData ? InputData.hoshmand_limit === 0 : false,
       fr_limit: InputData ? InputData.fr_limit === 0 : false,
-      glf_limit: InputData ? InputData.glf_limit === 0 : false,
     },
     validationSchema: validationSchema,
     onSubmit: () => {
       setLoading(true);
-      update_student_consult().then(() => {});
+      update_student_consult().then(() => { });
     },
   });
 
@@ -93,9 +110,8 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
     if (InputData) {
       formik.setValues({
         con_id: InputData.con_id,
-        gl_limit: InputData.gl_limit === 0,
+        hoshmand_limit: InputData.hoshmand_limit === 0,
         fr_limit: InputData.fr_limit === 0,
-        glf_limit: InputData.glf_limit === 0,
       });
     }
   }, [InputData]);
@@ -133,8 +149,8 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
                   value={
                     InputData
                       ? consultants.find(
-                          (item) => item.con_id === formik.values.con_id
-                        )
+                        (item) => item.con_id === formik.values.con_id
+                      )
                       : null
                   }
                   id="controllable-states-demo"
@@ -160,18 +176,18 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
               </Grid>
             )}
 
-            {InputData?.GL === 1 && (
+            {InputData?.hoshmand === 1 && (
               <Grid item md={12} xs={12}>
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formik.values.gl_limit}
+                      checked={formik.values.hoshmand_limit}
                       onChange={formik.handleChange}
-                      name="gl_limit"
+                      name="hoshmand_limit"
                       color="primary"
                     />
                   }
-                  label="مسدود کردن دسترسی دانش‌آموز به قسمت انتخاب رشته سراسری"
+                  label="مسدود کردن دسترسی دانش‌آموز به قسمت انتخاب رشته هوشمند"
                 />
               </Grid>
             )}
@@ -188,22 +204,6 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
                     />
                   }
                   label="مسدود کردن دسترسی دانش‌آموز به قسمت انتخاب رشته آزاد"
-                />
-              </Grid>
-            )}
-
-            {InputData?.GLF === 1 && (
-              <Grid item md={12} xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={formik.values.glf_limit}
-                      onChange={formik.handleChange}
-                      name="glf_limit"
-                      color="primary"
-                    />
-                  }
-                  label="مسدود کردن دسترسی دانش‌آموز به قسمت انتخاب رشته فرهنگیان"
                 />
               </Grid>
             )}
@@ -251,6 +251,20 @@ const EditStudentForm = ({ InputData, setReload, consultants }) => {
           </Grid>
         </form>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

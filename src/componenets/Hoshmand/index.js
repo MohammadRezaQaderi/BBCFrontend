@@ -71,7 +71,7 @@ const Hoshmand = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const [loading, setLoading] = useState(true);
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [userInfo] = useState(
     JSON.parse(localStorage.getItem("user-info")) || {}

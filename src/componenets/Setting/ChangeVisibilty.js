@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -15,6 +13,8 @@ import {
   Grid,
   CircularProgress,
   Box,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import styled from "styled-components";
@@ -45,6 +45,14 @@ const Divider = styled.hr`
 const ChangeVisibilty = () => {
   const [userInfo] = useState(JSON.parse(localStorage.getItem("user-info")));
   const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
   const update_permission = async (permission) => {
     try {
       const response = await axios.post(
@@ -62,14 +70,26 @@ const ChangeVisibilty = () => {
       if (response.data.tracking_code !== null) {
         let user = JSON.parse(localStorage.getItem("user-info"));
         user["data"]["permission"] = response?.data?.response?.data.permission;
-        setLocalStorageLogin("user-info", user, () => {});
-        toast.success(response?.data?.response?.message);
+        setLocalStorageLogin("user-info", user, () => { });
+        setSnackbar({
+          open: true,
+          message: response?.data?.response.message,
+          severity: "success",
+        });
         setTimeout(() => window.location.reload(), 3000);
       } else {
-        toast.error(response.data.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات کاربر",
+        severity: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -151,6 +171,20 @@ const ChangeVisibilty = () => {
           </Button>
         </FormContainer>
       </Grid>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

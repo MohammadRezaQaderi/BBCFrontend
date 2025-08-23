@@ -63,6 +63,7 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [data, setData] = useState([]);
+  const [userPFData, setUserPFData] = useState({});
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
@@ -133,59 +134,62 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
           sx: { width: "75%", marginRight: "8px", marginLeft: "8px" },
         },
       },
-      {
-        accessorKey: "hedayat",
-        header: "تناسب",
-        size: 25,
-        enableColumnFilter: false,
-        Cell: ({ cell }) => {
-          if (cell.getValue()) {
-            return (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  padding: "0 8px",
-                }}
-              >
-                {cell.getValue() === 1 && (
-                  <Tooltip title="توصیه اولویت اول" arrow placement="left">
-                    <BatteryFull
-                      fontSize="small"
-                      sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
-                    />
-                  </Tooltip>
-                )}
-                {cell.getValue() === 3 && (
-                  <Tooltip title="توصیه با احتیاط" arrow placement="left">
-                    <Battery50
-                      fontSize="small"
-                      sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
-                    />
-                  </Tooltip>
-                )}
-                {cell.getValue() === 2 && (
-                  <Tooltip title="عدم توصیه" arrow placement="left">
-                    <Battery20
-                      fontSize="small"
-                      sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
-                    />
-                  </Tooltip>
-                )}
-              </Box>
-            );
-          }
-          return null;
-        },
-        muiTableHeadCellProps: {
-          align: "center",
-        },
-        muiTableBodyCellProps: {
-          align: "center",
-        },
-      },
+      ...(userInfo?.data?.role === "stu" && userPFData?.AGAccess === 0
+        ? [] : [
+          {
+            accessorKey: "hedayat",
+            header: "تناسب",
+            size: 25,
+            enableColumnFilter: false,
+            Cell: ({ cell }) => {
+              if (cell.getValue()) {
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      padding: "0 8px",
+                    }}
+                  >
+                    {cell.getValue() === 1 && (
+                      <Tooltip title="توصیه اولویت اول" arrow placement="left">
+                        <BatteryFull
+                          fontSize="small"
+                          sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
+                        />
+                      </Tooltip>
+                    )}
+                    {cell.getValue() === 3 && (
+                      <Tooltip title="توصیه با احتیاط" arrow placement="left">
+                        <Battery50
+                          fontSize="small"
+                          sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
+                        />
+                      </Tooltip>
+                    )}
+                    {cell.getValue() === 2 && (
+                      <Tooltip title="عدم توصیه" arrow placement="left">
+                        <Battery20
+                          fontSize="small"
+                          sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
+                        />
+                      </Tooltip>
+                    )}
+                  </Box>
+                );
+              }
+              return null;
+            },
+            muiTableHeadCellProps: {
+              align: "center",
+            },
+            muiTableBodyCellProps: {
+              align: "center",
+            },
+          },
+        ]),
       {
         accessorKey: "city",
         header: "استان-شهر",
@@ -299,83 +303,67 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
           </Tooltip>
         ),
       },
-      {
-        accessorKey: "admissionKind",
-        header: "",
-        muiTableHeadCellProps: { align: "center" },
-        muiTableBodyCellProps: { align: "center" },
-        enableColumnFilter: false,
-        size: 50,
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return (
-            // <span
-            //   style={{
-            //     backgroundColor:
-            //       row === 3
-            //         ? "#fa7373"
-            //         : row === 2
-            //         ? "#f5eb69"
-            //         : row === 1
-            //         ? "#8ef78b"
-            //         : row === 0
-            //         ? "#c7c7c7"
-            //         : "white",
-            //     borderRadius: "50%",
-            //     paddingTop: 3,
-            //     paddingLeft: 10,
-            //     paddingRight: 10,
-            //     color: "white",
-            //   }}
-            // ></span>
-            <Tooltip
-              title={
-                row === 1
-                  ? "احتمال بالا"
-                  : row === 2
-                    ? "احتمال متوسط"
-                    : row === 3
-                      ? "احتمال کم"
-                      : "صرفا با سوابق"
-              }
-              arrow
-            >
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  backgroundColor:
+      ...(userInfo?.data?.role === "stu" && userPFData?.probability_permission === 0
+        ? [] : [
+          {
+            accessorKey: "admissionKind",
+            header: "",
+            muiTableHeadCellProps: { align: "center" },
+            muiTableBodyCellProps: { align: "center" },
+            enableColumnFilter: false,
+            size: 50,
+            Cell: ({ cell }) => {
+              const row = cell.getValue();
+              return (
+                <Tooltip
+                  title={
                     row === 1
-                      ? "#4caf50"
+                      ? "احتمال بالا"
                       : row === 2
-                        ? "#ff9800"
+                        ? "احتمال متوسط"
                         : row === 3
-                          ? "#f44336"
-                          : "#acacac",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mr: 1,
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                }}
-              >
-                {row === 1 && (
-                  <CheckIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-                {row === 2 && (
-                  <WarningIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-                {row === 3 && (
-                  <CloseIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-              </Box>
-            </Tooltip>
-          );
-        },
-      },
+                          ? "احتمال کم"
+                          : "صرفا با سوابق"
+                  }
+                  arrow
+                >
+                  <Box
+                    sx={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      backgroundColor:
+                        row === 1
+                          ? "#4caf50"
+                          : row === 2
+                            ? "#ff9800"
+                            : row === 3
+                              ? "#f44336"
+                              : "#acacac",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mr: 1,
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    {row === 1 && (
+                      <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                    {row === 2 && (
+                      <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                    {row === 3 && (
+                      <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                  </Box>
+                </Tooltip>
+              );
+            },
+          },
+        ]),
     ],
-    [data]
+    [data, userPFData]
   );
 
   const get_student_info = async () => {
@@ -395,6 +383,7 @@ const FPList = ({ userInfo, nextStep, stu_id }) => {
         setData(response.data.response.data);
         setSpecialList(response.data.response.selected_list || []);
         setIsHoshmand(response.data.response.is_hoshmand); // Set isHoshmand state
+        setUserPFData(response.data.response.stu_pf_data)
       } else {
         setSnackbar({
           open: true,

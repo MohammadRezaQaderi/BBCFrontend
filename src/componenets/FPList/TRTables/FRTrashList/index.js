@@ -228,83 +228,67 @@ const FRTrashList = () => {
           return <span>{row}</span>;
         },
       },
-      {
-        accessorKey: "admissionKind",
-        header: "",
-        size: 50,
-        muiTableHeadCellProps: { align: "center" },
-        muiTableBodyCellProps: { align: "center" },
-        enableColumnFilter: false,
-        Cell: ({ cell }) => {
-          const row = cell.getValue();
-          return (
-            // <span
-            //   style={{
-            //     backgroundColor:
-            //       row === 3
-            //         ? "#fa7373"
-            //         : row === 2
-            //           ? "#f5eb69"
-            //           : row === 1
-            //             ? "#8ef78b"
-            //             : row === 0
-            //               ? "#c7c7c7"
-            //               : "white",
-            //     borderRadius: "50%",
-            //     paddingTop: 3,
-            //     paddingLeft: 10,
-            //     paddingRight: 10,
-            //     color: "white",
-            //   }}
-            // ></span>
-            <Tooltip
-              title={
-                row === 1
-                  ? "احتمال بالا"
-                  : row === 2
-                    ? "احتمال متوسط"
-                    : row === 3
-                      ? "احتمال کم"
-                      : "صرفا با سوابق"
-              }
-              arrow
-            >
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  backgroundColor:
+      ...(userInfo?.data?.role === "stu" && UserData?.probability_show === 0
+        ? [] : [
+          {
+            accessorKey: "admissionKind",
+            header: "",
+            muiTableHeadCellProps: { align: "center" },
+            muiTableBodyCellProps: { align: "center" },
+            enableColumnFilter: false,
+            size: 50,
+            Cell: ({ cell }) => {
+              const row = cell.getValue();
+              return (
+                <Tooltip
+                  title={
                     row === 1
-                      ? "#4caf50"
+                      ? "احتمال بالا"
                       : row === 2
-                        ? "#ff9800"
+                        ? "احتمال متوسط"
                         : row === 3
-                          ? "#f44336"
-                          : "#acacac",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mr: 1,
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                }}
-              >
-                {row === 1 && (
-                  <CheckIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-                {row === 2 && (
-                  <WarningIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-                {row === 3 && (
-                  <CloseIcon sx={{ color: "white", fontSize: 14 }} />
-                )}
-              </Box>
-            </Tooltip>
-          );
-        },
-      },
+                          ? "احتمال کم"
+                          : "صرفا با سوابق"
+                  }
+                  arrow
+                >
+                  <Box
+                    sx={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      backgroundColor:
+                        row === 1
+                          ? "#4caf50"
+                          : row === 2
+                            ? "#ff9800"
+                            : row === 3
+                              ? "#f44336"
+                              : "#acacac",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mr: 1,
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    {row === 1 && (
+                      <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                    {row === 2 && (
+                      <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                    {row === 3 && (
+                      <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                    )}
+                  </Box>
+                </Tooltip>
+              );
+            },
+          },
+        ]),
     ],
-    []
+    [UserData]
   );
 
   const get_student_info = async () => {
@@ -331,7 +315,6 @@ const FRTrashList = () => {
         });
       }
     } catch (error) {
-
       setSnackbar({
         open: true,
         message: "خطا در دریافت اطلاعات دانش‌آموز",

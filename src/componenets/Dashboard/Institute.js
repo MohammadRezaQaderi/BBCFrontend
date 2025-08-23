@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   Box,
   Grid,
   Typography,
   Paper,
-  CircularProgress,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import {
   School as SchoolIcon,
   People as PeopleIcon,
-  CheckCircle as CheckCircleIcon,
   HourglassEmpty as HourglassIcon,
-  Notifications as NotificationsIcon,
   Assessment as ReportIcon,
   EmojiEvents as TrophyIcon
 } from "@mui/icons-material";
@@ -30,7 +27,14 @@ const Institute = ({ userInfo }) => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
   const getUserInfo = async () => {
     try {
       setLoading(true);
@@ -54,18 +58,29 @@ const Institute = ({ userInfo }) => {
       if (response?.data?.status === 200) {
         setData(response?.data?.response?.data);
       } else if (response?.data?.status === 404) {
-        toast.error("نشست شما به پایان رسیده لطفا دوباره وارد شوید.");
-        setTimeout(() => {
+        setSnackbar({
+          open: true,
+          message: "نشست شما به پایان رسیده لطفا دوباره وارد شوید.",
+          severity: "error",
+        }); setTimeout(() => {
           localStorage.removeItem("token");
           localStorage.removeItem("user-info");
           localStorage.removeItem("user-role");
           window.location.reload();
         }, 5000);
       } else {
-        toast.error(response?.data?.error);
+        setSnackbar({
+          open: true,
+          message: response?.data?.error,
+          severity: "error",
+        });
       }
     } catch (error) {
-      toast.error("خطا در دریافت اطلاعات کاربر");
+      setSnackbar({
+        open: true,
+        message: "خطا در دریافت اطلاعات کاربر",
+        severity: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -75,18 +90,6 @@ const Institute = ({ userInfo }) => {
     getUserInfo();
   }, []);
 
-  const reportData = {
-    activeStudents: 42,
-    completedTests: 128,
-    inProgressTests: 36,
-    upcomingTests: 5,
-    notifications: [
-      { id: 1, message: "3 آزمون جدید اضافه شد", time: "2 ساعت پیش", read: false },
-      { id: 1, message: "3 آزمون جدید اضافه شد", time: "2 ساعت پیش", read: false },
-      { id: 1, message: "3 آزمون جدید اضافه شد", time: "2 ساعت پیش", read: false },
-      { id: 2, message: "ظرفیت آزاد شما در حال اتمام است", time: "1 روز پیش", read: true },
-    ]
-  };
 
   if (loading) {
     return (
@@ -410,72 +413,21 @@ const Institute = ({ userInfo }) => {
             </Paper>
           </motion.div>
         </Grid>
-
-        <Grid item xs={12} md={12}>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            <Paper elevation={2} sx={{ p: 3, borderRadius: 3, height: '100%' }}>
-              <Typography variant="h6"
-                sx={{
-                  mb: 3,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  fontWeight: 600,
-                  color: theme.palette.primary.dark
-                }}>
-                <NotificationsIcon color="primary" />
-                اطلاعیه‌ها
-              </Typography>
-
-              <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
-                {reportData.notifications.length > 0 ? (
-                  reportData.notifications.map((notification) => (
-                    <Box
-                      key={notification.id}
-                      sx={{
-                        p: 2,
-                        mb: 2,
-                        backgroundColor: notification.read ? 'action.hover' : 'primary.light',
-                        borderRadius: 2,
-                        borderLeft: `4px solid ${notification.read ? theme.palette.grey[400] : theme.palette.primary.main}`
-                      }}
-                    >
-                      <Typography variant="body1" sx={{ fontWeight: notification.read ? 400 : 600 }}>
-                        {notification.message}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                        {notification.time}
-                      </Typography>
-                    </Box>
-                  ))
-                ) : (
-                  <Box sx={{ textAlign: 'center', py: 4 }}>
-                    <Typography variant="body1" color="text.secondary">
-                      هیچ اطلاعیه جدیدی وجود ندارد
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-            </Paper>
-          </motion.div>
-        </Grid>
       </Grid>
-
-      <ToastContainer
-        position="bottom-center"
-        rtl={true}
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

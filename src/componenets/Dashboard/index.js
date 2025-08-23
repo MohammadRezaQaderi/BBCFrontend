@@ -20,14 +20,14 @@ const Dashboard = () => {
     <>
       <Page>
         {userRole === "stu" ? (
-          // <Student userInfo={userInfo} />
-          <></>
+          <Student userInfo={userInfo} />
+          // <></>
         ) : userRole === "con" ? (
-          // <Consultant userInfo={userInfo} />
-          <></>
+          <Consultant userInfo={userInfo} />
+          // <></>
         ) : userRole === "ins" ? (
-          // <Institute userInfo={userInfo} />
-          <></>
+          <Institute userInfo={userInfo} />
+          // <></>
         ) : (
           <></>
         )}

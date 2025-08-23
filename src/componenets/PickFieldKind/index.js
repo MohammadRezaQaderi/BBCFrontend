@@ -118,10 +118,8 @@ const PickFieldKind = () => {
 
   const hasAccess = () => {
     return (
-      data?.gl_access === 1 ||
-      data?.fr_access === 1 ||
-      data?.glf_access === 1 ||
-      data?.sp_access === 1
+      data?.hoshmand_access === 1 ||
+      data?.fr_access === 1
     );
   };
 
@@ -309,32 +307,38 @@ const PickFieldKind = () => {
         ) : (
           <>
             <PickContainer>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-              >
-                <PickFieldCard
-                  title="هوشمند"
-                  onClick={() => navigate("/hoshmand/" + userInfo?.data?.user_id)}
-                  isFemale={userInfo?.data?.sex === 2}
-                  icon={<FaUniversity size={24} />}
-                  compact
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.4 }}
-              >
-                <PickFieldCard
-                  title="آزاد"
-                  onClick={() => setModalOpen(true)}
-                  isFemale={userInfo?.data?.sex === 2}
-                  icon={<FaBuilding size={24} />}
-                  compact
-                />
-              </motion.div>
+              {data?.hoshmand_limit === 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
+                >
+                  <PickFieldCard
+                    title="هوشمند"
+                    onClick={() => navigate("/hoshmand/" + userInfo?.data?.user_id)}
+                    isFemale={userInfo?.data?.sex === 2}
+                    icon={<FaUniversity size={24} />}
+                    compact
+                  />
+                </motion.div>
+              )
+              }
+              {data?.fr_limit === 1 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.4 }}
+                >
+                  <PickFieldCard
+                    title="آزاد"
+                    onClick={() => setModalOpen(true)}
+                    isFemale={userInfo?.data?.sex === 2}
+                    icon={<FaBuilding size={24} />}
+                    compact
+                  />
+                </motion.div>
+              )}
+
             </PickContainer>
           </>
         )}

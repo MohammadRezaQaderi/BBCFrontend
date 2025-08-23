@@ -224,12 +224,11 @@ const FieldPickList = () => {
                   <>-</>
                 ) : con_finalized === 1 ? (
                   <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
+                    {row} 
                   </div>
                 ) : (
                   <div>
                     {row}{" "}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
                   </div>
                 )}
               </>
@@ -329,38 +328,38 @@ const FieldPickList = () => {
             );
           },
         },
-        {
-          accessorKey: "con_name",
-          header: "تایید مشاور",
-          size: 50,
-          muiTableHeadCellProps: {
-            align: "center",
-          },
-          muiTableBodyCellProps: {
-            align: "center",
-          },
-          muiTableHeadCellFilterTextFieldProps: { placeholder: "تایید مشاور" },
-          Cell: ({ cell }) => {
-            const row = cell.getValue();
-            const con_finalized = cell.row.original.con_finalized;
-            return (
-              <>
-                {[2, 3].includes(kind) ? (
-                  <>-</>
-                ) : con_finalized === 1 ? (
-                  <div>
-                    {row} <FaCheckCircle size={18} style={{ color: "green" }} />
-                  </div>
-                ) : (
-                  <div>
-                    {row}{" "}
-                    <IoIosCloseCircle size={21} style={{ color: "red" }} />
-                  </div>
-                )}
-              </>
-            );
-          },
-        },
+        // {
+        //   accessorKey: "con_name",
+        //   header: "تایید مشاور",
+        //   size: 50,
+        //   muiTableHeadCellProps: {
+        //     align: "center",
+        //   },
+        //   muiTableBodyCellProps: {
+        //     align: "center",
+        //   },
+        //   muiTableHeadCellFilterTextFieldProps: { placeholder: "تایید مشاور" },
+        //   Cell: ({ cell }) => {
+        //     const row = cell.getValue();
+        //     const con_finalized = cell.row.original.con_finalized;
+        //     return (
+        //       <>
+        //         {[2, 3].includes(kind) ? (
+        //           <>-</>
+        //         ) : con_finalized === 1 ? (
+        //           <div>
+        //             {row} <FaCheckCircle size={18} style={{ color: "green" }} />
+        //           </div>
+        //         ) : (
+        //           <div>
+        //             {row}{" "}
+        //             <IoIosCloseCircle size={21} style={{ color: "red" }} />
+        //           </div>
+        //         )}
+        //       </>
+        //     );
+        //   },
+        // },
       ]
     };
   }, [kind, userRole]);
