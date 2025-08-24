@@ -197,61 +197,66 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
         },
       },
       ...(userInfo?.data?.role === "stu" && userPFData?.AGAccess === 0
-        ? [] : [
-          {
-            accessorKey: "hedayat",
-            header: "تناسب",
-            size: 25,
-            enableColumnFilter: false,
-            Cell: ({ cell }) => {
-              if (cell.getValue()) {
-                return (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      padding: "0 8px",
-                    }}
-                  >
-                    {cell.getValue() === 1 && (
-                      <Tooltip title="توصیه اولویت اول" arrow placement="left">
-                        <BatteryFull
-                          fontSize="small"
-                          sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
-                        />
-                      </Tooltip>
-                    )}
-                    {cell.getValue() === 3 && (
-                      <Tooltip title="توصیه با احتیاط" arrow placement="left">
-                        <Battery50
-                          fontSize="small"
-                          sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
-                        />
-                      </Tooltip>
-                    )}
-                    {cell.getValue() === 2 && (
-                      <Tooltip title="عدم توصیه" arrow placement="left">
-                        <Battery20
-                          fontSize="small"
-                          sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
-                        />
-                      </Tooltip>
-                    )}
-                  </Box>
-                );
-              }
-              return null;
+        ? []
+        : [
+            {
+              accessorKey: "hedayat",
+              header: "تناسب",
+              size: 25,
+              enableColumnFilter: false,
+              Cell: ({ cell }) => {
+                if (cell.getValue()) {
+                  return (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        padding: "0 8px",
+                      }}
+                    >
+                      {cell.getValue() === 1 && (
+                        <Tooltip
+                          title="توصیه اولویت اول"
+                          arrow
+                          placement="left"
+                        >
+                          <BatteryFull
+                            fontSize="small"
+                            sx={{ color: "#4caf50", ml: 1, cursor: "pointer" }}
+                          />
+                        </Tooltip>
+                      )}
+                      {cell.getValue() === 3 && (
+                        <Tooltip title="توصیه با احتیاط" arrow placement="left">
+                          <Battery50
+                            fontSize="small"
+                            sx={{ color: "#ff9800", ml: 1, cursor: "pointer" }}
+                          />
+                        </Tooltip>
+                      )}
+                      {cell.getValue() === 2 && (
+                        <Tooltip title="عدم توصیه" arrow placement="left">
+                          <Battery20
+                            fontSize="small"
+                            sx={{ color: "#f44336", ml: 1, cursor: "pointer" }}
+                          />
+                        </Tooltip>
+                      )}
+                    </Box>
+                  );
+                }
+                return null;
+              },
+              muiTableHeadCellProps: {
+                align: "center",
+              },
+              muiTableBodyCellProps: {
+                align: "center",
+              },
             },
-            muiTableHeadCellProps: {
-              align: "center",
-            },
-            muiTableBodyCellProps: {
-              align: "center",
-            },
-          },
-        ]),
+          ]),
       {
         accessorKey: "city",
         header: "استان-شهر",
@@ -366,65 +371,67 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
           </Tooltip>
         ),
       },
-      ...(userInfo?.data?.role === "stu" && userPFData?.probability_permission === 0
-        ? [] : [
-          {
-            accessorKey: "admissionKind",
-            header: "",
-            muiTableHeadCellProps: { align: "center" },
-            muiTableBodyCellProps: { align: "center" },
-            enableColumnFilter: false,
-            size: 50,
-            Cell: ({ cell }) => {
-              const row = cell.getValue();
-              return (
-                <Tooltip
-                  title={
-                    row === 1
-                      ? "احتمال بالا"
-                      : row === 2
+      ...(userInfo?.data?.role === "stu" &&
+      userPFData?.probability_permission === 0
+        ? []
+        : [
+            {
+              accessorKey: "admissionKind",
+              header: "",
+              muiTableHeadCellProps: { align: "center" },
+              muiTableBodyCellProps: { align: "center" },
+              enableColumnFilter: false,
+              size: 50,
+              Cell: ({ cell }) => {
+                const row = cell.getValue();
+                return (
+                  <Tooltip
+                    title={
+                      row === 1
+                        ? "احتمال بالا"
+                        : row === 2
                         ? "احتمال متوسط"
                         : row === 3
-                          ? "احتمال کم"
-                          : "صرفا با سوابق"
-                  }
-                  arrow
-                >
-                  <Box
-                    sx={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: "50%",
-                      backgroundColor:
-                        row === 1
-                          ? "#4caf50"
-                          : row === 2
+                        ? "احتمال کم"
+                        : "صرفا با سوابق"
+                    }
+                    arrow
+                  >
+                    <Box
+                      sx={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: "50%",
+                        backgroundColor:
+                          row === 1
+                            ? "#4caf50"
+                            : row === 2
                             ? "#ff9800"
                             : row === 3
-                              ? "#f44336"
-                              : "#acacac",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mr: 1,
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    {row === 1 && (
-                      <CheckIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                    {row === 2 && (
-                      <WarningIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                    {row === 3 && (
-                      <CloseIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                  </Box>
-                </Tooltip>
-              );
+                            ? "#f44336"
+                            : "#acacac",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mr: 1,
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      {row === 1 && (
+                        <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                      {row === 2 && (
+                        <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                      {row === 3 && (
+                        <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                    </Box>
+                  </Tooltip>
+                );
+              },
             },
-          },
-        ]),
+          ]),
     ],
     [userPFData]
   );
@@ -448,7 +455,7 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
         setData(response.data.response.selected_list || []);
         setTrashList(response.data.response.trash_list || []);
         setUserData(response.data.response.user_data || {});
-        setUserPFData(response.data.response.user_info_pf || {})
+        setUserPFData(response.data.response.user_info_pf || {});
       } else {
         setSnackbar({
           open: true,
@@ -900,13 +907,39 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
     setPdfProgress(0);
     setPdfLoading(true);
 
-    const doc = new jsPDF("portrait", "pt", "a4");
-    doc.addFileToVFS("IRANSansWeb-normal.ttf", font);
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "portrait";
+    const myFont = font;
+    const doc = new jsPDF(orientation, unit, size);
+    doc.addFileToVFS("IRANSansWeb-normal.ttf", myFont);
     doc.addFont("IRANSansWeb-normal.ttf", "IRANSansWeb", "normal");
     doc.setFont("IRANSansWeb");
+    const pageWidth = 595.28;
+    // const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 10;
+    const imageWidth = 80;
+    const imageHeight = 80;
 
     doc.setFontSize(14);
-    doc.text(`نام: ${userData?.first_name} ${userData?.last_name}`, 400, 40, {
+    doc.setTextColor(0, 0, 0);
+    let margin_now = margin + 30;
+    doc.text(
+      `نام: ${userData?.first_name} ${userData?.last_name}`,
+      pageWidth - margin,
+      margin_now,
+      { align: "right" }
+    );
+
+    margin_now = margin_now + 20;
+    doc.text(
+      `موسسه: ${userPFData?.institute_name}`,
+      pageWidth - margin,
+      margin_now,
+      { align: "right" }
+    );
+    margin_now = margin_now + 20;
+    doc.text(`مشاور: ${userPFData?.c_name}`, pageWidth - margin, margin_now, {
       align: "right",
     });
 
@@ -914,45 +947,210 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
       userInfo?.data?.pic === null
         ? imgData
         : `https://student.baazmoon.com/bbc_api/get_user_pic/${userInfo?.data?.pic}`;
-    doc.addImage(image, "PNG", 50, 40, 80, 80);
+    doc.addImage(
+      image,
+      "PNG",
+      margin,
+      margin,
+      imageWidth,
+      imageHeight,
+      undefined,
+      false
+    );
 
-    const interval = setInterval(() => {
+    doc.setDrawColor(40, 53, 147);
+    doc.setLineWidth(1.5);
+    margin_now = margin_now + 20;
+    doc.line(margin, margin_now, pageWidth - margin, margin_now);
+
+    doc.setFontSize(16);
+    doc.setTextColor(40, 53, 147);
+    margin_now = margin_now + 30;
+    doc.text("لیست رشته‌های پیشنهادی سراسری", pageWidth - margin, margin_now, {
+      align: "right",
+    });
+    const allColumns = [
+      {
+        key: "admissionKind",
+        header: "قبولی",
+        width: 30,
+        condition: !(userPFData?.probability_permission === 0 && userInfo?.data?.role === "stu"),
+        formatter: (elt) =>
+          elt.admissionKind === 1
+            ? "زیاد"
+            : elt.admissionKind === 2
+            ? "متوسط"
+            : elt.admissionKind === 3
+            ? "کم"
+            : "",
+      },
+      {
+        key: "explain",
+        header: "توضیح",
+        width: 80,
+        condition: true,
+        formatter: (elt) => elt.explain,
+      },
+      {
+        key: "capacity",
+        header: "ظرفیت",
+        width: 30,
+        condition: true,
+        formatter: (elt) => elt.capacity,
+      },
+      {
+        key: "period",
+        header: "دوره",
+        width: 30,
+        condition: true,
+        formatter: (elt) => elt.period,
+      },
+      {
+        key: "obligation",
+        header: "تعهد",
+        width: 25,
+        condition: true,
+        formatter: (elt) => (elt.obligation === 0 ? "ندارد" : "دارد"),
+      },
+      {
+        key: "kind",
+        header: "پذیرش",
+        width: 30,
+        condition: true,
+        formatter: (elt) => elt.kind,
+      },
+      {
+        key: "admission",
+        header: "ترم ورودی",
+        width: 50,
+        condition: true,
+        formatter: (elt) =>
+          elt.admission === 1 ? "نیم‌سال اول" : "نیم‌سال دوم",
+      },
+      {
+        key: "university",
+        header: "دانشگاه",
+        width: 75,
+        condition: true,
+        formatter: (elt) => elt.university,
+      },
+      {
+        key: "city",
+        header: "شهر",
+        width: 60,
+        condition: true,
+        formatter: (elt) => elt.city,
+      },
+      {
+        key: "field",
+        header: "رشته",
+        width: 70,
+        condition: true,
+        formatter: (elt) =>
+          elt.hedayatField === 1
+            ? `${elt.field} - مناسب`
+            : elt.hedayatField === 2
+            ? `${elt.field} - نامناسب`
+            : elt.field,
+      },
+      {
+        key: "filedCode",
+        header: "کد",
+        width: 35,
+        condition: true,
+        formatter: (elt) => elt.filedCode,
+      },
+      {
+        key: "rowNumber",
+        header: "ردیف",
+        width: 20,
+        condition: true,
+        formatter: (elt, index) => index + 1,
+      },
+    ];
+    const visibleColumns = allColumns.filter((col) => {
+      const shouldShowByCondition = col.condition;
+      const isVisibleInTable = columnVisibility[col.key] !== false;
+
+      return shouldShowByCondition && isVisibleInTable;
+    });
+
+    const headers = [visibleColumns.map((col) => col.header)];
+    const data_pdf = data.map((elt, index) =>
+      visibleColumns.map((col) => col.formatter(elt, index))
+    );
+
+    const allVisiblePossible = allColumns.filter((col) => col.condition);
+    const useFixedWidths = visibleColumns.length === allVisiblePossible.length;
+
+    const columnStyles = {};
+    visibleColumns.forEach((col, index) => {
+      columnStyles[index] = { cellWidth: useFixedWidths ? col.width : "auto" };
+    });
+
+    margin_now = margin_now + 20;
+    let content = {
+      head: headers,
+      body: data_pdf,
+      styles: {
+        font: "IRANSansWeb",
+        fontStyle: "normal",
+        fontSize: 4,
+        halign: "center",
+        textColor: [0, 0, 0],
+        cellPadding: 4,
+      },
+      headStyles: {
+        fillColor: [40, 53, 147],
+        textColor: [255, 255, 255],
+        fontSize: 5,
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240],
+      },
+      columnStyles: columnStyles,
+      startY: margin_now,
+      tableLineWidth: 0.1,
+      tableLineColor: [200, 200, 200],
+    };
+
+    doc.autoTable(content);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(
+      "تاریخ تولید: " + new Date().toLocaleDateString("fa-IR"),
+      pageWidth - margin,
+      doc.internal.pageSize.getHeight() - 20,
+      { align: "right" }
+    );
+
+    if (userPFData?.institute_name !== "باآزمون") {
+      doc.text(
+        "موسسه: " + userPFData?.institute_name,
+        margin,
+        doc.internal.pageSize.getHeight() - 20,
+        { align: "left" }
+      );
+    }
+
+    let progressInterval = setInterval(() => {
       setPdfProgress((prev) => {
-        const newProgress = prev + Math.random() * 10;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-
-          const headers = columns.map((col) => col.header);
-          const dataPdf = data.map((item) =>
-            columns.map((col) => {
-              const value = item[col.accessorKey];
-              if (col.Cell)
-                return col.Cell({ cell: { getValue: () => value } });
-              return value;
-            })
-          );
-
-          doc.autoTable({
-            head: [headers],
-            body: dataPdf,
-            startY: 140,
-            styles: { font: "IRANSansWeb", fontSize: 10, halign: "center" },
-            headStyles: {
-              fillColor: [40, 53, 147],
-              textColor: [255, 255, 255],
-            },
-          });
-
-          setTimeout(() => {
-            doc.save(`${userData?.first_name} ${userData?.last_name}.pdf`);
-            setPdfLoading(false);
-          }, 500);
-
-          return 100;
-        }
-        return newProgress;
+        if (prev < 100) return prev + 10;
+        clearInterval(progressInterval);
+        return 100;
       });
     }, 200);
+
+    setTimeout(() => {
+      const file_name = `${userData?.first_name} ${userData?.last_name}.pdf`;
+      doc.save(file_name);
+      setPdfProgress(100);
+      setTimeout(() => {
+        setPdfLoading(false);
+        setPdfProgress(0);
+      }, 1000);
+    }, 2000);
   };
 
   // Search related functions
@@ -1165,22 +1363,22 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
               acceptWay === "با آزمون"
                 ? "با آزمون"
                 : acceptWay === "صرفا با سوابق تحصیلی"
-                  ? "صرفا با سوابق تحصیلی"
-                  : "NULL",
+                ? "صرفا با سوابق تحصیلی"
+                : "NULL",
             acceptanceChance:
               acceptanceChance === "احتمال قبولی زیاد"
                 ? 1
                 : acceptanceChance === "احتمال قبولی متوسط تا زیاد"
-                  ? 2
-                  : acceptanceChance === "احتمال قبولی کم تا زیاد"
-                    ? 3
-                    : "NULL",
+                ? 2
+                : acceptanceChance === "احتمال قبولی کم تا زیاد"
+                ? 3
+                : "NULL",
             serviceCommitment:
               serviceCommitment === "دارد"
                 ? 1
                 : serviceCommitment === "ندارد"
-                  ? 0
-                  : 3,
+                ? 0
+                : 3,
             sex: userData?.sex,
             nativeProvince: userData?.city?.split(",")[1],
             rank_in_all: userData?.rank,
@@ -1273,8 +1471,9 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
       message += ` (${duplicateItems.length} مورد تکراری نادیده گرفته شد)`;
     }
     if (selectedItems.length > availableSpace) {
-      message += ` (${selectedItems.length - availableSpace
-        } مورد اضافه نشد چون لیست پر است)`;
+      message += ` (${
+        selectedItems.length - availableSpace
+      } مورد اضافه نشد چون لیست پر است)`;
     }
 
     setSnackbar({
@@ -1321,7 +1520,14 @@ const SPList = ({ userInfo, nextStep, stu_id }) => {
     if (openSearchModal) {
       fp_exam_types();
     }
-  }, [fieldName, universityName, citiesName, provincesName, userData, openSearchModal]);
+  }, [
+    fieldName,
+    universityName,
+    citiesName,
+    provincesName,
+    userData,
+    openSearchModal,
+  ]);
 
   if (loading) {
     return <Loader color={GetButtonColor(userInfo?.data?.sex)} />;
