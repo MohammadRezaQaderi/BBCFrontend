@@ -155,7 +155,7 @@ const FRBTrashList = () => {
       },
       {
         accessorKey: "sex",
-        header: "پذیرش",
+        header: "جنسیت",
         size: 100,
         muiTableHeadCellProps: {
           align: "center",
@@ -163,7 +163,7 @@ const FRBTrashList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "پذیرش" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "جنسیت" },
         Cell: ({ cell }) => {
           const row = cell?.getValue();
           return <span>{row === 3 ? "زن/مرد" : row === 1 ? "مرد" : "زن"}</span>;
@@ -669,6 +669,7 @@ const FRBTrashList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => update_table()}
                 >
@@ -685,6 +686,7 @@ const FRBTrashList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/pffrb/" + stu_id + "/" + field + "/" + part)}
                 >
@@ -701,6 +703,7 @@ const FRBTrashList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/spfrb/" + stu_id + "/" + field + "/" + part)}
                 >

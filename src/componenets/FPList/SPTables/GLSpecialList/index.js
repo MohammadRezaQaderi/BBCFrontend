@@ -866,6 +866,7 @@ const GLSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => update_table()}
                 >
@@ -882,6 +883,7 @@ const GLSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/pfgl")}
                 >
@@ -898,6 +900,7 @@ const GLSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/trgl")}
                 >

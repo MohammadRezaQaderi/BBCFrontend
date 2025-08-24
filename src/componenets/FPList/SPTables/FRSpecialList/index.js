@@ -22,7 +22,7 @@ import {
   Grid,
   styled as MuiStyled,
   CircularProgress,
-  Fade
+  Fade,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -44,7 +44,13 @@ import {
 import ErrorState from "../../../../helper/ErrorState";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { motion } from "framer-motion";
-import { FaAward, FaBook, FaMapMarkerAlt, FaUser, FaVenusMars } from "react-icons/fa";
+import {
+  FaAward,
+  FaBook,
+  FaMapMarkerAlt,
+  FaUser,
+  FaVenusMars,
+} from "react-icons/fa";
 import {
   Warning as WarningIcon,
   Check as CheckIcon,
@@ -56,7 +62,6 @@ const pulse = keyframes`
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 `;
-
 
 const ProgressOverlay = styled.div`
   position: fixed;
@@ -106,21 +111,19 @@ const ProgressText = styled.div`
   margin-top: 0.5rem;
 `;
 
-
 const LoadingOverlay = MuiStyled(Box)(({ theme }) => ({
-  position: 'fixed',
+  position: "fixed",
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  backdropFilter: 'blur(4px)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  backgroundColor: "rgba(255, 255, 255, 0.7)",
+  backdropFilter: "blur(4px)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   zIndex: "9999",
 }));
-
 
 const descriptionContent = (
   <Typography variant="body2" fontWeight="bold">
@@ -214,11 +217,11 @@ const FRSpecialList = () => {
           align: "center",
         },
         muiTableHeadCellFilterTextFieldProps: { placeholder: "کد رشته" },
-        size: 150
+        size: 150,
       },
       {
         accessorKey: "sex",
-        header: "پذیرش",
+        header: "جنسیت",
         size: 80,
         muiTableHeadCellProps: {
           align: "center",
@@ -226,7 +229,7 @@ const FRSpecialList = () => {
         muiTableBodyCellProps: {
           align: "center",
         },
-        muiTableHeadCellFilterTextFieldProps: { placeholder: "جنسیت پذیرش" },
+        muiTableHeadCellFilterTextFieldProps: { placeholder: "جنسیت" },
         Cell: ({ cell }) => {
           const row = cell.getValue();
           return <span>{row === 3 ? "زن/مرد" : row === 1 ? "مرد" : "زن"}</span>;
@@ -287,64 +290,65 @@ const FRSpecialList = () => {
         },
       },
       ...(userInfo?.data?.role === "stu" && UserData?.probability_show === 0
-        ? [] : [
-          {
-            accessorKey: "admissionKind",
-            header: "",
-            muiTableHeadCellProps: { align: "center" },
-            muiTableBodyCellProps: { align: "center" },
-            enableColumnFilter: false,
-            size: 50,
-            Cell: ({ cell }) => {
-              const row = cell.getValue();
-              return (
-                <Tooltip
-                  title={
-                    row === 1
-                      ? "احتمال بالا"
-                      : row === 2
+        ? []
+        : [
+            {
+              accessorKey: "admissionKind",
+              header: "",
+              muiTableHeadCellProps: { align: "center" },
+              muiTableBodyCellProps: { align: "center" },
+              enableColumnFilter: false,
+              size: 50,
+              Cell: ({ cell }) => {
+                const row = cell.getValue();
+                return (
+                  <Tooltip
+                    title={
+                      row === 1
+                        ? "احتمال بالا"
+                        : row === 2
                         ? "احتمال متوسط"
                         : row === 3
-                          ? "احتمال کم"
-                          : "صرفا با سوابق"
-                  }
-                  arrow
-                >
-                  <Box
-                    sx={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: "50%",
-                      backgroundColor:
-                        row === 1
-                          ? "#4caf50"
-                          : row === 2
+                        ? "احتمال کم"
+                        : "صرفا با سوابق"
+                    }
+                    arrow
+                  >
+                    <Box
+                      sx={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: "50%",
+                        backgroundColor:
+                          row === 1
+                            ? "#4caf50"
+                            : row === 2
                             ? "#ff9800"
                             : row === 3
-                              ? "#f44336"
-                              : "#acacac",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mr: 1,
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                    }}
-                  >
-                    {row === 1 && (
-                      <CheckIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                    {row === 2 && (
-                      <WarningIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                    {row === 3 && (
-                      <CloseIcon sx={{ color: "white", fontSize: 14 }} />
-                    )}
-                  </Box>
-                </Tooltip>
-              );
+                            ? "#f44336"
+                            : "#acacac",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mr: 1,
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      {row === 1 && (
+                        <CheckIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                      {row === 2 && (
+                        <WarningIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                      {row === 3 && (
+                        <CloseIcon sx={{ color: "white", fontSize: 14 }} />
+                      )}
+                    </Box>
+                  </Tooltip>
+                );
+              },
             },
-          },
-        ]),
+          ]),
     ],
     [UserData]
   );
@@ -355,7 +359,7 @@ const FRSpecialList = () => {
         "https://student.baazmoon.com/bbc_api/select_request",
         {
           table: "users",
-          method_type: "select_student_field_info",
+          method_type: "select_student_field_info_pdf",
           data: {
             kind: "FR",
             stu_id: parseInt(stu_id),
@@ -385,7 +389,8 @@ const FRSpecialList = () => {
     if (data?.length > 150) {
       setSnackbar({
         open: true,
-        message: "لیست منتخب شما پر می‌باشد. لطفا لیست انتخابی خود را مدیریت نمایید ",
+        message:
+          "لیست منتخب شما پر می‌باشد. لطفا لیست انتخابی خود را مدیریت نمایید ",
         severity: "error",
       });
     } else {
@@ -462,7 +467,8 @@ const FRSpecialList = () => {
     if (trashList?.length > 150) {
       setSnackbar({
         open: true,
-        message: "لیست آشفال شما پر می‌باشد. لطفا لیست آشفال خود را مدیریت نمایید ",
+        message:
+          "لیست آشفال شما پر می‌باشد. لطفا لیست آشفال خود را مدیریت نمایید ",
         severity: "warning",
       });
     } else {
@@ -535,7 +541,7 @@ const FRSpecialList = () => {
 
   const update_table = () => {
     if (Object.keys(UserData).length !== 0) {
-      setSearchLoading(true)
+      setSearchLoading(true);
       check_added_to_list().then(() => {
         update_trfr_list().then(() => {
           update_spfr_list().then(() => {
@@ -614,30 +620,77 @@ const FRSpecialList = () => {
     doc.addFileToVFS("IRANSansWeb-normal.ttf", myFont);
     doc.addFont("IRANSansWeb-normal.ttf", "IRANSansWeb", "normal");
     doc.setFont("IRANSansWeb");
-    doc.setFontSize(15);
+    const pageWidth = 595.28;
+    // const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 10;
+    const imageWidth = 80;
+    const imageHeight = 80;
 
-    const student = `${UserData?.first_name} ${UserData?.last_name
-      }, ${ConvertField(parseInt(field))}, رتبه ${UserData?.rank}`;
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    const headers = [
-      [
-        "ظرفیت نیمسال دوم",
-        "ظرفیت نیمسال اول",
-        "وضعیت خوابگاه",
-        "جنسیت پذیرش",
-        "کد رشته-واحد",
-        "نام رشته",
-        "نام واحد",
-        "نام استان",
-        "#",
-      ],
-    ];
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    let margin_now = margin + 30;
+    doc.text(
+      `نام: ${UserData?.first_name} ${UserData?.last_name}`,
+      pageWidth - margin,
+      margin_now,
+      { align: "right" }
+    );
+    margin_now = margin_now + 20;
+    doc.text(
+      `موسسه: ${UserData?.institute_name}`,
+      pageWidth - margin,
+      margin_now,
+      { align: "right" }
+    );
+    margin_now = margin_now + 20;
+    doc.text(`مشاور: ${UserData?.c_name}`, pageWidth - margin, margin_now, {
+      align: "right",
+    });
 
     const image =
       userInfo?.data?.pic === null
         ? imgData
         : `https://student.baazmoon.com/bbc_api/get_ins_pic/${userInfo?.data?.pic}`;
+    doc.addImage(
+      image,
+      "PNG",
+      margin,
+      margin,
+      imageWidth,
+      imageHeight,
+      undefined,
+      false
+    );
+
+    doc.setDrawColor(40, 53, 147);
+    doc.setLineWidth(1.5);
+    margin_now = margin_now + 20;
+    doc.line(margin, margin_now, pageWidth - margin, margin_now);
+
+    doc.setFontSize(16);
+    doc.setTextColor(40, 53, 147);
+    margin_now = margin_now + 30;
+    doc.text(
+      "لیست رشته‌های پیشنهادی آزاد باآزمون",
+      pageWidth - margin,
+      margin_now,
+      {
+        align: "right",
+      }
+    );
+    const headers = [
+      [
+        "نیمسال دوم",
+        "نیمسال اول",
+        "خوابگاه",
+        "جنسیت",
+        "کد رشته-واحد",
+        "رشته",
+        "واحد",
+        "استان",
+        "#",
+      ],
+    ];
 
     let data_pdf = data.map((elt, index) => [
       elt.second,
@@ -646,8 +699,8 @@ const FRSpecialList = () => {
       parseInt(elt.sex) === 3
         ? "زن/مرد"
         : parseInt(elt.sex) === 1
-          ? "مرد"
-          : "زن",
+        ? "مرد"
+        : "زن",
       elt.filedCode,
       elt.field,
       elt.university,
@@ -655,38 +708,49 @@ const FRSpecialList = () => {
       index + 1,
     ]);
 
+    margin_now = margin_now + 20;
     let content = {
       head: headers,
       body: data_pdf,
       styles: {
         font: "IRANSansWeb",
         fontStyle: "normal",
-        fontSize: 5,
+        fontSize: 4,
         halign: "center",
+        textColor: [0, 0, 0],
+        cellPadding: 4,
       },
-      startY: 120,
-      // headStyles: { fillColor: [239, 170, 188] },
-      // alternateRowStyles: { fillColor: [231, 215, 252] },
-      // tableLineColor: [110, 60, 108],
+      headStyles: {
+        fillColor: [40, 53, 147],
+        textColor: [255, 255, 255],
+        fontSize: 5,
+      },
+      startY: margin_now,
+      alternateRowStyles: {
+        fillColor: [240, 240, 240],
+      },
+      tableLineColor: [200, 200, 200],
       tableLineWidth: 0.1,
     };
-
-    doc.text(student, pageWidth - 40, 40, { align: "right" });
-    doc.setFontSize(12);
-    // if (UserData?.institiute_name !== "باآزمون") {
-    //   const institiute = "موسسه: " + UserData?.institute_name;
-    //   doc.text(institiute, pageWidth - 40, 60, { align: "right" });
-    // }
-    // if (UserData?.hc_name !== "") {
-    //   const headConsultant = "سرمشاور: " + UserData?.hc_name;
-    //   doc.text(headConsultant, pageWidth - 40, 80, { align: "right" });
-    // }
-    // if (UserData?.c_name !== "") {
-    //   const consultant = "مشاور: " + UserData?.c_name;
-    //   doc.text(consultant, pageWidth - 40, 100, { align: "right" });
-    // }
-    doc.addImage(image, "PNG", 20, 20, 65, 65, undefined, false);
     doc.autoTable(content);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(
+      "تاریخ تولید: " + new Date().toLocaleDateString("fa-IR"),
+      pageWidth - margin,
+      doc.internal.pageSize.getHeight() - 20,
+      { align: "right" }
+    );
+
+    if (UserData?.institute_name !== "باآزمون") {
+      doc.text(
+        "موسسه: " + UserData?.institute_name,
+        margin,
+        doc.internal.pageSize.getHeight() - 20,
+        { align: "left" }
+      );
+    }
 
     let progressInterval = setInterval(() => {
       setPdfProgress((prev) => {
@@ -705,10 +769,6 @@ const FRSpecialList = () => {
         setPdfProgress(0);
       }, 1000);
     }, 2000);
-
-    // const file_name = UserData?.first_name + " " + UserData?.last_name + ".pdf";
-    // doc.save(file_name);
-    // setPdfLoading(false);
   };
 
   const InfoItem = ({ icon, label, value, color }) => (
@@ -718,32 +778,41 @@ const FRSpecialList = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <Box sx={{
-          display: "flex",
-          alignItems: "center",
-          p: 1.5,
-          borderRadius: "8px",
-          height: "100%",
-        }}>
-          <Box sx={{
+        <Box
+          sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            backgroundColor: color ? `${color}20` : "#f0f0f0",
-            color: color || "#555",
-            mr: 1.5,
-            flexShrink: 0
-          }}>
+            p: 1.5,
+            borderRadius: "8px",
+            height: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              backgroundColor: color ? `${color}20` : "#f0f0f0",
+              color: color || "#555",
+              mr: 1.5,
+              flexShrink: 0,
+            }}
+          >
             {icon}
           </Box>
           <Box sx={{ overflow: "hidden" }}>
             <Typography variant="caption" color="textSecondary" noWrap>
               {label}
             </Typography>
-            <Typography variant="body2" fontWeight="bold" color={color || "textPrimary"} noWrap>
+            <Typography
+              variant="body2"
+              fontWeight="bold"
+              color={color || "textPrimary"}
+              noWrap
+            >
               {value}
             </Typography>
           </Box>
@@ -757,13 +826,14 @@ const FRSpecialList = () => {
   }
 
   return (
-    <div sx={{
-      display: "flex",
-      flexDirection: "column",
-    }}
+    <div
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}
       style={{
         width: "100%",
-        position: 'relative'
+        position: "relative",
       }}
     >
       {searchLoading && (
@@ -795,7 +865,9 @@ const FRSpecialList = () => {
                 <Box
                   sx={{
                     position: "relative",
-                    border: `1px solid ${GetBackGroundColor(userInfo?.data?.sex)}`,
+                    border: `1px solid ${GetBackGroundColor(
+                      userInfo?.data?.sex
+                    )}`,
                     borderRadius: "12px",
                     backgroundColor: "#f8f9fa",
                     boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
@@ -809,7 +881,9 @@ const FRSpecialList = () => {
                       alignItems: "center",
                       p: 2,
                       cursor: "pointer",
-                      backgroundColor: expanded ? "rgba(0,0,0,0.02)" : "transparent",
+                      backgroundColor: expanded
+                        ? "rgba(0,0,0,0.02)"
+                        : "transparent",
                     }}
                     onClick={toggleExpand}
                   >
@@ -820,17 +894,20 @@ const FRSpecialList = () => {
                         color: GetBackGroundColor(userInfo?.data?.sex),
                         fontSize: "1rem",
                         fontWeight: "bold",
-                        mr: 2
+                        mr: 2,
                       }}
                     >
-                      {UserData?.first_name?.charAt(0)}.{UserData?.last_name?.charAt(0)}
+                      {UserData?.first_name?.charAt(0)}.
+                      {UserData?.last_name?.charAt(0)}
                     </Avatar>
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="subtitle1" fontWeight="bold">
                         {`${UserData?.first_name} ${UserData?.last_name}`}
                       </Typography>
                       <Typography variant="caption" color="textSecondary">
-                        {`${ConvertField(UserData?.field)} • رتبه ${UserData?.rank}`}
+                        {`${ConvertField(UserData?.field)} • رتبه ${
+                          UserData?.rank
+                        }`}
                       </Typography>
                     </Box>
                     {/* <Typography variant="caption" color="textSecondary">
@@ -922,6 +999,7 @@ const FRSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => update_table()}
                 >
@@ -938,6 +1016,7 @@ const FRSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/pffr/" + stu_id + "/" + field)}
                 >
@@ -954,6 +1033,7 @@ const FRSpecialList = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/trfr/" + stu_id + "/" + field)}
                 >
@@ -1054,9 +1134,7 @@ const FRSpecialList = () => {
               )}
               enableRowActions
               renderRowActions={({ row, table }) => (
-                <Box
-                  sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}
-                >
+                <Box sx={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
                   <IconButton
                     color="error"
                     onClick={() => {
@@ -1077,12 +1155,10 @@ const FRSpecialList = () => {
                     onChange={(e) => setChangeRow(e.target.value)}
                     onKeyDown={(ev) => {
                       if (ev.key === "Enter") {
-                        change_row_by_id(row.index, changeRow).then(
-                          () => { }
-                        );
+                        change_row_by_id(row.index, changeRow).then(() => {});
                       }
                     }}
-                  // type="number"
+                    // type="number"
                   ></input>
                 </Box>
               )}
@@ -1127,7 +1203,9 @@ const FRSpecialList = () => {
             <ProgressBar>
               <ProgressFill progress={pdfProgress} color={baseColor} />
             </ProgressBar>
-            <ProgressText>{Math.min(100, Math.round(pdfProgress))}%</ProgressText>
+            <ProgressText>
+              {Math.min(100, Math.round(pdfProgress))}%
+            </ProgressText>
           </ProgressContainer>
         </ProgressOverlay>
       </Fade>

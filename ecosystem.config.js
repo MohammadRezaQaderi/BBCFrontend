@@ -3,7 +3,7 @@ module.exports = {
     name: 'react-app',
     script: 'npm',
     args: 'start',
-    cwd: '/home/mrq/Dev/Sefroyek/bbc/BBCFrontend',
+    cwd: '/home/mrq/Dev/SefroYek/bbc/BBCFrontend',
     interpreter: 'none',
     env: {
       NODE_ENV: 'development',

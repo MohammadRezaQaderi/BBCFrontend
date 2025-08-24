@@ -1051,6 +1051,7 @@ const GLFieldPickTable = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={Search}
                 >
@@ -1067,6 +1068,7 @@ const GLFieldPickTable = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={() => navigate("/spgl")}
                 >
@@ -1086,6 +1088,7 @@ const GLFieldPickTable = () => {
                     borderRadius: "25px",
                     minWidth: isMobile ? "40px" : "auto",
                     padding: isMobile ? "8px" : "10px 16px",
+                    color: "#fff",
                   }}
                   onClick={special_list}
                 >
